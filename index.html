@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rodja Streaming & Akun</title>
+    <title>Pencampur Warna Foto Otomatis</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -11,186 +11,230 @@
             margin: 0;
             padding: 20px;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             min-height: 100vh;
-            /* Mencegah teks terblok biru saat digeser pakai jari */
-            -webkit-user-select: none;
-            user-select: none; 
         }
         .card {
             background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             width: 100%;
-            max-width: 380px;
-            box-sizing: border-box;
-            margin-bottom: 20px;
+            max-width: 420px;
             text-align: center;
         }
-        h2 { color: #2c3e50; margin-top: 0; margin-bottom: 15px; font-size: 20px; }
-        .stream-info { font-size: 14px; color: #666; margin-bottom: 10px; }
-        
-        audio { width: 100%; margin-top: 10px; outline: none; }
+        h2 { color: #2c3e50; margin-top: 0; margin-bottom: 8px; font-size: 22px; }
+        p { font-size: 13px; color: #666; margin-bottom: 25px; }
 
-        /* Desain Tombol Geser (Slider) Atas */
-        .toggle-container {
-            position: relative;
+        .upload-section {
             display: flex;
-            background: #f1f5f9;
-            border-radius: 30px;
-            margin-bottom: 5px;
-            height: 45px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-            touch-action: pan-y; /* Mengizinkan scroll ke bawah tapi mendeteksi geser ke samping */
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 25px;
         }
-        .btn-bg {
-            position: absolute;
-            top: 0; left: 0;
-            width: 50%; height: 100%;
-            background: #27ae60;
-            border-radius: 30px;
-            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        .toggle-btn {
+        .upload-box {
             flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px; font-weight: bold; color: #64748b;
-            position: relative; z-index: 1;
-            transition: color 0.4s ease;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            background: #f8fafc;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-        .toggle-btn.active-text { color: white; }
-        
-        .geser-hint {
-            display: block;
+        .upload-box:hover {
+            border-color: #27ae60;
+            background: #f0fdf4;
+        }
+        .upload-box input[type="file"] {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .preview-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 8px;
+            display: none;
+            border: 2px solid #27ae60;
+        }
+        .upload-label {
             font-size: 13px;
             font-weight: bold;
-            color: #64748b;
-            margin-bottom: 20px;
-            margin-top: 5px;
+            color: #475569;
+        }
+        .operator {
+            font-size: 24px;
+            font-weight: bold;
+            color: #94a3b8;
+            align-self: center;
         }
 
-        /* Area Form yang Dikunci Tingginya */
-        .form-slider-wrapper {
-            width: 100%;
-            overflow: hidden;
+        /* Kotak Hasil */
+        .result-box {
+            padding: 20px;
+            border-radius: 12px;
+            background-color: #cbd5e1;
+            color: white;
+            transition: background-color 0.4s ease;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
         }
-        .form-slider-container {
-            display: flex;
-            width: 200%;
-            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            /* flex-start mengunci tinggi kotak menyesuaikan form Daftar yang lebih panjang */
-            align-items: flex-start; 
+        .nama-warna {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 4px;
         }
-        .form-slide {
-            width: 50%;
-            padding: 0 2px;
-            box-sizing: border-box;
-        }
-
-        /* Input & Button Form */
-        input {
-            width: 100%; padding: 12px; margin: 8px 0;
-            border: 1px solid #ddd; border-radius: 6px;
-            box-sizing: border-box; font-size: 14px;
-        }
-        button.btn {
-            background: #27ae60; color: white; border: none;
-            padding: 12px; width: 100%; border-radius: 6px;
-            font-size: 16px; font-weight: bold; margin-top: 10px;
+        .kode-warna {
+            font-size: 13px;
+            opacity: 0.9;
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h2>Rodja Streaming</h2>
-        <div class="stream-info">Live Streaming Kajian Islam & Radio Rodja</div>
-        <audio controls controlsList="nodownload" preload="none">
-            <source src="https://live2.radiorodja.com/rodja.mp3" type="audio/mpeg">
-            Browser Anda tidak mendukung pemutar audio.
-        </audio>
-    </div>
-
-    <div class="card">
+        <h2>Mixer Warna Foto</h2>
+        <p>Unggah 2 foto berbeda untuk melihat hasil pencampuran warna dominannya secara otomatis!</p>
         
-        <div class="toggle-container" id="toggleContainer">
-            <div id="btn-bg" class="btn-bg"></div>
-            <div class="toggle-btn active-text" id="btn-login">Masuk</div>
-            <div class="toggle-btn" id="btn-register">Daftar</div>
-        </div>
-        <span class="geser-hint">👈 Usap DiBawah 👇 Untuk Memilih 👉</span>
-
-        <div class="form-slider-wrapper" id="sliderWrapper">
-            <div class="form-slider-container" id="sliderContainer">
-                
-                <div class="form-slide">
-                    <form onsubmit="event.preventDefault(); alert('Login segera hadir!');">
-                        <input type="text" placeholder="Email / Username" required>
-                        <input type="password" placeholder="Password" required>
-                        <button type="submit" class="btn">Masuk</button>
-                    </form>
-                </div>
-
-                <div class="form-slide">
-                    <form onsubmit="event.preventDefault(); alert('Daftar berhasil!');">
-                        <input type="text" placeholder="Nama Lengkap" required>
-                        <input type="email" placeholder="Email Aktif" required>
-                        <input type="password" placeholder="Password Baru" required>
-                        <button type="submit" class="btn">Daftar Sekarang</button>
-                    </form>
-                </div>
-
+        <div class="upload-section">
+            <!-- Upload Foto 1 -->
+            <div class="upload-box">
+                <img id="preview1" class="preview-img" alt="Preview 1">
+                <div id="label1" class="upload-label">📁 Upload Foto 1</div>
+                <input type="file" accept="image/*" onchange="prosesFoto(event, 1)">
             </div>
+
+            <div class="operator">+</div>
+
+            <!-- Upload Foto 2 -->
+            <div class="upload-box">
+                <img id="preview2" class="preview-img" alt="Preview 2">
+                <div id="label2" class="upload-label">📁 Upload Foto 2</div>
+                <input type="file" accept="image/*" onchange="prosesFoto(event, 2)">
+            </div>
+        </div>
+
+        <!-- Hasil Pencampuran -->
+        <div id="resultBox" class="result-box">
+            <div id="namaHasil" class="nama-warna">Menunggu Foto...</div>
+            <div id="kodeHasil" class="kode-warna">Silakan unggah kedua foto di atas</div>
         </div>
     </div>
 
 <script>
-    const btnBg = document.getElementById('btn-bg');
-    const sliderContainer = document.getElementById('sliderContainer');
-    const btnLogin = document.getElementById('btn-login');
-    const btnReg = document.getElementById('btn-register');
-    
-    function switchForm(index) {
-        if (index === 0) {
-            btnBg.style.transform = 'translateX(0)';
-            sliderContainer.style.transform = 'translateX(0)';
-            btnLogin.classList.add('active-text');
-            btnReg.classList.remove('active-text');
-        } else {
-            btnBg.style.transform = 'translateX(100%)';
-            sliderContainer.style.transform = 'translateX(-50%)';
-            btnReg.classList.add('active-text');
-            btnLogin.classList.remove('active-text');
+    // Menyimpan rata-rata warna RGB dari masing-masing foto
+    let warnaFoto1 = null;
+    let warnaFoto2 = null;
+
+    // Referensi kamus nama warna dasar
+    const referensiWarna = [
+        { nama: "🔴 Merah", rgb: [255, 0, 0] },
+        { nama: "🟠 Orange", rgb: [255, 128, 0] },
+        { nama: "🟡 Kuning", rgb: [255, 255, 0] },
+        { nama: "🟢 Hijau", rgb: [0, 128, 0] },
+        { nama: "🔵 Biru", rgb: [0, 0, 255] },
+        { nama: "🟣 Ungu", rgb: [128, 0, 128] },
+        { nama: "🌸 Pink", rgb: [255, 105, 180] },
+        { nama: "🟤 Cokelat", rgb: [139, 69, 19] },
+        { nama: "⚫ Hitam", rgb: [0, 0, 0] },
+        { nama: "⚪ Putih", rgb: [255, 255, 255] },
+        { nama: "🔘 Abu-abu", rgb: [128, 128, 128] },
+        { nama: "🩵 Toska / Cyan", rgb: [0, 255, 255] }
+    ];
+
+    function prosesFoto(event, nomor) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Tampilkan gambar kecil (preview) di kotak upload
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const imgElement = document.getElementById(`preview${nomor}`);
+            const labelElement = document.getElementById(`label${nomor}`);
+            
+            imgElement.src = e.target.result;
+            imgElement.style.display = "block";
+            labelElement.style.display = "none"; // Sembunyikan teks upload agar rapi
+
+            // Ekstraksi warna rata-rata dari gambar menggunakan Canvas tersembunyi
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 50; // Ukuran diperkecil agar prosesnya sangat cepat
+                canvas.height = 50;
+                
+                ctx.drawImage(img, 0, 0, 50, 50);
+                const imageData = ctx.getImageData(0, 0, 50, 50).data;
+                
+                let rTotal = 0, gTotal = 0, bTotal = 0, totalPiksel = 0;
+                
+                // Hitung rata-rata seluruh piksel dalam foto
+                for (let i = 0; i < imageData.length; i += 4) {
+                    rTotal += imageData[i];
+                    gTotal += imageData[i+1];
+                    bTotal += imageData[i+2];
+                    totalPiksel++;
+                }
+
+                const avgR = Math.floor(rTotal / totalPiksel);
+                const avgG = Math.floor(gTotal / totalPiksel);
+                const avgB = Math.floor(bTotal / totalPiksel);
+
+                if (nomor === 1) warnaFoto1 = [avgR, avgG, avgB];
+                if (nomor === 2) warnaFoto2 = [avgR, avgG, avgB];
+
+                // Jika kedua foto sudah diunggah, lakukan pencampuran otomatis!
+                if (warnaFoto1 && warnaFoto2) {
+                    hitungCampuranWarna();
+                }
+            }
         }
+        reader.readAsDataURL(file);
     }
 
-    let startX = 0;
-    
-    function handleTouchStart(e) {
-        startX = e.changedTouches[0].screenX;
-    }
-    
-    function handleTouchEnd(e) {
-        let endX = e.changedTouches[0].screenX;
-        let diffX = startX - endX;
-        
-        if (diffX > 30) {
-            switchForm(1);
-        } else if (diffX < -30) {
-            switchForm(0);
-        }
+    function hitungCampuranWarna() {
+        // Rumus rata-rata pencampuran RGB foto 1 dan foto 2
+        let rMix = Math.floor((warnaFoto1[0] + warnaFoto2[0]) / 2);
+        let gMix = Math.floor((warnaFoto1[1] + warnaFoto2[1]) / 2);
+        let bMix = Math.floor((warnaFoto1[2] + warnaFoto2[2]) / 2);
+
+        // Ubah ke format HEX
+        let hasilHex = "#" + ((1 << 24) + (rMix << 16) + (gMix << 8) + bMix).toString(16).slice(1);
+
+        // Cocokkan dengan nama warna terdekat
+        let namaOtomatis = cariNamaWarna(rMix, gMix, bMix);
+
+        // Tampilkan hasilnya di web
+        let box = document.getElementById("resultBox");
+        box.style.backgroundColor = hasilHex;
+        document.getElementById("namaHasil").innerText = namaOtomatis;
+        document.getElementById("kodeHasil").innerText = "Kode: " + hasilHex.toUpperCase();
     }
 
-    document.getElementById('toggleContainer').addEventListener('touchstart', handleTouchStart, {passive: true});
-    document.getElementById('toggleContainer').addEventListener('touchend', handleTouchEnd, {passive: true});
-    
-    document.getElementById('sliderWrapper').addEventListener('touchstart', handleTouchStart, {passive: true});
-    document.getElementById('sliderWrapper').addEventListener('touchend', handleTouchEnd, {passive: true});
+    function cariNamaWarna(r, g, b) {
+        let terdekat = referensiWarna[0];
+        let jarakTerkecil = Infinity;
+
+        for (let w of referensiWarna) {
+            let dr = r - w.rgb[0];
+            let dg = g - w.rgb[1];
+            let db = b - w.rgb[2];
+            let jarak = Math.sqrt(dr * dr + dg * dg + db * db);
+            
+            if (jarak < jarakTerkecil) {
+                jarakTerkecil = jarak;
+                terdekat = w;
+            }
+        }
+        return terdekat.nama;
+    }
 </script>
 
 </body>
