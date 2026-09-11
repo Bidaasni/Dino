@@ -14,7 +14,6 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            /* Mencegah teks terblok biru saat digeser pakai jari */
             -webkit-user-select: none;
             user-select: none; 
         }
@@ -31,7 +30,6 @@
         }
         h2 { color: #2c3e50; margin-top: 0; margin-bottom: 15px; font-size: 20px; }
         .stream-info { font-size: 14px; color: #666; margin-bottom: 10px; }
-        
         audio { width: 100%; margin-top: 10px; outline: none; }
 
         /* Desain Tombol Geser (Slider) Atas */
@@ -43,7 +41,7 @@
             margin-bottom: 5px;
             height: 45px;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-            touch-action: pan-y; /* Mengizinkan scroll ke bawah tapi mendeteksi geser ke samping */
+            touch-action: pan-y;
         }
         .btn-bg {
             position: absolute;
@@ -83,7 +81,6 @@
             display: flex;
             width: 200%;
             transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            /* flex-start mengunci tinggi kotak menyesuaikan form Daftar yang lebih panjang */
             align-items: flex-start; 
         }
         .form-slide {
@@ -107,21 +104,21 @@
 </head>
 <body>
 
-    <!-- Bagian Radio (Terkunci & Tidak Bergerak) -->
+    <!-- Bagian Radio -->
     <div class="card">
         <h2>Rodja Streaming</h2>
         <div class="stream-info">Live Streaming Kajian Islam & Radio Rodja</div>
-        <!-- controlsList="nodownload" ditambahkan di sini untuk menghilangkan tombol download -->
+        <!-- Multi-source: Jika link pertama mati/diblokir, otomatis pindah ke link cadangan -->
         <audio controls controlsList="nodownload" preload="none">
-            <source src="https://live.radiorodja.com/stream" type="audio/mpeg">
+            <source src="https://live.radiorodja.com/stream;?" type="audio/mpeg">
+            <source src="https://live.radiorodja.com/;" type="audio/aac">
+            <source src="https://stream.radioislamindonesia.com:8443/radiorodja" type="audio/mpeg">
             Browser Anda tidak mendukung pemutar audio.
         </audio>
     </div>
 
-    <!-- Bagian Akun (Murni Geser) -->
+    <!-- Bagian Akun -->
     <div class="card">
-        
-        <!-- Area Tombol Pilihan -->
         <div class="toggle-container" id="toggleContainer">
             <div id="btn-bg" class="btn-bg"></div>
             <div class="toggle-btn active-text" id="btn-login">Masuk</div>
@@ -129,11 +126,9 @@
         </div>
         <span class="geser-hint">👈 Usap DiBawah 👇 Untuk Memilih 👉</span>
 
-        <!-- Area Form Pilihan -->
         <div class="form-slider-wrapper" id="sliderWrapper">
             <div class="form-slider-container" id="sliderContainer">
                 
-                <!-- Form Masuk -->
                 <div class="form-slide">
                     <form onsubmit="event.preventDefault(); alert('Login segera hadir!');">
                         <input type="text" placeholder="Email / Username" required>
@@ -142,7 +137,6 @@
                     </form>
                 </div>
 
-                <!-- Form Daftar -->
                 <div class="form-slide">
                     <form onsubmit="event.preventDefault(); alert('Daftar berhasil!');">
                         <input type="text" placeholder="Nama Lengkap" required>
@@ -164,13 +158,11 @@
     
     function switchForm(index) {
         if (index === 0) {
-            // Geser ke Kiri (Masuk)
             btnBg.style.transform = 'translateX(0)';
             sliderContainer.style.transform = 'translateX(0)';
             btnLogin.classList.add('active-text');
             btnReg.classList.remove('active-text');
         } else {
-            // Geser ke Kanan (Daftar)
             btnBg.style.transform = 'translateX(100%)';
             sliderContainer.style.transform = 'translateX(-50%)';
             btnReg.classList.add('active-text');
@@ -178,28 +170,18 @@
         }
     }
 
-    // Deteksi Usapan (Swipe) Layar
     let startX = 0;
     
-    function handleTouchStart(e) {
-        startX = e.changedTouches[0].screenX;
-    }
+    function handleTouchStart(e) { startX = e.changedTouches[0].screenX; }
     
     function handleTouchEnd(e) {
-        let endX = e.changedTouches[0].screenX;
-        let diffX = startX - endX;
-        
-        if (diffX > 30) {
-            switchForm(1); // Jika jari mengusap ke kiri (menuju Daftar)
-        } else if (diffX < -30) {
-            switchForm(0); // Jika jari mengusap ke kanan (menuju Masuk)
-        }
+        let diffX = startX - e.changedTouches[0].screenX;
+        if (diffX > 30) switchForm(1);
+        else if (diffX < -30) switchForm(0);
     }
 
-    // Terapkan usapan di kotak hijau maupun kotak form putih bawah
     document.getElementById('toggleContainer').addEventListener('touchstart', handleTouchStart, {passive: true});
     document.getElementById('toggleContainer').addEventListener('touchend', handleTouchEnd, {passive: true});
-    
     document.getElementById('sliderWrapper').addEventListener('touchstart', handleTouchStart, {passive: true});
     document.getElementById('sliderWrapper').addEventListener('touchend', handleTouchEnd, {passive: true});
 </script>
