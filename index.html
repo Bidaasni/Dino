@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rodja Streaming</title>
+    <title>Rodja & Kajian Streaming</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -30,7 +30,7 @@
             color: #2c3e50;
             margin-bottom: 15px;
         }
-        input {
+        select, input {
             width: 100%;
             padding: 12px;
             margin: 8px 0;
@@ -38,6 +38,7 @@
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 14px;
+            background: #fff;
         }
         button {
             background: #27ae60;
@@ -67,17 +68,24 @@
 </head>
 <body>
 
-    <!-- Bagian Live Streaming Radio -->
+    <!-- Bagian Pilihan Live Streaming Radio -->
     <div class="card">
-        <h2>Rodja Streaming</h2>
-        <div class="stream-info">Putar Kajian Islam & Live Streaming Radio Rodja</div>
-        <audio controls>
+        <h2>Radio Streaming</h2>
+        <div class="stream-info">Pilih Channel Kajian Islam & Radio</div>
+        
+        <!-- Pilihan Channel Radio -->
+        <select id="radioChannel" onchange="changeRadio()">
+            <option value="https://live.radiorodja.com/stream">Radio Rodja Jakarta (720 AM)</option>
+            <option value="https://radiokita.or.id:8000/stream">Radio Rodja Bandung</option>
+        </select>
+
+        <audio id="audioPlayer" controls>
             <source src="https://live.radiorodja.com/stream" type="audio/mpeg">
             Browser Anda tidak mendukung pemutar audio.
         </audio>
     </div>
 
-    <!-- Bagian Login / Register -->
+    <!-- Bagian Form Akun -->
     <div class="card">
         <h2>Akun Pengguna</h2>
         <form>
@@ -86,6 +94,16 @@
             <button type="submit">Masuk / Daftar</button>
         </form>
     </div>
+
+<script>
+    function changeRadio() {
+        const select = document.getElementById('radioChannel');
+        const player = document.getElementById('audioPlayer');
+        player.src = select.value;
+        player.load();
+        player.play().catch(e => console.log("Autoplay diblokir browser, silakan tekan play manual."));
+    }
+</script>
 
 </body>
 </html>
