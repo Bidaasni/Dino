@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pencampur Warna Foto Otomatis</title>
+    <title>Mixer Warna Foto & Pen Tunjuk</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -17,57 +17,73 @@
         }
         .card {
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             width: 100%;
             max-width: 420px;
             text-align: center;
         }
-        h2 { color: #2c3e50; margin-top: 0; margin-bottom: 8px; font-size: 22px; }
-        p { font-size: 13px; color: #666; margin-bottom: 25px; }
+        h2 { color: #2c3e50; margin-top: 0; margin-bottom: 5px; font-size: 22px; }
+        p { font-size: 13px; color: #666; margin-bottom: 20px; }
 
-        .upload-section {
+        .container-foto {
             display: flex;
-            justify-content: space-between;
             gap: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
-        .upload-box {
+        .box-satu-foto {
             flex: 1;
-            border: 2px dashed #cbd5e1;
-            border-radius: 12px;
-            padding: 15px 10px;
-            text-align: center;
             background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* Area Gambar Penuh di Kotak */
+        .preview-container {
+            width: 100%;
+            height: 120px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #cbd5e1;
             position: relative;
-            cursor: pointer;
-            transition: all 0.3s;
+            cursor: crosshair; /* Bentuk kursor penunjuk */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .upload-box:hover {
-            border-color: #27ae60;
-            background: #f0fdf4;
-        }
-        .upload-box input[type="file"] {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-        .preview-img {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 50%;
-            margin-bottom: 8px;
+        .preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Membuat foto full menutupi kotak */
             display: none;
-            border: 2px solid #27ae60;
         }
-        .upload-label {
-            font-size: 13px;
+        .placeholder-text {
+            font-size: 11px;
+            color: #64748b;
+            padding: 10px;
+        }
+
+        /* Tombol Upload Dipisah di Bawah */
+        .btn-upload {
+            margin-top: 8px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            font-size: 11px;
             font-weight: bold;
-            color: #475569;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
         }
+        .btn-upload:hover { background: #2563eb; }
+        .hidden-input { display: none; }
+
         .operator {
             font-size: 24px;
             font-weight: bold;
@@ -75,7 +91,17 @@
             align-self: center;
         }
 
-        /* Kotak Hasil */
+        /* Indikator Warna Terpilih dari Pen */
+        .color-picked-indicator {
+            width: 100%;
+            height: 15px;
+            border-radius: 4px;
+            margin-top: 6px;
+            background: #ddd;
+            border: 1px solid #cbd5e1;
+        }
+
+        /* Kotak Hasil Pencampuran */
         .result-box {
             padding: 20px;
             border-radius: 12px;
@@ -84,54 +110,57 @@
             transition: background-color 0.4s ease;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
         }
-        .nama-warna {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-        .kode-warna {
-            font-size: 13px;
-            opacity: 0.9;
-        }
+        .nama-warna { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
+        .kode-warna { font-size: 13px; opacity: 0.9; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h2>Mixer Warna Foto</h2>
-        <p>Unggah 2 foto berbeda untuk melihat hasil pencampuran warna dominannya secara otomatis!</p>
+        <h2>Mixer Warna Foto & Pen</h2>
+        <p>Upload foto di bawah, lalu ketuk fotonya menggunakan Pen untuk menunjuk warna yang ingin dicampur!</p>
         
-        <div class="upload-section">
-            <!-- Upload Foto 1 -->
-            <div class="upload-box">
-                <img id="preview1" class="preview-img" alt="Preview 1">
-                <div id="label1" class="upload-label">📁 Upload Foto 1</div>
-                <input type="file" accept="image/*" onchange="prosesFoto(event, 1)">
+        <div class="container-foto">
+            <!-- FOTO 1 -->
+            <div class="box-satu-foto">
+                <div class="preview-container" id="container1" onclick="aktifkanPen(1)">
+                    <span id="ph1" class="placeholder-text">Belum ada foto</span>
+                    <img id="img1" alt="Foto 1">
+                    <canvas id="canvas1" style="display:none;"></canvas>
+                </div>
+                <div id="ind1" class="color-picked-indicator" title="Warna terpilih"></div>
+                <!-- Tombol Upload Dipisah di Bawah -->
+                <button class="btn-upload" onclick="document.getElementById('file1').click()">📁 Pilih Foto 1</button>
+                <input type="file" id="file1" class="hidden-input" accept="image/*" onchange="muatFoto(event, 1)">
             </div>
 
             <div class="operator">+</div>
 
-            <!-- Upload Foto 2 -->
-            <div class="upload-box">
-                <img id="preview2" class="preview-img" alt="Preview 2">
-                <div id="label2" class="upload-label">📁 Upload Foto 2</div>
-                <input type="file" accept="image/*" onchange="prosesFoto(event, 2)">
+            <!-- FOTO 2 -->
+            <div class="box-satu-foto">
+                <div class="preview-container" id="container2" onclick="aktifkanPen(2)">
+                    <span id="ph2" class="placeholder-text">Belum ada foto</span>
+                    <img id="img2" alt="Foto 2">
+                    <canvas id="canvas2" style="display:none;"></canvas>
+                </div>
+                <div id="ind2" class="color-picked-indicator" title="Warna terpilih"></div>
+                <!-- Tombol Upload Dipisah di Bawah -->
+                <button class="btn-upload" onclick="document.getElementById('file2').click()">📁 Pilih Foto 2</button>
+                <input type="file" id="file2" class="hidden-input" accept="image/*" onchange="muatFoto(event, 2)">
             </div>
         </div>
 
         <!-- Hasil Pencampuran -->
         <div id="resultBox" class="result-box">
-            <div id="namaHasil" class="nama-warna">Menunggu Foto...</div>
-            <div id="kodeHasil" class="kode-warna">Silakan unggah kedua foto di atas</div>
+            <div id="namaHasil" class="nama-warna">Menunggu Pilihan Warna...</div>
+            <div id="kodeHasil" class="kode-warna">Ketuk foto untuk ambil warna</div>
         </div>
     </div>
 
 <script>
-    // Menyimpan rata-rata warna RGB dari masing-masing foto
-    let warnaFoto1 = null;
-    let warnaFoto2 = null;
+    let warna1 = null;
+    let warna2 = null;
 
-    // Referensi kamus nama warna dasar
     const referensiWarna = [
         { nama: "🔴 Merah", rgb: [255, 0, 0] },
         { nama: "🟠 Orange", rgb: [255, 128, 0] },
@@ -144,74 +173,79 @@
         { nama: "⚫ Hitam", rgb: [0, 0, 0] },
         { nama: "⚪ Putih", rgb: [255, 255, 255] },
         { nama: "🔘 Abu-abu", rgb: [128, 128, 128] },
-        { nama: "🩵 Toska / Cyan", rgb: [0, 255, 255] }
+        { nama: "🩵 Toska", rgb: [0, 255, 255] }
     ];
 
-    function prosesFoto(event, nomor) {
+    function muatFoto(event, nomor) {
         const file = event.target.files[0];
         if (!file) return;
 
-        // Tampilkan gambar kecil (preview) di kotak upload
         const reader = new FileReader();
         reader.onload = function(e) {
-            const imgElement = document.getElementById(`preview${nomor}`);
-            const labelElement = document.getElementById(`label${nomor}`);
-            
-            imgElement.src = e.target.result;
-            imgElement.style.display = "block";
-            labelElement.style.display = "none"; // Sembunyikan teks upload agar rapi
-
-            // Ekstraksi warna rata-rata dari gambar menggunakan Canvas tersembunyi
-            const img = new Image();
+            const img = document.getElementById(`img${nomor}`);
+            const ph = document.getElementById(`ph${nomor}`);
             img.src = e.target.result;
+            img.style.display = "block";
+            ph.style.display = "none";
+
             img.onload = function() {
-                const canvas = document.createElement('canvas');
+                const canvas = document.getElementById(`canvas${nomor}`);
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
                 const ctx = canvas.getContext('2d');
-                canvas.width = 50; // Ukuran diperkecil agar prosesnya sangat cepat
-                canvas.height = 50;
-                
-                ctx.drawImage(img, 0, 0, 50, 50);
-                const imageData = ctx.getImageData(0, 0, 50, 50).data;
-                
-                let rTotal = 0, gTotal = 0, bTotal = 0, totalPiksel = 0;
-                
-                // Hitung rata-rata seluruh piksel dalam foto
-                for (let i = 0; i < imageData.length; i += 4) {
-                    rTotal += imageData[i];
-                    gTotal += imageData[i+1];
-                    bTotal += imageData[i+2];
-                    totalPiksel++;
-                }
-
-                const avgR = Math.floor(rTotal / totalPiksel);
-                const avgG = Math.floor(gTotal / totalPiksel);
-                const avgB = Math.floor(bTotal / totalPiksel);
-
-                if (nomor === 1) warnaFoto1 = [avgR, avgG, avgB];
-                if (nomor === 2) warnaFoto2 = [avgR, avgG, avgB];
-
-                // Jika kedua foto sudah diunggah, lakukan pencampuran otomatis!
-                if (warnaFoto1 && warnaFoto2) {
-                    hitungCampuranWarna();
-                }
+                ctx.drawImage(img, 0, 0);
             }
         }
         reader.readAsDataURL(file);
     }
 
-    function hitungCampuranWarna() {
-        // Rumus rata-rata pencampuran RGB foto 1 dan foto 2
-        let rMix = Math.floor((warnaFoto1[0] + warnaFoto2[0]) / 2);
-        let gMix = Math.floor((warnaFoto1[1] + warnaFoto2[1]) / 2);
-        let bMix = Math.floor((warnaFoto1[2] + warnaFoto2[2]) / 2);
+    // Fungsi "Pen" untuk menunjuk warna saat foto diketuk
+    function aktifkanPen(nomor) {
+        const img = document.getElementById(`img${nomor}`);
+        const canvas = document.getElementById(`canvas${nomor}`);
+        if (img.style.display !== "block") {
+            alert("Silakan pilih foto terlebih dahulu menggunakan tombol di bawah!");
+            return;
+        }
 
-        // Ubah ke format HEX
+        event.stopPropagation();
+        const rect = img.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        // Hitung koordinat asli pada gambar
+        const xAwal = Math.floor((x / rect.width) * canvas.width);
+        const yAwal = Math.floor((y / rect.height) * canvas.height);
+
+        const ctx = canvas.getContext('2d');
+        const pixel = ctx.getImageData(xAwal, yAwal, 1, 1).data;
+        const r = pixel[0], g = pixel[1], b = pixel[2];
+
+        const hexWarna = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+
+        // Simpan warna yang ditunjuk pen
+        if (nomor === 1) {
+            warna1 = [r, g, b];
+            document.getElementById("ind1").style.backgroundColor = hexWarna;
+        } else {
+            warna2 = [r, g, b];
+            document.getElementById("ind2").style.backgroundColor = hexWarna;
+        }
+
+        // Jika kedua foto sudah dipilih warnanya oleh pen, campur otomatis!
+        if (warna1 && warna2) {
+            campurHasil();
+        }
+    }
+
+    function campurHasil() {
+        let rMix = Math.floor((warna1[0] + warna2[0]) / 2);
+        let gMix = Math.floor((warna1[1] + warna2[1]) / 2);
+        let bMix = Math.floor((warna1[2] + warna2[2]) / 2);
+
         let hasilHex = "#" + ((1 << 24) + (rMix << 16) + (gMix << 8) + bMix).toString(16).slice(1);
-
-        // Cocokkan dengan nama warna terdekat
         let namaOtomatis = cariNamaWarna(rMix, gMix, bMix);
 
-        // Tampilkan hasilnya di web
         let box = document.getElementById("resultBox");
         box.style.backgroundColor = hasilHex;
         document.getElementById("namaHasil").innerText = namaOtomatis;
@@ -221,13 +255,11 @@
     function cariNamaWarna(r, g, b) {
         let terdekat = referensiWarna[0];
         let jarakTerkecil = Infinity;
-
         for (let w of referensiWarna) {
             let dr = r - w.rgb[0];
             let dg = g - w.rgb[1];
             let db = b - w.rgb[2];
             let jarak = Math.sqrt(dr * dr + dg * dg + db * db);
-            
             if (jarak < jarakTerkecil) {
                 jarakTerkecil = jarak;
                 terdekat = w;
