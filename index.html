@@ -26,6 +26,14 @@
             text-align: center;
             margin-bottom: 20px;
         }
+        .form-card {
+            min-height: 290px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow: hidden;
+            position: relative;
+        }
         h2 {
             color: #2c3e50;
             margin-bottom: 15px;
@@ -56,12 +64,18 @@
         button.btn:hover {
             background: #219653;
         }
-        .tabs {
+        /* Navigasi Kiri (Masuk) & Kanan (Daftar) */
+        .nav-switch {
             display: flex;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #eee;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 30px;
+            padding: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
         }
-        .tab-btn {
+        .switch-btn {
             flex: 1;
             padding: 10px;
             background: none;
@@ -69,18 +83,25 @@
             font-weight: bold;
             color: #7f8c8d;
             cursor: pointer;
-            font-size: 15px;
+            font-size: 14px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
         }
-        .tab-btn.active {
-            color: #27ae60;
-            border-bottom: 2px solid #27ae60;
-            margin-bottom: -2px;
+        .switch-btn.active {
+            background: #27ae60;
+            color: white;
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
         }
         .form-section {
             display: none;
+            animation: fadeIn 0.4s ease;
         }
         .form-section.active {
             display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         audio {
             width: 100%;
@@ -95,7 +116,6 @@
 </head>
 <body>
 
-    <!-- Bagian Radio Streaming Tunggal -->
     <div class="card">
         <h2>Rodja Streaming</h2>
         <div class="stream-info">Live Streaming Kajian Islam & Radio Rodja</div>
@@ -105,14 +125,12 @@
         </audio>
     </div>
 
-    <!-- Bagian Login & Register -->
-    <div class="card">
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('login')">Masuk</button>
-            <button class="tab-btn" onclick="switchTab('register')">Daftar</button>
+    <div class="card form-card">
+        <div class="nav-switch">
+            <button id="btnLoginTab" class="switch-btn active" onclick="switchForm('login')">Masuk</button>
+            <button id="btnRegTab" class="switch-btn" onclick="switchForm('register')">Daftar</button>
         </div>
 
-        <!-- Form Masuk (Login) -->
         <div id="loginForm" class="form-section active">
             <h2>Masuk Akun</h2>
             <form onsubmit="handleLogin(event)">
@@ -122,7 +140,6 @@
             </form>
         </div>
 
-        <!-- Form Daftar (Register) -->
         <div id="registerForm" class="form-section">
             <h2>Daftar Akun Baru</h2>
             <form onsubmit="handleRegister(event)">
@@ -135,16 +152,22 @@
     </div>
 
 <script>
-    function switchTab(tabName) {
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.form-section').forEach(sec => sec.classList.remove('active'));
-        
-        if(tabName === 'login') {
-            document.querySelectorAll('.tab-btn')[0].classList.add('active');
-            document.getElementById('loginForm').classList.add('active');
+    function switchForm(type) {
+        const btnLogin = document.getElementById('btnLoginTab');
+        const btnReg = document.getElementById('btnRegTab');
+        const formLogin = document.getElementById('loginForm');
+        const formReg = document.getElementById('registerForm');
+
+        if(type === 'login') {
+            btnLogin.classList.add('active');
+            btnReg.classList.remove('active');
+            formLogin.classList.add('active');
+            formReg.classList.remove('active');
         } else {
-            document.querySelectorAll('.tab-btn')[1].classList.add('active');
-            document.getElementById('registerForm').classList.add('active');
+            btnReg.classList.add('active');
+            btnLogin.classList.remove('active');
+            formReg.classList.add('active');
+            formLogin.classList.remove('active');
         }
     }
 
