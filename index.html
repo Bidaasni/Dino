@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aldino Portfolio - Login & Radio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2, h3 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 14px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .toggle-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .toggle-link a {
+            color: #007bff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .radio-section {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            text-align: center;
+        }
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Aldino Portfolio</h2>
+
+        <!-- Form Login -->
+        <form id="loginForm">
+            <h3>Masuk (Login)</h3>
+            <div class="form-group">
+                <label>Email / Username</label>
+                <input type="text" required placeholder="Masukkan email atau username">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" required placeholder="Masukkan password">
+            </div>
+            <button type="submit" class="btn">Login</button>
+            <div class="toggle-link">
+                Belum punya akun? <a onclick="toggleForm()">Daftar di sini</a>
+            </div>
+        </form>
+
+        <!-- Form Register (Default Sembunyi) -->
+        <form id="registerForm" class="hidden">
+            <h3>Daftar (Register)</h3>
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" required placeholder="Masukkan nama lengkap">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" required placeholder="Masukkan email aktif">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" required placeholder="Buat password baru">
+            </div>
+            <button type="submit" class="btn">Register</button>
+            <div class="toggle-link">
+                Sudah punya akun? <a onclick="toggleForm()">Login di sini</a>
+            </div>
+        </form>
+
+        <!-- Bagian Radio Live Streaming di Bawah -->
+        <div class="radio-section">
+            <h3>Live Streaming Radio</h3>
+            <div class="form-group">
+                <label for="radioSelect">Pilih Saluran:</label>
+                <select id="radioSelect">
+                    <option value="salafi" selected>Radio Salafi</option>
+                    <option value="rodja">Radio Rodja (756 AM)</option>
+                </select>
+            </div>
+            <!-- Pemutar Audio dengan fitur Autoplay -->
+            <audio id="radioPlayer" controls autoplay>
+                <source src="https://live.radiorodja.com/;stream.nsv" type="audio/aac">
+                Browser Anda tidak mendukung pemutar audio.
+            </audio>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk berganti tampilan antara Login dan Register
+        function toggleForm() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            loginForm.classList.toggle('hidden');
+            registerForm.classList.toggle('hidden');
+        }
+
+        // Pengaturan pilihan radio
+        const radioSelect = document.getElementById('radioSelect');
+        const radioPlayer = document.getElementById('radioPlayer');
+
+        radioSelect.addEventListener('change', function() {
+            // Anda dapat menyesuaikan link streaming sesuai kebutuhan
+            if(this.value === 'rodja' || this.value === 'salafi') {
+                radioPlayer.src = 'https://live.radiorodja.com/;stream.nsv';
+            }
+            radioPlayer.play().catch(error => {
+                console.log("Autoplay dicegah oleh browser, silakan klik tombol play manual.");
+            });
+        });
+    </script>
+</body>
+</html>
