@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mixer Jutaan Warna & Pen Tunjuk Akurat</title>
+    <title>Mixer Warna Roda Melingkar</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -14,6 +14,8 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            -webkit-user-select: none;
+            user-select: none;
         }
         .card {
             background: white;
@@ -21,54 +23,56 @@
             border-radius: 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             text-align: center;
         }
         h2 { color: #2c3e50; margin-top: 0; margin-bottom: 5px; font-size: 22px; }
         p { font-size: 13px; color: #666; margin-bottom: 20px; }
 
-        .container-foto {
+        .mixer-grid {
             display: flex;
             gap: 15px;
             margin-bottom: 20px;
+            justify-content: center;
         }
-        .box-satu-foto {
+        .color-picker-box {
             flex: 1;
             background: #f8fafc;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            padding: 10px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        
-        .preview-container {
-            width: 100%;
-            height: 120px;
-            border-radius: 8px;
-            overflow: hidden;
-            background: #cbd5e1;
+
+        /* Kanvas Roda Warna Melingkar */
+        .wheel-container {
+            width: 130px;
+            height: 130px;
             position: relative;
-            cursor: crosshair;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            cursor: pointer;
+            margin-bottom: 8px;
         }
-        .preview-container img {
+        canvas.color-wheel {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            display: none;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
-        .placeholder-text {
-            font-size: 11px;
-            color: #64748b;
-            padding: 10px;
+
+        .info-warna {
+            font-size: 12px;
+            font-weight: bold;
+            color: #334155;
+            margin-bottom: 8px;
+            min-height: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .btn-upload {
-            margin-top: 8px;
             background: #27ae60;
             color: white;
             border: none;
@@ -89,180 +93,244 @@
             align-self: center;
         }
 
-        .color-picked-indicator {
-            width: 100%;
-            height: 15px;
-            border-radius: 4px;
-            margin-top: 6px;
-            background: #ddd;
-            border: 1px solid #cbd5e1;
+        /* Bagian Hasil Gabungan Warna di Bawah */
+        .result-section {
+            margin-top: 15px;
+            border-top: 2px dashed #e2e8f0;
+            padding-top: 15px;
         }
-
+        .result-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #475569;
+            margin-bottom: 8px;
+        }
         .result-box {
-            padding: 20px;
+            padding: 18px;
             border-radius: 12px;
             background-color: #cbd5e1;
             color: white;
             transition: background-color 0.4s ease;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
         }
-        .nama-warna { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
-        .kode-warna { font-size: 13px; opacity: 0.9; }
+        .nama-hasil { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
+        .kode-hasil { font-size: 13px; opacity: 0.9; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h2>Mixer Jutaan Warna</h2>
-        <p>Upload foto, ketuk bagian warna yang diinginkan dengan Pen, dan sistem akan membaca jutaan kombinasi warna secara akurat!</p>
+        <h2>Mixer Roda Warna</h2>
+        <p>Upload foto, lalu <b>usap/sentuh</b> roda warna melingkar di bawah untuk memilih warna!</p>
         
-        <div class="container-foto">
-            <!-- FOTO 1 -->
-            <div class="box-satu-foto">
-                <div class="preview-container" onclick="aktifkanPen(event, 1)">
-                    <span id="ph1" class="placeholder-text">Belum ada foto</span>
-                    <img id="img1" alt="Foto 1">
-                    <canvas id="canvas1" style="display:none;"></canvas>
+        <div class="mixer-grid">
+            <!-- WARNA 1 -->
+            <div class="color-picker-box">
+                <div class="wheel-container">
+                    <canvas id="wheel1" class="color-wheel"></canvas>
                 </div>
-                <div id="ind1" class="color-picked-indicator" title="Warna terpilih"></div>
-                <button class="btn-upload" onclick="document.getElementById('file1').click()">📁 Pilih Foto 1</button>
-                <input type="file" id="file1" class="hidden-input" accept="image/*" onchange="muatFoto(event, 1)">
+                <div id="info1" class="info-warna">
+                    <span>Pilih Foto 1</span>
+                    <span style="font-size:10px; color:#888;">-</span>
+                </div>
+                <button class="btn-upload" onclick="document.getElementById('file1').click()">📁 Upload Foto 1</button>
+                <input type="file" id="file1" class="hidden-input" accept="image/*" onchange="prosesUpload(event, 1)">
             </div>
 
             <div class="operator">+</div>
 
-            <!-- FOTO 2 -->
-            <div class="box-satu-foto">
-                <div class="preview-container" onclick="aktifkanPen(event, 2)">
-                    <span id="ph2" class="placeholder-text">Belum ada foto</span>
-                    <img id="img2" alt="Foto 2">
-                    <canvas id="canvas2" style="display:none;"></canvas>
+            <!-- WARNA 2 -->
+            <div class="color-picker-box">
+                <div class="wheel-container">
+                    <canvas id="wheel2" class="color-wheel"></canvas>
                 </div>
-                <div id="ind2" class="color-picked-indicator" title="Warna terpilih"></div>
-                <button class="btn-upload" onclick="document.getElementById('file2').click()">📁 Pilih Foto 2</button>
-                <input type="file" id="file2" class="hidden-input" accept="image/*" onchange="muatFoto(event, 2)">
+                <div id="info2" class="info-warna">
+                    <span>Pilih Foto 2</span>
+                    <span style="font-size:10px; color:#888;">-</span>
+                </div>
+                <button class="btn-upload" onclick="document.getElementById('file2').click()">📁 Upload Foto 2</button>
+                <input type="file" id="file2" class="hidden-input" accept="image/*" onchange="prosesUpload(event, 2)">
             </div>
         </div>
 
-        <!-- Hasil Pencampuran -->
-        <div id="resultBox" class="result-box">
-            <div id="namaHasil" class="nama-warna">Menunggu Pilihan Warna...</div>
-            <div id="kodeHasil" class="kode-warna">Ketuk foto untuk ambil warna</div>
+        <!-- HASIL GABUNGAN WARNA DI BAWAH -->
+        <div class="result-section">
+            <div class="result-title">✨ Hasil Gabungan Warna ✨</div>
+            <div id="resultBox" class="result-box">
+                <div id="namaHasil" class="nama-hasil">Belum Dicampur</div>
+                <div id="kodeHasil" class="kode-hasil">Silakan pilih warna dari kedua foto</div>
+            </div>
         </div>
     </div>
 
 <script>
-    let warna1 = null;
-    let warna2 = null;
+    let rgb1 = [200, 200, 200];
+    let rgb2 = [200, 200, 200];
+    let activeWheel = null;
 
-    function muatFoto(event, nomor) {
+    // Fungsi menggambar Roda Warna Melingkar (Color Wheel) pada Canvas
+    function drawColorWheel(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext('2d');
+        const radius = canvas.width / 2;
+        
+        canvas.width = 200;
+        canvas.height = 200;
+        const r = 100;
+
+        for (let x = -r; x <= r; x++) {
+            for (let y = -r; y <= r; y++) {
+                let distance = Math.sqrt(x*x + y*y);
+                if (distance <= r) {
+                    let angle = Math.atan2(y, x) * (180 / Math.PI);
+                    if (angle < 0) angle += 360;
+                    let saturation = distance / r;
+                    let lightness = 0.5;
+
+                    let hex = hslToHex(angle, saturation, lightness);
+                    ctx.fillStyle = hex;
+                    ctx.fillRect(x + r, y + r, 1, 1);
+                }
+            }
+        }
+    }
+
+    // Inisialisasi awal roda warna
+    drawColorWheel('wheel1');
+    drawColorWheel('wheel2');
+
+    function hslToHex(h, s, l) {
+        let c = (1 - Math.abs(2 * l - 1)) * s,
+            x = c * (1 - Math.abs((h / 60) % 2 - 1)),
+            m = l - c / 2,
+            r = 0, g = 0, b = 0;
+
+        if (0 <= h && h < 60) { r = c; g = x; b = 0; }
+        else if (60 <= h && h < 120) { r = x; g = c; b = 0; }
+        else if (120 <= h && h < 180) { r = 0; g = c; b = x; }
+        else if (180 <= h && h < 240) { r = 0; g = x; b = c; }
+        else if (240 <= h && h < 300) { r = x; g = 0; b = c; }
+        else if (300 <= h && h < 360) { r = c; g = 0; b = x; }
+
+        r = Math.round((r + m) * 255);
+        g = Math.round((g + m) * 255);
+        b = Math.round((b + m) * 255);
+
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+
+    // Ketika foto diunggah, kita ambil warna dominannya untuk menetapkan titik awal pada roda
+    function prosesUpload(event, nomor) {
         const file = event.target.files[0];
         if (!file) return;
 
         const reader = new FileReader();
         reader.onload = function(e) {
-            const img = document.getElementById(`img${nomor}`);
-            const ph = document.getElementById(`ph${nomor}`);
+            const img = new Image();
             img.src = e.target.result;
-            img.style.display = "block";
-            ph.style.display = "none";
-
             img.onload = function() {
-                const canvas = document.getElementById(`canvas${nomor}`);
-                canvas.width = img.naturalWidth;
-                canvas.height = img.naturalHeight;
+                const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0);
+                canvas.width = 50; canvas.height = 50;
+                ctx.drawImage(img, 0, 0, 50, 50);
+                const p = ctx.getImageData(25, 25, 1, 1).data;
+                
+                if (nomor === 1) rgb1 = [p[0], p[1], p[2]];
+                else rgb2 = [p[0], p[1], p[2]];
+
+                updateInfoWarna(nomor);
+                hitungCampuran();
             }
         }
         reader.readAsDataURL(file);
     }
 
-    // Fungsi Pen Tunjuk Warna dengan Presisi Tinggi
-    function aktifkanPen(event, nomor) {
-        const img = document.getElementById(`img${nomor}`);
-        const canvas = document.getElementById(`canvas${nomor}`);
-        if (img.style.display !== "block") {
-            alert("Silakan pilih foto terlebih dahulu menggunakan tombol di bawah!");
-            return;
+    // Interaksi Usap/Sentuh pada Roda Warna
+    ['wheel1', 'wheel2'].forEach((id, idx) => {
+        const canvas = document.getElementById(id);
+        const nomor = idx + 1;
+
+        function handleInteraction(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
+            
+            const ctx = canvas.getContext('2d');
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            const pixel = ctx.getImageData(Math.floor(x * scaleX), Math.floor(y * scaleY), 1, 1).data;
+            if (pixel[3] > 0) { // Jika berada di dalam lingkaran warna
+                if (nomor === 1) rgb1 = [pixel[0], pixel[1], pixel[2]];
+                else rgb2 = [pixel[0], pixel[1], pixel[2]];
+
+                updateInfoWarna(nomor);
+                hitungCampuran();
+            }
         }
 
-        const rect = event.currentTarget.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
+        canvas.addEventListener('mousedown', (e) => { activeWheel = nomor; handleInteraction(e); });
+        window.addEventListener('mousemove', (e) => { if (activeWheel === nomor) handleInteraction(e); });
+        window.addEventListener('mouseup', () => { activeWheel = null; });
 
-        const xAwal = Math.floor((x / rect.width) * canvas.width);
-        const yAwal = Math.floor((y / rect.height) * canvas.height);
+        canvas.addEventListener('touchstart', (e) => { activeWheel = nomor; handleInteraction(e); e.preventDefault(); }, {passive: false});
+        canvas.addEventListener('touchmove', (e) => { if (activeWheel === nomor) handleInteraction(e); e.preventDefault(); }, {passive: false});
+        canvas.addEventListener('touchend', () => { activeWheel = null; });
+    });
 
-        const ctx = canvas.getContext('2d');
-        const pixel = ctx.getImageData(xAwal, yAwal, 1, 1).data;
-        const r = pixel[0], g = pixel[1], b = pixel[2];
+    function updateInfoWarna(nomor) {
+        let rgb = (nomor === 1) ? rgb1 : rgb2;
+        let hex = "#" + ((1 << 24) + (rgb[0] << 16) + (rgb[1] << 8) + rgb[2]).toString(16).slice(1);
+        let nama = tentukanNamaWarna(rgb[0], rgb[1], rgb[2]);
 
-        const hexWarna = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-
-        if (nomor === 1) {
-            warna1 = [r, g, b];
-            document.getElementById("ind1").style.backgroundColor = hexWarna;
-        } else {
-            warna2 = [r, g, b];
-            document.getElementById("ind2").style.backgroundColor = hexWarna;
-        }
-
-        if (warna1 && warna2) {
-            campurHasil();
-        }
+        let infoDiv = document.getElementById(`info${nomor}`);
+        infoDiv.innerHTML = `<span style="color:${hex}; font-weight:bold;">${nama}</span><span style="font-size:10px; color:#555;">${hex.toUpperCase()}</span>`;
     }
 
-    function campurHasil() {
-        // Rumus pencampuran matematis rata-rata RGB dari 2 warna yang ditunjuk pen
-        let rMix = Math.floor((warna1[0] + warna2[0]) / 2);
-        let gMix = Math.floor((warna1[1] + warna2[1]) / 2);
-        let bMix = Math.floor((warna1[2] + warna2[2]) / 2);
+    function hitungCampuran() {
+        let rMix = Math.floor((rgb1[0] + rgb2[0]) / 2);
+        let gMix = Math.floor((rgb1[1] + rgb2[1]) / 2);
+        let bMix = Math.floor((rgb1[2] + rgb2[2]) / 2);
 
         let hasilHex = "#" + ((1 << 24) + (rMix << 16) + (gMix << 8) + bMix).toString(16).slice(1);
-        let namaOtomatis = tentukanNamaWarnaAkurat(rMix, gMix, bMix);
+        let namaMix = tentukanNamaWarna(rMix, gMix, bMix);
 
         let box = document.getElementById("resultBox");
         box.style.backgroundColor = hasilHex;
-        document.getElementById("namaHasil").innerText = namaOtomatis;
+        document.getElementById("namaHasil").innerText = namaMix;
         document.getElementById("kodeHasil").innerText = "Kode: " + hasilHex.toUpperCase();
     }
 
-    // Algoritma HSL Pintar untuk mengenali Juta Warna secara akurat
-    function tentukanNamaWarnaAkurat(r, g, b) {
+    function tentukanNamaWarna(r, g, b) {
         r /= 255; g /= 255; b /= 255;
         let max = Math.max(r, g, b), min = Math.min(r, g, b);
         let h, s, l = (max + min) / 2;
 
-        if (max === min) {
-            h = s = 0;
-        } else {
+        if (max === min) { h = s = 0; }
+        else {
             let d = max - min;
             s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
             switch (max) {
                 case r: h = (g - b) / d + (g < b ? 6 : 0); break;
                 case g: h = (b - r) / d + 2; break;
-                case b: h = (r - g) / d + 4; break;
+                case b: h: h = (r - g) / d + 4; break;
             }
             h /= 6;
         }
-
         h *= 360; s *= 100; l *= 100;
 
-        // Klasifikasi ilmiah berdasarkan HSL (menghindari salah baca Biru jadi Abu-abu)
         if (l < 12) return "⚫ Hitam";
         if (l > 88 && s < 15) return "⚪ Putih";
-        if (s < 12) {
-            if (l < 40) return "⚫ Abu Gelap";
-            if (l > 70) return "⚪ Abu Terang";
-            return "🔘 Abu-abu";
-        }
+        if (s < 12) return "🔘 Abu-abu";
 
         if (h < 15 || h >= 345) return "🔴 Merah";
         if (h >= 15 && h < 40) return l < 40 ? "🟤 Cokelat" : "🟠 Orange";
         if (h >= 40 && h < 70) return "🟡 Kuning";
         if (h >= 70 && h < 160) return "🟢 Hijau";
-        if (h >= 160 && h < 195) return "🩵 Toska / Cyan";
+        if (h >= 160 && h < 195) return "🩵 Toska";
         if (h >= 195 && h < 260) return "🔵 Biru";
         if (h >= 260 && h < 315) return "🟣 Ungu";
         if (h >= 315 && h < 345) return "🌸 Pink";
