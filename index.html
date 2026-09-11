@@ -107,23 +107,17 @@
 </head>
 <body>
 
-    <!-- Bagian Radio (Terkunci & Tidak Bergerak) -->
     <div class="card">
         <h2>Rodja Streaming</h2>
         <div class="stream-info">Live Streaming Kajian Islam & Radio Rodja</div>
-        <!-- Link Server Cadangan & Hilangkan Tombol Download -->
         <audio controls controlsList="nodownload" preload="none">
-            <source src="https://live.radiorodja.com/stream;?" type="audio/mpeg">
-            <source src="https://live.radiorodja.com/;" type="audio/aac">
-            <source src="https://stream.radioislamindonesia.com:8443/radiorodja" type="audio/mpeg">
+            <source src="https://live2.radiorodja.com/rodja.mp3" type="audio/mpeg">
             Browser Anda tidak mendukung pemutar audio.
         </audio>
     </div>
 
-    <!-- Bagian Akun (Murni Geser) -->
     <div class="card">
         
-        <!-- Area Tombol Pilihan -->
         <div class="toggle-container" id="toggleContainer">
             <div id="btn-bg" class="btn-bg"></div>
             <div class="toggle-btn active-text" id="btn-login">Masuk</div>
@@ -131,76 +125,4 @@
         </div>
         <span class="geser-hint">👈 Usap DiBawah 👇 Untuk Memilih 👉</span>
 
-        <!-- Area Form Pilihan -->
-        <div class="form-slider-wrapper" id="sliderWrapper">
-            <div class="form-slider-container" id="sliderContainer">
-                
-                <!-- Form Masuk -->
-                <div class="form-slide">
-                    <form onsubmit="event.preventDefault(); alert('Login segera hadir!');">
-                        <input type="text" placeholder="Email / Username" required>
-                        <input type="password" placeholder="Password" required>
-                        <button type="submit" class="btn">Masuk</button>
-                    </form>
-                </div>
-
-                <!-- Form Daftar -->
-                <div class="form-slide">
-                    <form onsubmit="event.preventDefault(); alert('Daftar berhasil!');">
-                        <input type="text" placeholder="Nama Lengkap" required>
-                        <input type="email" placeholder="Email Aktif" required>
-                        <input type="password" placeholder="Password Baru" required>
-                        <button type="submit" class="btn">Daftar Sekarang</button>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-<script>
-    const btnBg = document.getElementById('btn-bg');
-    const sliderContainer = document.getElementById('sliderContainer');
-    const btnLogin = document.getElementById('btn-login');
-    const btnReg = document.getElementById('btn-register');
-    
-    function switchForm(index) {
-        if (index === 0) {
-            btnBg.style.transform = 'translateX(0)';
-            sliderContainer.style.transform = 'translateX(0)';
-            btnLogin.classList.add('active-text');
-            btnReg.classList.remove('active-text');
-        } else {
-            btnBg.style.transform = 'translateX(100%)';
-            sliderContainer.style.transform = 'translateX(-50%)';
-            btnReg.classList.add('active-text');
-            btnLogin.classList.remove('active-text');
-        }
-    }
-
-    let startX = 0;
-    
-    function handleTouchStart(e) {
-        startX = e.changedTouches[0].screenX;
-    }
-    
-    function handleTouchEnd(e) {
-        let endX = e.changedTouches[0].screenX;
-        let diffX = startX - endX;
         
-        if (diffX > 30) {
-            switchForm(1);
-        } else if (diffX < -30) {
-            switchForm(0);
-        }
-    }
-
-    document.getElementById('toggleContainer').addEventListener('touchstart', handleTouchStart, {passive: true});
-    document.getElementById('toggleContainer').addEventListener('touchend', handleTouchEnd, {passive: true});
-    
-    document.getElementById('sliderWrapper').addEventListener('touchstart', handleTouchStart, {passive: true});
-    document.getElementById('sliderWrapper').addEventListener('touchend', handleTouchEnd, {passive: true});
-</script>
-
-</body>
-</html>
