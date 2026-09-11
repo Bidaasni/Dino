@@ -13,8 +13,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
+            /* Mencegah teks terblok biru saat digeser pakai jari */
+            -webkit-user-select: none;
+            user-select: none; 
         }
         .card {
             background: white;
@@ -23,163 +25,183 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             width: 100%;
             max-width: 380px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .form-card {
-            min-height: 290px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            overflow: hidden;
-            position: relative;
-        }
-        h2 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border: 1px solid #ddd;
-            border-radius: 6px;
             box-sizing: border-box;
-            font-size: 14px;
-            background: #fff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        h2 { color: #2c3e50; margin-top: 0; margin-bottom: 15px; font-size: 20px; }
+        .stream-info { font-size: 14px; color: #666; margin-bottom: 10px; }
+        
+        audio { width: 100%; margin-top: 10px; outline: none; }
+
+        /* Desain Tombol Geser (Slider) Atas */
+        .toggle-container {
+            position: relative;
+            display: flex;
+            background: #f1f5f9;
+            border-radius: 30px;
+            margin-bottom: 5px;
+            height: 45px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            touch-action: pan-y; /* Mengizinkan scroll ke bawah tapi mendeteksi geser ke samping */
+        }
+        .btn-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 50%; height: 100%;
+            background: #27ae60;
+            border-radius: 30px;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .toggle-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px; font-weight: bold; color: #64748b;
+            position: relative; z-index: 1;
+            transition: color 0.4s ease;
+        }
+        .toggle-btn.active-text { color: white; }
+        
+        .geser-hint {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            color: #64748b;
+            margin-bottom: 20px;
+            margin-top: 5px;
+        }
+
+        /* Area Form yang Dikunci Tingginya */
+        .form-slider-wrapper {
+            width: 100%;
+            overflow: hidden;
+        }
+        .form-slider-container {
+            display: flex;
+            width: 200%;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            /* flex-start mengunci tinggi kotak menyesuaikan form Daftar yang lebih panjang */
+            align-items: flex-start; 
+        }
+        .form-slide {
+            width: 50%;
+            padding: 0 2px;
+            box-sizing: border-box;
+        }
+
+        /* Input & Button Form */
+        input {
+            width: 100%; padding: 12px; margin: 8px 0;
+            border: 1px solid #ddd; border-radius: 6px;
+            box-sizing: border-box; font-size: 14px;
         }
         button.btn {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px;
-            width: 100%;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        button.btn:hover {
-            background: #219653;
-        }
-        /* Navigasi Kiri (Masuk) & Kanan (Daftar) */
-        .nav-switch {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f8f9fa;
-            border-radius: 30px;
-            padding: 5px;
-            margin-bottom: 20px;
-            border: 1px solid #e0e0e0;
-        }
-        .switch-btn {
-            flex: 1;
-            padding: 10px;
-            background: none;
-            border: none;
-            font-weight: bold;
-            color: #7f8c8d;
-            cursor: pointer;
-            font-size: 14px;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-        }
-        .switch-btn.active {
-            background: #27ae60;
-            color: white;
-            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
-        }
-        .form-section {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-        .form-section.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        audio {
-            width: 100%;
-            margin-top: 10px;
-        }
-        .stream-info {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 10px;
+            background: #27ae60; color: white; border: none;
+            padding: 12px; width: 100%; border-radius: 6px;
+            font-size: 16px; font-weight: bold; margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
+    <!-- Bagian Radio (Terkunci & Tidak Bergerak) -->
     <div class="card">
         <h2>Rodja Streaming</h2>
         <div class="stream-info">Live Streaming Kajian Islam & Radio Rodja</div>
-        <audio controls preload="none">
+        <!-- controlsList="nodownload" ditambahkan di sini untuk menghilangkan tombol download -->
+        <audio controls controlsList="nodownload" preload="none">
             <source src="https://live.radiorodja.com/stream" type="audio/mpeg">
             Browser Anda tidak mendukung pemutar audio.
         </audio>
     </div>
 
-    <div class="card form-card">
-        <div class="nav-switch">
-            <button id="btnLoginTab" class="switch-btn active" onclick="switchForm('login')">Masuk</button>
-            <button id="btnRegTab" class="switch-btn" onclick="switchForm('register')">Daftar</button>
+    <!-- Bagian Akun (Murni Geser) -->
+    <div class="card">
+        
+        <!-- Area Tombol Pilihan -->
+        <div class="toggle-container" id="toggleContainer">
+            <div id="btn-bg" class="btn-bg"></div>
+            <div class="toggle-btn active-text" id="btn-login">Masuk</div>
+            <div class="toggle-btn" id="btn-register">Daftar</div>
         </div>
+        <span class="geser-hint">👈 Usap DiBawah 👇 Untuk Memilih 👉</span>
 
-        <div id="loginForm" class="form-section active">
-            <h2>Masuk Akun</h2>
-            <form onsubmit="handleLogin(event)">
-                <input type="text" placeholder="Email / Username" required>
-                <input type="password" placeholder="Password" required>
-                <button type="submit" class="btn">Masuk</button>
-            </form>
-        </div>
+        <!-- Area Form Pilihan -->
+        <div class="form-slider-wrapper" id="sliderWrapper">
+            <div class="form-slider-container" id="sliderContainer">
+                
+                <!-- Form Masuk -->
+                <div class="form-slide">
+                    <form onsubmit="event.preventDefault(); alert('Login segera hadir!');">
+                        <input type="text" placeholder="Email / Username" required>
+                        <input type="password" placeholder="Password" required>
+                        <button type="submit" class="btn">Masuk</button>
+                    </form>
+                </div>
 
-        <div id="registerForm" class="form-section">
-            <h2>Daftar Akun Baru</h2>
-            <form onsubmit="handleRegister(event)">
-                <input type="text" placeholder="Nama Lengkap" required>
-                <input type="email" placeholder="Email Aktif" required>
-                <input type="password" placeholder="Password Baru" required>
-                <button type="submit" class="btn">Daftar Sekarang</button>
-            </form>
+                <!-- Form Daftar -->
+                <div class="form-slide">
+                    <form onsubmit="event.preventDefault(); alert('Daftar berhasil!');">
+                        <input type="text" placeholder="Nama Lengkap" required>
+                        <input type="email" placeholder="Email Aktif" required>
+                        <input type="password" placeholder="Password Baru" required>
+                        <button type="submit" class="btn">Daftar Sekarang</button>
+                    </form>
+                </div>
+
+            </div>
         </div>
     </div>
 
 <script>
-    function switchForm(type) {
-        const btnLogin = document.getElementById('btnLoginTab');
-        const btnReg = document.getElementById('btnRegTab');
-        const formLogin = document.getElementById('loginForm');
-        const formReg = document.getElementById('registerForm');
-
-        if(type === 'login') {
-            btnLogin.classList.add('active');
-            btnReg.classList.remove('active');
-            formLogin.classList.add('active');
-            formReg.classList.remove('active');
+    const btnBg = document.getElementById('btn-bg');
+    const sliderContainer = document.getElementById('sliderContainer');
+    const btnLogin = document.getElementById('btn-login');
+    const btnReg = document.getElementById('btn-register');
+    
+    function switchForm(index) {
+        if (index === 0) {
+            // Geser ke Kiri (Masuk)
+            btnBg.style.transform = 'translateX(0)';
+            sliderContainer.style.transform = 'translateX(0)';
+            btnLogin.classList.add('active-text');
+            btnReg.classList.remove('active-text');
         } else {
-            btnReg.classList.add('active');
-            btnLogin.classList.remove('active');
-            formReg.classList.add('active');
-            formLogin.classList.remove('active');
+            // Geser ke Kanan (Daftar)
+            btnBg.style.transform = 'translateX(100%)';
+            sliderContainer.style.transform = 'translateX(-50%)';
+            btnReg.classList.add('active-text');
+            btnLogin.classList.remove('active-text');
         }
     }
 
-    function handleLogin(e) {
-        e.preventDefault();
-        alert('Fitur login akan segera dihubungkan ke database.');
+    // Deteksi Usapan (Swipe) Layar
+    let startX = 0;
+    
+    function handleTouchStart(e) {
+        startX = e.changedTouches[0].screenX;
+    }
+    
+    function handleTouchEnd(e) {
+        let endX = e.changedTouches[0].screenX;
+        let diffX = startX - endX;
+        
+        if (diffX > 30) {
+            switchForm(1); // Jika jari mengusap ke kiri (menuju Daftar)
+        } else if (diffX < -30) {
+            switchForm(0); // Jika jari mengusap ke kanan (menuju Masuk)
+        }
     }
 
-    function handleRegister(e) {
-        e.preventDefault();
-        alert('Form pendaftaran berhasil dikirim!');
-    }
+    // Terapkan usapan di kotak hijau maupun kotak form putih bawah
+    document.getElementById('toggleContainer').addEventListener('touchstart', handleTouchStart, {passive: true});
+    document.getElementById('toggleContainer').addEventListener('touchend', handleTouchEnd, {passive: true});
+    
+    document.getElementById('sliderWrapper').addEventListener('touchstart', handleTouchStart, {passive: true});
+    document.getElementById('sliderWrapper').addEventListener('touchend', handleTouchEnd, {passive: true});
 </script>
 
 </body>
