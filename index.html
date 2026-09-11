@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mixer Warna Foto & Pen Tunjuk</title>
+    <title>Mixer Jutaan Warna & Pen Tunjuk Akurat</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -43,7 +43,6 @@
             align-items: center;
         }
         
-        /* Area Gambar Penuh di Kotak */
         .preview-container {
             width: 100%;
             height: 120px;
@@ -51,7 +50,7 @@
             overflow: hidden;
             background: #cbd5e1;
             position: relative;
-            cursor: crosshair; /* Bentuk kursor penunjuk */
+            cursor: crosshair;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -59,7 +58,7 @@
         .preview-container img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Membuat foto full menutupi kotak */
+            object-fit: cover;
             display: none;
         }
         .placeholder-text {
@@ -68,10 +67,9 @@
             padding: 10px;
         }
 
-        /* Tombol Upload Dipisah di Bawah */
         .btn-upload {
             margin-top: 8px;
-            background: #3b82f6;
+            background: #27ae60;
             color: white;
             border: none;
             padding: 6px 10px;
@@ -81,7 +79,7 @@
             cursor: pointer;
             width: 100%;
         }
-        .btn-upload:hover { background: #2563eb; }
+        .btn-upload:hover { background: #219653; }
         .hidden-input { display: none; }
 
         .operator {
@@ -91,7 +89,6 @@
             align-self: center;
         }
 
-        /* Indikator Warna Terpilih dari Pen */
         .color-picked-indicator {
             width: 100%;
             height: 15px;
@@ -101,14 +98,13 @@
             border: 1px solid #cbd5e1;
         }
 
-        /* Kotak Hasil Pencampuran */
         .result-box {
             padding: 20px;
             border-radius: 12px;
             background-color: #cbd5e1;
             color: white;
             transition: background-color 0.4s ease;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
         .nama-warna { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
         .kode-warna { font-size: 13px; opacity: 0.9; }
@@ -117,19 +113,18 @@
 <body>
 
     <div class="card">
-        <h2>Mixer Warna Foto & Pen</h2>
-        <p>Upload foto di bawah, lalu ketuk fotonya menggunakan Pen untuk menunjuk warna yang ingin dicampur!</p>
+        <h2>Mixer Jutaan Warna</h2>
+        <p>Upload foto, ketuk bagian warna yang diinginkan dengan Pen, dan sistem akan membaca jutaan kombinasi warna secara akurat!</p>
         
         <div class="container-foto">
             <!-- FOTO 1 -->
             <div class="box-satu-foto">
-                <div class="preview-container" id="container1" onclick="aktifkanPen(1)">
+                <div class="preview-container" onclick="aktifkanPen(event, 1)">
                     <span id="ph1" class="placeholder-text">Belum ada foto</span>
                     <img id="img1" alt="Foto 1">
                     <canvas id="canvas1" style="display:none;"></canvas>
                 </div>
                 <div id="ind1" class="color-picked-indicator" title="Warna terpilih"></div>
-                <!-- Tombol Upload Dipisah di Bawah -->
                 <button class="btn-upload" onclick="document.getElementById('file1').click()">📁 Pilih Foto 1</button>
                 <input type="file" id="file1" class="hidden-input" accept="image/*" onchange="muatFoto(event, 1)">
             </div>
@@ -138,13 +133,12 @@
 
             <!-- FOTO 2 -->
             <div class="box-satu-foto">
-                <div class="preview-container" id="container2" onclick="aktifkanPen(2)">
+                <div class="preview-container" onclick="aktifkanPen(event, 2)">
                     <span id="ph2" class="placeholder-text">Belum ada foto</span>
                     <img id="img2" alt="Foto 2">
                     <canvas id="canvas2" style="display:none;"></canvas>
                 </div>
                 <div id="ind2" class="color-picked-indicator" title="Warna terpilih"></div>
-                <!-- Tombol Upload Dipisah di Bawah -->
                 <button class="btn-upload" onclick="document.getElementById('file2').click()">📁 Pilih Foto 2</button>
                 <input type="file" id="file2" class="hidden-input" accept="image/*" onchange="muatFoto(event, 2)">
             </div>
@@ -160,21 +154,6 @@
 <script>
     let warna1 = null;
     let warna2 = null;
-
-    const referensiWarna = [
-        { nama: "🔴 Merah", rgb: [255, 0, 0] },
-        { nama: "🟠 Orange", rgb: [255, 128, 0] },
-        { nama: "🟡 Kuning", rgb: [255, 255, 0] },
-        { nama: "🟢 Hijau", rgb: [0, 128, 0] },
-        { nama: "🔵 Biru", rgb: [0, 0, 255] },
-        { nama: "🟣 Ungu", rgb: [128, 0, 128] },
-        { nama: "🌸 Pink", rgb: [255, 105, 180] },
-        { nama: "🟤 Cokelat", rgb: [139, 69, 19] },
-        { nama: "⚫ Hitam", rgb: [0, 0, 0] },
-        { nama: "⚪ Putih", rgb: [255, 255, 255] },
-        { nama: "🔘 Abu-abu", rgb: [128, 128, 128] },
-        { nama: "🩵 Toska", rgb: [0, 255, 255] }
-    ];
 
     function muatFoto(event, nomor) {
         const file = event.target.files[0];
@@ -199,8 +178,8 @@
         reader.readAsDataURL(file);
     }
 
-    // Fungsi "Pen" untuk menunjuk warna saat foto diketuk
-    function aktifkanPen(nomor) {
+    // Fungsi Pen Tunjuk Warna dengan Presisi Tinggi
+    function aktifkanPen(event, nomor) {
         const img = document.getElementById(`img${nomor}`);
         const canvas = document.getElementById(`canvas${nomor}`);
         if (img.style.display !== "block") {
@@ -208,12 +187,10 @@
             return;
         }
 
-        event.stopPropagation();
-        const rect = img.getBoundingClientRect();
+        const rect = event.currentTarget.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
 
-        // Hitung koordinat asli pada gambar
         const xAwal = Math.floor((x / rect.width) * canvas.width);
         const yAwal = Math.floor((y / rect.height) * canvas.height);
 
@@ -223,7 +200,6 @@
 
         const hexWarna = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 
-        // Simpan warna yang ditunjuk pen
         if (nomor === 1) {
             warna1 = [r, g, b];
             document.getElementById("ind1").style.backgroundColor = hexWarna;
@@ -232,19 +208,19 @@
             document.getElementById("ind2").style.backgroundColor = hexWarna;
         }
 
-        // Jika kedua foto sudah dipilih warnanya oleh pen, campur otomatis!
         if (warna1 && warna2) {
             campurHasil();
         }
     }
 
     function campurHasil() {
+        // Rumus pencampuran matematis rata-rata RGB dari 2 warna yang ditunjuk pen
         let rMix = Math.floor((warna1[0] + warna2[0]) / 2);
         let gMix = Math.floor((warna1[1] + warna2[1]) / 2);
         let bMix = Math.floor((warna1[2] + warna2[2]) / 2);
 
         let hasilHex = "#" + ((1 << 24) + (rMix << 16) + (gMix << 8) + bMix).toString(16).slice(1);
-        let namaOtomatis = cariNamaWarna(rMix, gMix, bMix);
+        let namaOtomatis = tentukanNamaWarnaAkurat(rMix, gMix, bMix);
 
         let box = document.getElementById("resultBox");
         box.style.backgroundColor = hasilHex;
@@ -252,20 +228,45 @@
         document.getElementById("kodeHasil").innerText = "Kode: " + hasilHex.toUpperCase();
     }
 
-    function cariNamaWarna(r, g, b) {
-        let terdekat = referensiWarna[0];
-        let jarakTerkecil = Infinity;
-        for (let w of referensiWarna) {
-            let dr = r - w.rgb[0];
-            let dg = g - w.rgb[1];
-            let db = b - w.rgb[2];
-            let jarak = Math.sqrt(dr * dr + dg * dg + db * db);
-            if (jarak < jarakTerkecil) {
-                jarakTerkecil = jarak;
-                terdekat = w;
+    // Algoritma HSL Pintar untuk mengenali Juta Warna secara akurat
+    function tentukanNamaWarnaAkurat(r, g, b) {
+        r /= 255; g /= 255; b /= 255;
+        let max = Math.max(r, g, b), min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
+
+        if (max === min) {
+            h = s = 0;
+        } else {
+            let d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch (max) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
             }
+            h /= 6;
         }
-        return terdekat.nama;
+
+        h *= 360; s *= 100; l *= 100;
+
+        // Klasifikasi ilmiah berdasarkan HSL (menghindari salah baca Biru jadi Abu-abu)
+        if (l < 12) return "⚫ Hitam";
+        if (l > 88 && s < 15) return "⚪ Putih";
+        if (s < 12) {
+            if (l < 40) return "⚫ Abu Gelap";
+            if (l > 70) return "⚪ Abu Terang";
+            return "🔘 Abu-abu";
+        }
+
+        if (h < 15 || h >= 345) return "🔴 Merah";
+        if (h >= 15 && h < 40) return l < 40 ? "🟤 Cokelat" : "🟠 Orange";
+        if (h >= 40 && h < 70) return "🟡 Kuning";
+        if (h >= 70 && h < 160) return "🟢 Hijau";
+        if (h >= 160 && h < 195) return "🩵 Toska / Cyan";
+        if (h >= 195 && h < 260) return "🔵 Biru";
+        if (h >= 260 && h < 315) return "🟣 Ungu";
+        if (h >= 315 && h < 345) return "🌸 Pink";
+        return "🔴 Merah";
     }
 </script>
 
