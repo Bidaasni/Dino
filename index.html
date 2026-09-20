@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruqyah Syar'iyyah - Ayat & Doa</title>
-    <!-- Mengambil font Islami dan modern dari Google Fonts -->
+    <title>Ruqyah & Zikir Sebelum Tidur</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            /* Palet Warna - Mode Terang (Default) */
             --primary-green: #114232;
             --secondary-green: #1A5D44;
             --gold: #D4AF37;
@@ -25,13 +23,12 @@
             --header-gradient-2: #1A5D44;
         }
 
-        /* Palet Warna - Mode Gelap */
         [data-theme="dark"] {
             --primary-green: #0a1f18;
             --secondary-green: #113627;
-            --gold: #E5C158; /* Emas yang lebih terang untuk kontras */
+            --gold: #E5C158;
             --bg-color: #121212;
-            --card-bg: #1A2421; /* Abu-abu kehijauan gelap */
+            --card-bg: #1A2421;
             --text-main: #EAEAEA;
             --text-muted: #A0A0A0;
             --card-header-bg: #114232;
@@ -42,7 +39,6 @@
             --header-gradient-2: #0a1f18;
         }
 
-        /* Transisi halus saat berganti mode */
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
@@ -53,7 +49,6 @@
             transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* Desain Header */
         header {
             background: linear-gradient(135deg, var(--header-gradient-1) 0%, var(--header-gradient-2) 100%);
             color: var(--gold);
@@ -66,19 +61,18 @@
 
         header h1 {
             margin: 0;
-            font-size: 2.8rem;
+            font-size: 2.2rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
         header p {
             margin-top: 0.5rem;
             color: #fff;
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.9;
         }
 
-        /* Tombol Toggle Mode */
         .theme-toggle {
             position: absolute;
             top: 1.5rem;
@@ -91,11 +85,8 @@
             cursor: pointer;
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .theme-toggle:hover {
@@ -109,7 +100,6 @@
             padding: 0 1.5rem;
         }
 
-        /* Desain Kartu Ayat */
         .card {
             background: var(--card-bg);
             border-radius: 12px;
@@ -129,69 +119,89 @@
             background-color: var(--card-header-bg);
             color: var(--card-header-text);
             padding: 1rem 1.5rem;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
         .card-body {
-            padding: 2rem 1.5rem;
+            padding: 1.5rem;
         }
 
-        /* Tipografi Arab & Terjemahan */
         .arab {
             font-family: 'Amiri', serif;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             line-height: 2.2;
             text-align: right;
             color: var(--arab-color);
             margin-bottom: 1.5rem;
-            transition: color 0.4s ease;
         }
 
         .latin {
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: var(--text-muted);
             font-style: italic;
             margin-bottom: 0.8rem;
             padding-left: 1rem;
             border-left: 3px solid var(--gold);
-            transition: color 0.4s ease;
         }
 
         .terjemah {
             font-size: 1rem;
             color: var(--text-main);
             margin-bottom: 1.5rem;
-            transition: color 0.4s ease;
         }
 
-        /* Pemutar Audio */
         .audio-player {
             width: 100%;
             margin-top: 1rem;
             border-radius: 30px;
         }
 
-        /* Styling judul surah */
+        .download-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 20px;
+            background-color: var(--primary-green);
+            color: var(--gold);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background-color: var(--gold);
+            color: var(--primary-green);
+        }
+
         .surah-title {
             text-align: center;
             color: var(--arab-color);
             padding-bottom: 0.5rem;
             margin: 3rem 0 1.5rem;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             display: inline-block;
             border-bottom: 3px solid var(--gold);
             width: 100%;
-            transition: color 0.4s ease;
         }
 
-        /* Animasi Loading */
+        .info-sunnah {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 4px solid var(--gold);
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            border-radius: 0 8px 8px 0;
+        }
+
         .loading-container {
             text-align: center;
             padding: 4rem 0;
@@ -219,69 +229,75 @@
             background: linear-gradient(135deg, var(--header-gradient-1) 0%, var(--header-gradient-2) 100%);
             color: var(--gold);
             margin-top: 4rem;
-            transition: background-color 0.4s ease;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <!-- Tombol Ganti Tema Gelap / Terang -->
         <button id="themeToggle" class="theme-toggle">🌙 Mode Gelap</button>
-        
-        <h1>Ruqyah Syar'iyyah</h1>
-        <p>Kumpulan Ayat dan Doa Pelindung Diri & Pengobatan</p>
+        <h1>Zikir & Ruqyah Sebelum Tidur</h1>
+        <p>Urutan Sesuai Sunnah - Audio Syekh Misyari Rasyid</p>
     </header>
 
     <div class="container">
-        <!-- Doa Pembuka -->
-        <h2 class="surah-title">Doa Pembuka (Ta'awwudz)</h2>
-        <div class="card">
-            <div class="card-header">
-                <span>Ta'awwudz Khusus Ruqyah</span>
-                <span>Doa</span>
+        <!-- AUDIO RUQYAH FULL -->
+        <div class="card" style="border-top: 4px solid #27ae60;">
+            <div class="card-header" style="background-color: rgba(39, 174, 96, 0.1);">
+                <span>Audio Ruqyah Tidur (Durasi Penuh)</span>
+                <span>Syekh Misyari</span>
             </div>
-            <div class="card-body">
-                <div class="arab" dir="rtl">أَعُوذُ بِاللَّهِ السَّمِيعِ الْعَلِيمِ مِنَ الشَّيْطَانِ الرَّجِيمِ مِنْ هَمْزِهِ وَنَفْخِهِ وَنَفْثِهِ</div>
-                <div class="latin">A'udzu billahis sami'il 'alim minasy syaithanir rajim, min hamzihi wa nafkhihi wa naftsih.</div>
-                <div class="terjemah">"Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari gangguan setan yang terkutuk, dari kegilaannya, kesombongannya, dan syairnya yang tercela."</div>
+            <div class="card-body" style="text-align: center;">
+                <p>Putar audio ini jika Anda ingin mendengarkan bacaan ruqyah penuh selama bersiap tidur.</p>
+                <audio class="audio-player" controls preload="metadata">
+                    <source src="https://ia800300.us.archive.org/5/items/RuqyahShariyah_759/Ruqyah-Mishary-Rashid-Alafasy.mp3" type="audio/mpeg">
+                </audio>
+                <a href="https://ia800300.us.archive.org/5/items/RuqyahShariyah_759/Ruqyah-Mishary-Rashid-Alafasy.mp3" target="_blank" class="download-btn">⬇ Download MP3 Ruqyah Full</a>
             </div>
         </div>
 
-        <!-- Wadah Ayat -->
         <div id="quran-container"></div>
         
-        <!-- Indikator Loading -->
         <div id="loading" class="loading-container">
             <div class="spinner"></div>
-            <h3>Memuat Ayat-Ayat Ruqyah...</h3>
-            <p>Sedang mengambil teks Arab, Latin, Terjemahan, dan Audio dari API Al-Quran...</p>
+            <h3>Memuat Surah & Ayat...</h3>
+        </div>
+
+        <!-- DOA SEBELUM TIDUR (Ditampilkan setelah loading selesai) -->
+        <div id="doa-tidur" style="display: none;">
+            <h2 class="surah-title">Penutup: Doa Sebelum Tidur</h2>
+            <div class="card" style="border-top: 4px solid var(--primary-green);">
+                <div class="card-header">
+                    <span>Doa Tidur</span>
+                    <span>Akhir Zikir</span>
+                </div>
+                <div class="card-body">
+                    <div class="info-sunnah">
+                        <strong>Sunnah:</strong> Dibaca tepat sebelum memejamkan mata sebagai penutup seluruh rangkaian zikir malam.
+                    </div>
+                    <div class="arab" dir="rtl">بِاسْمِكَ اللَّهُمَّ أَحْيَا وَأَمُوتُ</div>
+                    <div class="latin">Bismikallahumma ahyaa wa amuutu.</div>
+                    <div class="terjemah">"Dengan nama-Mu ya Allah, aku hidup dan aku mati."</div>
+                </div>
+            </div>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2026 Ruqyah Syar'iyyah | Semoga Allah memberikan kesembuhan dan perlindungan.</p>
+        <p>&copy; 2026 Ruqyah Syar'iyyah | Semoga tidurmu dijaga oleh Allah SWT.</p>
     </footer>
 
     <script>
-        /* ----------------------------------------------------
-           LOGIKA UNTUK MODE GELAP / TERANG (DARK MODE)
-        ---------------------------------------------------- */
+        // LOGIKA TEMA
         const themeToggleBtn = document.getElementById('themeToggle');
-        
-        // Cek jika pengguna pernah menyimpan preferensi tema sebelumnya
         const currentTheme = localStorage.getItem('theme');
         if (currentTheme) {
             document.documentElement.setAttribute('data-theme', currentTheme);
-            if (currentTheme === 'dark') {
-                themeToggleBtn.innerHTML = '☀️ Mode Terang';
-            }
+            if (currentTheme === 'dark') themeToggleBtn.innerHTML = '☀️ Mode Terang';
         }
 
-        // Fungsi klik tombol tema
         themeToggleBtn.addEventListener('click', () => {
             let theme = document.documentElement.getAttribute('data-theme');
-            
             if (theme === 'dark') {
                 document.documentElement.setAttribute('data-theme', 'light');
                 localStorage.setItem('theme', 'light');
@@ -293,29 +309,31 @@
             }
         });
 
-
-        /* ----------------------------------------------------
-           LOGIKA PENGAMBILAN API AYAT RUQYAH
-        ---------------------------------------------------- */
+        // URUTAN SESUAI SUNNAH SEBELUM TIDUR
         const ruqyahList = [
-            { surah: 2, ranges: [[1, 5], [102, 103], [137, 137], [255, 255], [284, 286]] }, // Al-Baqarah
-            { surah: 3, ranges: [[1, 5], [85, 85], [173, 174]] }, // Ali-Imran
-            { surah: 6, ranges: [[17, 17]] }, // Al-An'am
-            { surah: 10, ranges: [[79, 82]] }, // Yunus
-            { surah: 20, ranges: [[65, 69]] }, // Thaha
-            { surah: 23, ranges: [[115, 118]] }, // Al-Mukminun
-            { surah: 36, ranges: [[1, 9]] }, // Yasin
-            { surah: 37, ranges: [[1, 10]] }, // As-Saffat
-            { surah: 40, ranges: [[1, 3]] }, // Ghafir
-            { surah: 46, ranges: [[29, 32]] }, // Al-Ahqaf
-            { surah: 55, ranges: [[33, 35]] }, // Ar-Rahman
-            { surah: 59, ranges: [[21, 21]] }, // Al-Hasyr
-            { surah: 72, ranges: [[1, 10]] }  // Al-Jinn
+            { 
+              surah: 2, 
+              ranges: [[255, 255], [285, 286]],
+              note: "Membaca Ayat Kursi menjaga Anda hingga pagi. Dua ayat terakhir Al-Baqarah mencukupkan kebutuhan malam Anda." 
+            },
+            { 
+              surah: 109, 
+              ranges: [[1, 6]],
+              note: "Membaca Al-Kafirun sebelum tidur adalah pelepas diri dari kesyirikan." 
+            },
+            { 
+              surah: 112, 
+              ranges: [[1, 4]],
+              note: "Sunnah: Tiupkan ke dua telapak tangan setelah membaca Al-Ikhlas, Al-Falaq, & An-Naas, lalu usapkan ke kepala, wajah, dan tubuh (Diulang 3x)." 
+            },
+            { surah: 113, ranges: [[1, 5]] },
+            { surah: 114, ranges: [[1, 6]] }
         ];
 
         async function loadRuqyah() {
             const container = document.getElementById('quran-container');
             const loading = document.getElementById('loading');
+            const doaContainer = document.getElementById('doa-tidur');
 
             for (const item of ruqyahList) {
                 try {
@@ -330,17 +348,22 @@
                     surahTitle.textContent = `${item.surah}. Surah ${suratData.namaLatin}`;
                     surahDiv.appendChild(surahTitle);
 
+                    // Tambahkan catatan sunnah jika ada
+                    if (item.note) {
+                        const noteDiv = document.createElement('div');
+                        noteDiv.className = 'info-sunnah';
+                        noteDiv.innerHTML = `<strong>Fadhilah:</strong> ${item.note}`;
+                        surahDiv.appendChild(noteDiv);
+                    }
+
                     item.ranges.forEach(range => {
                         const start = range[0];
                         const end = range[1];
-                        
                         const ayatList = suratData.ayat.filter(a => a.nomorAyat >= start && a.nomorAyat <= end);
 
                         ayatList.forEach(ayat => {
                             const card = document.createElement('div');
                             card.className = 'card';
-                            
-                            // PERBAIKAN: Menggunakan versi '05' (Audio Studio Misyari Rasyid yang lebih jernih)
                             const audioSrc = ayat.audio['05'];
 
                             card.innerHTML = `
@@ -355,8 +378,10 @@
                                     
                                     <audio class="audio-player" controls preload="none">
                                         <source src="${audioSrc}" type="audio/mpeg">
-                                        Browser Anda tidak mendukung elemen audio.
                                     </audio>
+                                    <div style="text-align: center;">
+                                        <a href="${audioSrc}" target="_blank" class="download-btn">⬇ Download MP3</a>
+                                    </div>
                                 </div>
                             `;
                             surahDiv.appendChild(card);
@@ -368,7 +393,9 @@
                     console.error(`Gagal memuat surah ke-${item.surah}:`, error);
                 }
             }
+            // Sembunyikan loading dan tampilkan doa tidur
             loading.style.display = 'none';
+            doaContainer.style.display = 'block';
         }
 
         window.onload = loadRuqyah;
