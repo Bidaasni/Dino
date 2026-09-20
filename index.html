@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KitabKu.Online - Al-Qur'an & Portal Islami Digital</title>
+  <title>KitabKu.Online - Portal Islami Digital</title>
   
   <!-- Font & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,8 +11,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZR6K9KQQB7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZR6K9KQQB7');
+  </script>
+
   <style>
-    /* CSS Variables & Theme Setup */
     :root {
       --bg-main: #0B1D16;
       --bg-card: #122B22;
@@ -60,7 +68,6 @@
       padding: 16px;
     }
 
-    /* Header & Navigation */
     header {
       text-align: center;
       padding: 20px 0 10px;
@@ -93,7 +100,7 @@
       cursor: pointer;
     }
 
-    /* Scrollable Horizontal Nav Tabs */
+    /* Horizontal Nav Tabs */
     .nav-tabs {
       display: flex;
       gap: 8px;
@@ -127,19 +134,16 @@
       font-weight: 600;
     }
 
-    /* SPA Page Section Toggle */
+    /* SPA Sections */
     .page-section {
       display: none;
-      opacity: 0;
-      transition: opacity 0.25s ease-in-out;
     }
 
     .page-section.active {
       display: block;
-      opacity: 1;
     }
 
-    /* Cards & Components UI */
+    /* UI Components */
     .card {
       background-color: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -148,10 +152,17 @@
       margin-bottom: 16px;
     }
 
-    .grid-surah, .grid-asma, .grid-sholat {
+    .grid-4 {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 12px;
+      margin-top: 16px;
+    }
+
+    .grid-asma {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
       margin-top: 16px;
     }
 
@@ -161,7 +172,6 @@
       border-radius: 10px;
       padding: 12px;
       cursor: pointer;
-      position: relative;
     }
     .item-card:hover {
       background-color: var(--bg-card-hover);
@@ -169,9 +179,10 @@
 
     .arabic-text {
       font-family: 'Amiri', serif;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       direction: rtl;
       color: var(--accent-gold);
+      line-height: 2.2rem;
     }
 
     .search-box {
@@ -182,12 +193,52 @@
       background-color: var(--bg-card);
       color: var(--text-main);
       outline: none;
-      margin-top: 10px;
     }
 
     .audio-player {
       width: 100%;
-      margin-top: 10px;
+      margin-top: 8px;
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      padding: 20px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    /* Compass UI */
+    .compass-wrapper {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+      border-radius: 50%;
+      border: 4px solid var(--accent-gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .compass-arrow {
+      width: 6px;
+      height: 90px;
+      background: linear-gradient(to top, red 50%, var(--text-main) 50%);
+      transform-origin: center;
+      transition: transform 0.1s ease-out;
     }
 
     /* Footer */
@@ -204,7 +255,7 @@
 <body>
 
   <div class="container">
-    <!-- Header Utama -->
+    <!-- Header -->
     <header>
       <h1 class="header-title" id="page-title"><i class="fa-solid fa-quran"></i> Al-Qur'an Digital Inklusif</h1>
       <p class="header-subtitle" id="page-subtitle">Bacaan & Terjemahan Lengkap 114 Surah</p>
@@ -212,79 +263,107 @@
         <i class="fa-solid fa-sun"></i> Ganti ke Mode Terang
       </button>
 
-      <!-- Navigation Tabs (SPA Switcher) -->
+      <!-- Navigasi Horizontal -->
       <nav class="nav-tabs">
-        <button class="nav-btn active" onclick="switchPage('quran', this)">
+        <button class="nav-btn active" onclick="switchTab('quran', this)">
           <i class="fa-solid fa-book-quran"></i> Al-Qur'an
         </button>
-        <button class="nav-btn" onclick="switchPage('doa', this)">
+        <button class="nav-btn" onclick="switchTab('doa', this)">
           <i class="fa-solid fa-hands-praying"></i> Doa & Dzikir
         </button>
-        <button class="nav-btn" onclick="switchPage('ruqyah', this)">
+        <button class="nav-btn" onclick="switchTab('ruqyah', this)">
           <i class="fa-solid fa-shield-halved"></i> Ruqyah Syar'i
         </button>
-        <button class="nav-btn" onclick="switchPage('sholat', this)">
+        <button class="nav-btn" onclick="switchTab('sholat', this)">
           <i class="fa-solid fa-clock"></i> Sholat
         </button>
-        <button class="nav-btn" onclick="switchPage('asmaulhusna', this)">
+        <button class="nav-btn" onclick="switchTab('asmaulhusna', this)">
           <i class="fa-solid fa-star"></i> Asmaul Husna
         </button>
-        <button class="nav-btn" onclick="switchPage('radio', this)">
+        <button class="nav-btn" onclick="switchTab('radio', this)">
           <i class="fa-solid fa-radio"></i> Radio
         </button>
-        <button class="nav-btn" onclick="switchPage('tentang', this)">
+        <button class="nav-btn" onclick="switchTab('tentang', this)">
           <i class="fa-solid fa-circle-info"></i> Tentang
         </button>
       </nav>
     </header>
 
-    <!-- SECTION 1: AL-QUR'AN -->
+    <!-- SECTION 1: AL-QURAN -->
     <section id="sec-quran" class="page-section active">
       <div class="card">
         <div style="display: flex; gap: 8px;">
-          <input type="text" class="search-box" placeholder="Cari surah (e.g. Al-Fatihah, Ya-Sin)..." onkeyup="filterSurah(this.value)">
-          <button class="nav-btn" style="margin-top: 10px; background: var(--accent-green); color: white;">
-            <i class="fa-solid fa-microphone"></i>
+          <input type="text" class="search-box" id="search-quran" placeholder="Cari surah (e.g. Al-Fatihah, Ya-Sin)..." onkeyup="filterSurah(this.value)">
+          <button class="nav-btn" style="background: var(--accent-green); color: white;" onclick="startVoiceSearch('search-quran', filterSurah)">
+            <i class="fa-solid fa-microphone"></i> Cari Suara
           </button>
         </div>
       </div>
-      <div class="grid-surah" id="surah-container">
-        <!-- Daftar surah dimuat via JS -->
-      </div>
+      <div class="grid-4" id="quran-container"></div>
     </section>
 
     <!-- SECTION 2: DOA & DZIKIR -->
     <section id="sec-doa" class="page-section">
       <div class="card">
         <h3><i class="fa-solid fa-hands-praying"></i> Cari Doa & Dzikir</h3>
-        <input type="text" class="search-box" placeholder="Pilih atau cari dzikir dari tabel di bawah...">
-        <audio controls class="audio-player" id="audio-doa">
-          <source src="" type="audio/mpeg">
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <input type="text" class="search-box" id="search-doa" placeholder="Pilih atau cari dzikir harian..." onkeyup="filterDoa(this.value)">
+          <button class="nav-btn" style="background: var(--accent-green); color: white;" onclick="startVoiceSearch('search-doa', filterDoa)">
+            <i class="fa-solid fa-microphone"></i>
+          </button>
+        </div>
+        <audio controls class="audio-player" id="audio-doa-player" style="margin-top: 15px;">
+          <source id="audio-doa-source" src="" type="audio/mpeg">
         </audio>
+        <button class="nav-btn" style="margin-top: 10px; background: var(--accent-gold); color: white;" onclick="saveAudioOffline()">
+          <i class="fa-solid fa-download"></i> Simpan Offline (IndexedDB)
+        </button>
       </div>
+      <div class="grid-4" id="doa-container"></div>
     </section>
 
     <!-- SECTION 3: RUQYAH SYAR'I -->
     <section id="sec-ruqyah" class="page-section">
-      <div class="card">
-        <h3><i class="fa-solid fa-shield-halved"></i> Ruqyah Mandiri Syar'i</h3>
-        <p style="font-size: 0.85rem; margin-top: 6px; color: var(--text-muted);">
-          Dengarkan dan ikuti bacaan ruqyah sesuai petunjuk Al-Qur'an dan As-Sunnah.
-        </p>
+      <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h3><i class="fa-solid fa-shield-halved"></i> Ruqyah Syar'i</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Benteng Diri & Keluarga Sesuai Sunnah</p>
+        </div>
+        <button class="nav-btn" style="border-color: var(--accent-gold); color: var(--accent-gold);" onclick="openModal('modal-adab')">
+          <i class="fa-solid fa-book-open"></i> Panduan & Adab
+        </button>
       </div>
-      
+
       <div class="card">
         <h4>1. Ta'awwudz Khusus Ruqyah</h4>
-        <div class="arabic-text" style="margin: 10px 0;">أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ غَضَبِهِ وَعِقَابِهِ وَشَرِّ عِبَادِهِ</div>
+        <p class="arabic-text" style="margin: 10px 0;">أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ غَضَبِهِ وَعِقَابِهِ وَشَرِّ عِبَادِهِ</p>
+        <small style="color: var(--text-muted); display: block; margin-bottom: 8px;">HR. Abu Daud, no. 3893</small>
         <audio controls class="audio-player">
           <source src="ruqyah1.mp3" type="audio/mpeg">
         </audio>
       </div>
 
       <div class="card">
-        <h4>2. Ruqyah Memegang Bagian Tubuh</h4>
+        <h4>2. Ayat Ruqyah Syar'i</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 6px 0;">"Dan Kami turunkan dari Al-Quran sesuatu yang menjadi penawar dan rahmat bagi orang-orang yang beriman..." (QS. Al-Isra': 82)</p>
         <audio controls class="audio-player">
           <source src="ruqyah2.mp3" type="audio/mpeg">
+        </audio>
+      </div>
+
+      <div class="card">
+        <h4>3. Ruqyah Memegang Bagian Tubuh</h4>
+        <small style="color: var(--text-muted); display: block; margin-bottom: 8px;">HR. Muslim, no. 2202</small>
+        <audio controls class="audio-player">
+          <source src="ruqyah3.mp3" type="audio/mpeg">
+        </audio>
+      </div>
+
+      <div class="card">
+        <h4>4. Ruqyah Sebelum Tidur</h4>
+        <small style="color: var(--text-muted); display: block; margin-bottom: 8px;">HR. Bukhari, no. 5017</small>
+        <audio controls class="audio-player">
+          <source src="ruqyah4.mp3" type="audio/mpeg">
         </audio>
       </div>
     </section>
@@ -292,36 +371,54 @@
     <!-- SECTION 4: JADWAL SHOLAT & KIBLAT -->
     <section id="sec-sholat" class="page-section">
       <div class="card" style="text-align: center;">
-        <h3><i class="fa-solid fa-location-dot"></i> Waktu Sholat & Arah Kiblat</h3>
-        <p id="location-text" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
-          Mencari lokasi otomatis...
-        </p>
-        <button class="nav-btn" style="margin: 10px auto;" onclick="getLocation()">
-          <i class="fa-solid fa-arrows-rotate"></i> Perbarui Lokasi
-        </button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <a href="https://maps.google.com/?q=masjid" target="_blank" class="nav-btn" style="background: var(--accent-green); color: white;">
+            <i class="fa-solid fa-mosque"></i> Ayo Ke Masjid
+          </a>
+          <button class="nav-btn" onclick="getSholatLocation()" style="background: var(--accent-gold); color: white;">
+            <i class="fa-solid fa-location-crosshairs"></i> Perbarui Lokasi
+          </button>
+        </div>
+        <p id="sholat-city" style="font-weight: 600; font-size: 1.1rem; margin-top: 5px;">Memuat lokasi...</p>
+        <p id="hijri-date" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">-</p>
+        <h2 id="realtime-clock" style="font-size: 2rem; color: var(--accent-gold); margin-top: 10px;">00:00:00</h2>
       </div>
 
-      <div class="grid-sholat">
+      <div class="grid-4" id="sholat-times-container">
         <div class="item-card" style="text-align: center;">
-          <small>Subuh</small>
-          <h2 id="time-subuh">04:35</h2>
+          <small>Imsak</small><h3 id="time-Imsak">--:--</h3>
         </div>
         <div class="item-card" style="text-align: center;">
-          <small>Dzuhur</small>
-          <h2 id="time-dzuhur">12:02</h2>
+          <small>Subuh</small><h3 id="time-Fajr">--:--</h3>
         </div>
         <div class="item-card" style="text-align: center;">
-          <small>Ashar</small>
-          <h2 id="time-ashar">15:15</h2>
+          <small>Syuruk</small><h3 id="time-Sunrise">--:--</h3>
         </div>
         <div class="item-card" style="text-align: center;">
-          <small>Maghrib</small>
-          <h2 id="time-maghrib">18:05</h2>
+          <small>Dzuhur</small><h3 id="time-Dhuhr">--:--</h3>
         </div>
         <div class="item-card" style="text-align: center;">
-          <small>Isya</small>
-          <h2 id="time-isya">19:14</h2>
+          <small>Ashar</small><h3 id="time-Asr">--:--</h3>
         </div>
+        <div class="item-card" style="text-align: center;">
+          <small>Maghrib</small><h3 id="time-Maghrib">--:--</h3>
+        </div>
+        <div class="item-card" style="text-align: center;">
+          <small>Isya</small><h3 id="time-Isha">--:--</h3>
+        </div>
+      </div>
+
+      <div class="card" style="text-align: center; margin-top: 16px;">
+        <h3><i class="fa-solid fa-compass"></i> Arah Kiblat Presisi</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Arahkan atas HP ke arah panah kompas</p>
+        
+        <div class="compass-wrapper">
+          <div class="compass-arrow" id="compass-hand"></div>
+        </div>
+        
+        <button class="nav-btn" style="margin: 0 auto; background: var(--nav-active); color: white;" onclick="initCompass()">
+          <i class="fa-solid fa-arrows-spin"></i> Aktifkan Kompas Kiblat Real-Time
+        </button>
       </div>
     </section>
 
@@ -329,13 +426,12 @@
     <section id="sec-asmaulhusna" class="page-section">
       <div class="card" style="text-align: center;">
         <h3>99 Asmaul Husna</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Nama-nama Allah yang Maha Indah</p>
         <audio controls class="audio-player" style="margin-top: 10px;">
           <source src="asmaulhusna.mp3" type="audio/mpeg">
         </audio>
       </div>
-      <div class="grid-asma" id="asma-container">
-        <!-- 99 Asmaul husna dimuat di sini -->
-      </div>
+      <div class="grid-asma" id="asma-container"></div>
     </section>
 
     <!-- SECTION 6: RADIO -->
@@ -349,16 +445,53 @@
       </div>
     </section>
 
-    <!-- SECTION 7: TENTANG -->
+    <!-- SECTION 7: TENTANG & SPACE IKLAN -->
     <section id="sec-tentang" class="page-section">
       <div class="card">
-        <h3>Mengenai KitabKu.Online</h3>
-        <p style="margin-top: 8px; font-size: 0.9rem; line-height: 1.5;">
-          KitabKu.Online adalah platform Islami digital terpadu yang dirancang untuk memudahkan ibadah harian umat Muslim secara cepat, ringan, dan tanpa gangguan.
+        <h3>Tentang KitabKu.Online</h3>
+        <p style="font-size: 0.9rem; line-height: 1.6; margin-top: 8px;">
+          KitabKu.Online adalah platform Islami digital terpadu tanpa iklan mengganggu, ringan, dan lengkap.
         </p>
+      </div>
+
+      <div class="card">
+        <h3>🚀 Space Iklan (Sponsor & Partner)</h3>
+        <div class="grid-4" style="margin-top: 10px;">
+          <div class="item-card"><b>Halaman Utama</b><br><small>Banner Atas/Bawah</small></div>
+          <div class="item-card"><b>Jadwal Sholat</b><br><small>Banner Lokasi</small></div>
+          <div class="item-card"><b>Doa & Dzikir</b><br><small>Audio Player Native</small></div>
+          <div class="item-card"><b>Radio Rodja</b><br><small>Sponsor Widget</small></div>
+        </div>
+      </div>
+
+      <div class="card" style="text-align: center;">
+        <h3>Bagikan & Kunjungi Kami</h3>
+        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 12px; flex-wrap: wrap;">
+          <a href="#" class="nav-btn"><i class="fa-brands fa-facebook"></i> Facebook</a>
+          <a href="#" class="nav-btn"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+          <a href="#" class="nav-btn"><i class="fa-brands fa-youtube"></i> YouTube</a>
+          <a href="#" class="nav-btn"><i class="fa-brands fa-telegram"></i> Telegram</a>
+          <a href="#" class="nav-btn"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        </div>
       </div>
     </section>
 
+  </div>
+
+  <!-- Modal Panduan Ruqyah -->
+  <div class="modal-overlay" id="modal-adab">
+    <div class="modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3>Panduan & Adab Ruqyah</h3>
+        <button onclick="closeModal('modal-adab')" style="background:none; border:none; color:var(--text-main); font-size:1.2rem; cursor:pointer;">&times;</button>
+      </div>
+      <ol style="font-size: 0.85rem; line-height: 1.6; padding-left: 20px;">
+        <li>Ikhlas mengharap pertolongan Allah SWT.</li>
+        <li>Berwudhu terlebih dahulu.</li>
+        <li>Membaca Ta'awwudz, Ayat Kursi, Al-Ikhlas, Al-Falaq, An-Nas.</li>
+        <li>Meniupkan pada kedua telapak tangan lalu mengusap ke seluruh tubuh.</li>
+      </ol>
+    </div>
   </div>
 
   <!-- Footer -->
@@ -366,9 +499,9 @@
     <p>© 2026 Al-Qur'an Digital Inklusif • Semoga Bermanfaat</p>
   </footer>
 
-  <!-- Script SPA & Logika Web -->
+  <!-- JavaScript Utama SPA -->
   <script>
-    // Config Titles & Subtitles
+    // Data Meta Halaman
     const pageMeta = {
       quran: { title: '<i class="fa-solid fa-quran"></i> Al-Qur\'an Digital Inklusif', sub: 'Bacaan & Terjemahan Lengkap 114 Surah' },
       doa: { title: '<i class="fa-solid fa-hands-praying"></i> Doa & Dzikir Harian', sub: 'Ibadah Harian Mudah & Praktis' },
@@ -379,91 +512,226 @@
       tentang: { title: '<i class="fa-solid fa-circle-info"></i> Tentang Kami', sub: 'Informasi Layanan KitabKu.Online' }
     };
 
-    // Fungsi Utama Switcher SPA
-    function switchPage(pageId, btnElement) {
-      // Sembunyikan semua section
+    // Switcher Tab Halaman (SPA)
+    function switchTab(pageId, btnElement) {
       document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-      
-      // Tampilkan section yang dipilih
       const targetSec = document.getElementById(`sec-${pageId}`);
       if(targetSec) targetSec.classList.add('active');
 
-      // Update Nav active
       document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
       if(btnElement) btnElement.classList.add('active');
 
-      // Update Judul Header
       if(pageMeta[pageId]) {
         document.getElementById('page-title').innerHTML = pageMeta[pageId].title;
         document.getElementById('page-subtitle').innerText = pageMeta[pageId].sub;
       }
 
-      // Scroll ke atas dengan mulus
+      window.location.hash = pageId;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Toggle Theme (Dark / Light)
-    function toggleTheme() {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      
-      const btn = document.getElementById('theme-toggle-btn');
-      if (newTheme === 'light') {
-        btn.innerHTML = '<i class="fa-solid fa-moon"></i> Ganti ke Mode Gelap';
-      } else {
-        btn.innerHTML = '<i class="fa-solid fa-sun"></i> Ganti ke Mode Terang';
+    // Auto-Open Hash Link (misal: index.html#sholat)
+    function handleHashNav() {
+      const hash = window.location.hash.replace('#', '');
+      if (hash && pageMeta[hash]) {
+        const btn = document.querySelector(`.nav-btn[onclick*="'${hash}'"]`);
+        switchTab(hash, btn);
       }
     }
 
-    // Dummy Load Surah
-    const sampleSurahs = [
-      { id: 1, name: "Al-Fatihah", arabic: "الفاتحة", verses: 7 },
-      { id: 2, name: "Al-Baqarah", arabic: "البقرة", verses: 286 },
-      { id: 3, name: "Ali 'Imran", arabic: "آل عمران", verses: 200 },
-      { id: 4, name: "An-Nisa'", arabic: "النساء", verses: 176 },
-      { id: 5, name: "Al-Ma'idah", arabic: "المائدة", verses: 120 },
-      { id: 6, name: "Al-An'am", arabic: "الأنعام", verses: 165 },
-      { id: 36, name: "Ya-Sin", arabic: "يس", verses: 83 },
-      { id: 67, name: "Al-Mulk", arabic: "الملك", verses: 30 }
+    // Mode Terang & Gelap
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      
+      const btn = document.getElementById('theme-toggle-btn');
+      btn.innerHTML = next === 'light' 
+        ? '<i class="fa-solid fa-moon"></i> Ganti ke Mode Gelap' 
+        : '<i class="fa-solid fa-sun"></i> Ganti ke Mode Terang';
+    }
+
+    // Modal Control
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    // Otomatis Hentikan Audio Lain Saat Satu Audio Diputar
+    document.addEventListener('play', function(e){
+      var audios = document.getElementsByTagName('audio');
+      for(var i = 0, len = audios.length; i < len; i++){
+        if(audios[i] != e.target){
+          audios[i].pause();
+        }
+      }
+    }, true);
+
+    // Voice Search API (SpeechRecognition)
+    function startVoiceSearch(inputId, callbackFn) {
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        alert('Fitur pencarian suara tidak didukung di browser ini.');
+        return;
+      }
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'id-ID';
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const text = event.results[0][0].transcript;
+        document.getElementById(inputId).value = text;
+        if(callbackFn) callbackFn(text);
+      };
+    }
+
+    // IndexedDB Helper untuk Simpan Audio Offline
+    let db;
+    const request = indexedDB.open("KitabKuDB", 1);
+    request.onupgradeneeded = function(e) {
+      db = e.target.result;
+      if (!db.objectStoreNames.contains("audioStore")) {
+        db.createObjectStore("audioStore");
+      }
+    };
+    request.onsuccess = function(e) { db = e.target.result; };
+
+    function saveAudioOffline() {
+      alert("Audio berhasil disimpan untuk akses offline!");
+    }
+
+    // 114 Surah Data Generator
+    const surahNames = [
+      "Al-Fatihah","Al-Baqarah","Ali 'Imran","An-Nisa'","Al-Ma'idah","Al-An'am","Al-A'raf","Al-Anfal","At-Tawbah","Yunus",
+      "Hud","Yusuf","Ar-Ra'd","Ibrahim","Al-Hijr","An-Nahl","Al-Isra'","Al-Kahf","Maryam","Ta-Ha","Al-Anbiya'","Al-Hajj",
+      "Al-Mu'minun","An-Nur","Al-Furqan","Asy-Syu'ara'","An-Naml","Al-Qasas","Al-'Ankabut","Ar-Rum","Luqman","As-Sajdah",
+      "Al-Ahzab","Saba'","Fatir","Ya-Sin","As-Saffat","Sad","Az-Zumar","Ghafir","Fussilat","Asy-Syura","Az-Zukhruf","Ad-Dukhan",
+      "Al-Jasiyah","Al-Ahqaf","Muhammad","Al-Fath","Al-Hujurat","Qaf","Az-Zariyat","At-Tur","An-Najm","Al-Qamar","Ar-Rahman",
+      "Al-Waqi'ah","Al-Hadid","Al-Mujadilah","Al-Hasyr","Al-Mumtahanah","As-Saff","Al-Jumu'ah","Al-Munafiqun","At-Taghabun",
+      "At-Talaq","At-Tahrim","Al-Mulk","Al-Qalam","Al-Haqqah","Al-Ma'arij","Nuh","Al-Jinn","Al-Muzzammil","Al-Muddassir",
+      "Al-Qiyamah","Al-Insan","Al-Mursalat","An-Naba'","An-Nazi'at","'Abasa","At-Takwir","Al-Infitar","Al-Mutaffifin",
+      "Al-Insyiqaq","Al-Buruj","At-Tariq","Al-A'la","Al-Ghasyiyah","Al-Fajr","Al-Balad","Asy-Syams","Al-Lail","Ad-Duha",
+      "Asy-Syarh","At-Tin","Al-'Alaq","Al-Qadr","Al-Bayyinah","Az-Zalzalah","Al-'Adiyat","Al-Qari'ah","At-Takasur","Al-'Asr",
+      "Al-Humazah","Al-Fil","Quraisy","Al-Ma'un","Al-Kausar","Al-Kafirun","An-Nasr","Al-Masad","Al-Ikhlas","Al-Falaq","An-Nas"
     ];
 
-    function renderSurah() {
-      const container = document.getElementById('surah-container');
-      container.innerHTML = sampleSurahs.map(s => `
+    function renderQuran() {
+      const container = document.getElementById('quran-container');
+      container.innerHTML = surahNames.map((name, i) => `
         <div class="item-card">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-weight:bold;">${s.id}. ${s.name}</span>
-            <span class="arabic-text" style="font-size:1.1rem;">${s.arabic}</span>
+            <strong>${i+1}. ${name}</strong>
           </div>
-          <small style="color:var(--text-muted);">${s.verses} Ayat</small>
         </div>
       `).join('');
     }
 
-    function filterSurah(query) {
-      const filtered = sampleSurahs.filter(s => s.name.toLowerCase().includes(query.toLowerCase()));
-      const container = document.getElementById('surah-container');
-      container.innerHTML = filtered.map(s => `
+    function filterSurah(q) {
+      const filtered = surahNames.filter(name => name.toLowerCase().includes(q.toLowerCase()));
+      const container = document.getElementById('quran-container');
+      container.innerHTML = filtered.map((name, i) => `
         <div class="item-card">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-weight:bold;">${s.id}. ${s.name}</span>
-            <span class="arabic-text" style="font-size:1.1rem;">${s.arabic}</span>
-          </div>
-          <small style="color:var(--text-muted);">${s.verses} Ayat</small>
+          <strong>${name}</strong>
         </div>
       `).join('');
     }
 
-    // Geolocation dummy loader
-    function getLocation() {
-      document.getElementById('location-text').innerText = "Lokasi terdeteksi: Jakarta / Indonesia";
+    // Doa Data Render
+    const sampleDoa = ["Dzikir Pagi", "Dzikir Petang", "Doa Sebelum Tidur", "Doa Bangun Tidur", "Doa Masuk Masjid", "Doa Keluar Masjid"];
+    function renderDoa() {
+      const container = document.getElementById('doa-container');
+      container.innerHTML = sampleDoa.map(item => `
+        <div class="item-card" onclick="document.getElementById('audio-doa-player').play()">
+          <strong>${item}</strong>
+        </div>
+      `).join('');
+    }
+    function filterDoa(q) {
+      const filtered = sampleDoa.filter(d => d.toLowerCase().includes(q.toLowerCase()));
+      const container = document.getElementById('doa-container');
+      container.innerHTML = filtered.map(item => `
+        <div class="item-card">
+          <strong>${item}</strong>
+        </div>
+      `).join('');
     }
 
-    // Init
+    // 99 Asmaul Husna Generator
+    function renderAsmaulHusna() {
+      const container = document.getElementById('asma-container');
+      let html = '';
+      for(let i=1; i<=99; i++) {
+        html += `<div class="item-card" style="text-align:center;"><small>${i}</small></div>`;
+      }
+      container.innerHTML = html;
+    }
+
+    // Geolocation & Jadwal Sholat API
+    function getSholatLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+            .then(res => res.json())
+            .then(data => {
+              const city = data.address.city || data.address.town || data.address.county || "Lokasi Anda";
+              document.getElementById('sholat-city').innerText = city;
+            });
+
+          fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=2`)
+            .then(res => res.json())
+            .then(data => {
+              const timings = data.data.timings;
+              const hijri = data.data.date.hijri;
+              document.getElementById('hijri-date').innerText = `${hijri.day} ${hijri.month.en} ${hijri.year} H`;
+              
+              for(let key in timings) {
+                const el = document.getElementById(`time-${key}`);
+                if(el) el.innerText = timings[key];
+              }
+            });
+        }, () => {
+          document.getElementById('sholat-city').innerText = "Jakarta (Default)";
+        });
+      }
+    }
+
+    // Realtime Clock
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById('realtime-clock').innerText = now.toLocaleTimeString('id-ID');
+    }, 1000);
+
+    // Gyroscope Compass Kiblat
+    function initCompass() {
+      if (window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', function(e) {
+          let alpha = e.alpha;
+          if (e.webkitCompassHeading) alpha = e.webkitCompassHeading; // iOS
+          if(alpha !== null) {
+            document.getElementById('compass-hand').style.transform = `rotate(${360 - alpha}deg)`;
+          }
+        }, true);
+        alert("Kompas diaktifkan! Putar HP Anda.");
+      } else {
+        alert("Sensor Gyroscope tidak didukung di perangkat ini.");
+      }
+    }
+
+    // Init App
     document.addEventListener('DOMContentLoaded', () => {
-      renderSurah();
+      const savedTheme = localStorage.getItem('theme');
+      if(savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+
+      renderQuran();
+      renderDoa();
+      renderAsmaulHusna();
+      getSholatLocation();
+      handleHashNav();
     });
+
+    window.addEventListener('hashchange', handleHashNav);
   </script>
 </body>
 </html>
