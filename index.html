@@ -337,6 +337,7 @@
 
             for (const item of ruqyahList) {
                 try {
+                    // Mengambil teks dari API EQuran
                     const response = await fetch(`https://equran.id/api/v2/surat/${item.surah}`);
                     const json = await response.json();
                     const suratData = json.data;
@@ -348,7 +349,6 @@
                     surahTitle.textContent = `${item.surah}. Surah ${suratData.namaLatin}`;
                     surahDiv.appendChild(surahTitle);
 
-                    // Tambahkan catatan sunnah jika ada
                     if (item.note) {
                         const noteDiv = document.createElement('div');
                         noteDiv.className = 'info-sunnah';
@@ -364,7 +364,12 @@
                         ayatList.forEach(ayat => {
                             const card = document.createElement('div');
                             card.className = 'card';
-                            const audioSrc = ayat.audio['05'];
+                            
+                            // PERBAIKAN: Menggunakan Server EveryAyah (Sangat Stabil)
+                            // Format: https://everyayah.com/data/Alafasy_128kbps/001001.mp3
+                            const padSurah = String(item.surah).padStart(3, '0');
+                            const padAyat = String(ayat.nomorAyat).padStart(3, '0');
+                            const audioSrc = `https://everyayah.com/data/Alafasy_128kbps/${padSurah}${padAyat}.mp3`;
 
                             card.innerHTML = `
                                 <div class="card-header">
@@ -393,7 +398,6 @@
                     console.error(`Gagal memuat surah ke-${item.surah}:`, error);
                 }
             }
-            // Sembunyikan loading dan tampilkan doa tidur
             loading.style.display = 'none';
             doaContainer.style.display = 'block';
         }
