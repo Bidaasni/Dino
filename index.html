@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AffiliateStore - Diskon Realtime</title>
+    <style>
+        :root {
+            --primary-color: #ee4d2d; 
+            --accent-color: #ff7337; 
+            --bg-gradient: linear-gradient(135deg, #ee4d2d, #1a1a1a);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-container {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            background: #18191a; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            transition: background 0.4s ease;
+        }
+
+        /* Header */
+        header {
+            background: var(--bg-gradient);
+            padding: 20px 15px;
+            color: white;
+            text-align: center;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            transition: background 0.4s ease;
+        }
+
+        header h1 {
+            font-size: 1.2rem;
+            margin-bottom: 3px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        /* Search & Filter Bar */
+        .search-filter-box {
+            padding: 10px 15px;
+            background: #242526;
+            border-bottom: 1px solid #3a3b3c;
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-filter-box input {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid #3a3b3c;
+            outline: none;
+            font-size: 0.85rem;
+            color: #fff;
+            background: #303031;
+        }
+
+        .search-filter-box input::placeholder {
+            color: #aaa;
+        }
+
+        .search-filter-box select {
+            padding: 0 10px;
+            border-radius: 20px;
+            border: 1px solid #3a3b3c;
+            background: #303031;
+            font-size: 0.8rem;
+            outline: none;
+            cursor: pointer;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* Platform Selector Tabs */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 8px 15px;
+            background: #242526;
+            white-space: nowrap;
+            border-bottom: 1px solid #3a3b3c;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid #3a3b3c;
+            background: #303031;
+            font-size: 0.8rem;
+            color: #ccc;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        /* Main Content Area */
+        .content {
+            flex: 1;
+            background: var(--bg-gradient);
+            padding: 12px 15px;
+            transition: background 0.4s ease;
+        }
+
+        /* Pilihan Target (Semua, Pria, Wanita, Baby) di Atas - Grid 4 Kolom */
+        .category-menu {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .cat-btn {
+            background: rgba(24, 25, 26, 0.9);
+            border: 1px solid #3a3b3c;
+            border-radius: 6px;
+            padding: 6px 2px;
+            text-align: center;
+            cursor: pointer;
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .cat-btn:hover, .cat-btn.active-cat {
+            background: var(--accent-color);
+            color: #111;
+            border-color: var(--accent-color);
+        }
+
+        .cat-icon {
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 1px;
+        }
+
+        /* Menu Ikon Kategori Ukuran Kecil (Grid 6 Kolom di Bawah Target) */
+        .product-type-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+
+        .type-btn {
+            background: rgba(24, 25, 26, 0.9);
+            border: 1px solid #3a3b3c;
+            border-radius: 6px;
+            padding: 5px 2px;
+            text-align: center;
+            cursor: pointer;
+            color: #bbb;
+            font-size: 0.55rem;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            transition: all 0.2s;
+        }
+
+        .type-btn:hover, .type-btn.active-type {
+            background: var(--accent-color);
+            color: #111;
+            border-color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .type-icon {
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 1px;
+        }
+
+        .section-title-bar {
+            background: rgba(24, 25, 26, 0.9);
+            backdrop-filter: blur(5px);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding-bottom: 15px;
+        }
+
+        .product-card {
+            background: #242526;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #3a3b3c;
+            position: relative;
+        }
+
+        /* Label Diskon Badge */
+        .discount-badge {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            background: #ff4d4d;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: bold;
+            padding: 2px 5px;
+            border-radius: 3px;
+            z-index: 2;
+        }
+
+        .product-img {
+            width: 100%;
+            height: 120px;
+            background: #3a3b3c;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 8px;
+        }
+
+        .product-title {
+            font-size: 0.8rem;
+            color: #f0f2f5;
+            font-weight: 600;
+            height: 34px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            margin-bottom: 4px;
+        }
+
+        .price-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .original-price {
+            font-size: 0.7rem;
+            color: #aaa;
+            text-decoration: line-through;
+        }
+
+        .product-price {
+            color: #ff4d4d;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .product-btn {
+            width: 100%;
+            padding: 8px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        .product-btn:hover {
+            opacity: 0.85;
+        }
+
+        /* Footer Info */
+        .store-footer {
+            background: #111;
+            color: #aaa;
+            text-align: center;
+            padding: 12px;
+            font-size: 0.7rem;
+            margin-top: auto;
+            border-radius: 6px 6px 0 0;
+            border-top: 2px solid var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-container" id="appContainer">
+    <!-- Header -->
+    <header id="mainHeader">
+        <h1>🔥 Diskon Realtime</h1>
+        <p id="subHeader">Khusus produk diskon Shopee Pilihan</p>
+    </header>
+
+    <!-- Search & Sort Bar -->
+    <div class="search-filter-box">
+        <input type="text" id="searchInput" placeholder="Cari diskon barang..." oninput="filterProducts()">
+        <select id="sortSelect" onchange="filterProducts()">
+            <option value="asc">Harga ⬇️</option>
+            <option value="desc">Harga ⬆️</option>
+        </select>
+    </div>
+
+    <!-- Platform Selector Tabs -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="setTheme('shopee')">🛍️ Shopee</button>
+        <button class="tab-btn" onclick="setTheme('tiktok')">🎵 TikTok Shop</button>
+        <button class="tab-btn" onclick="setTheme('lazada')">💙 Lazada</button>
+        <button class="tab-btn" onclick="setTheme('tokopedia')">🟢 Tokopedia</button>
+        <button class="tab-btn" onclick="setTheme('blibli')">🔵 Blibli</button>
+    </div>
+
+    <!-- Main Dynamic Content -->
+    <div class="content" id="mainContent">
+        
+        <!-- Pilihan Target (Semua, Pria, Wanita, Baby) di ATAS -->
+        <div class="category-menu">
+            <button class="cat-btn active-cat" onclick="filterTarget('all-target', this)"><span class="cat-icon">🔥</span>Semua</button>
+            <button class="cat-btn" onclick="filterTarget('man', this)"><span class="cat-icon">👨</span>Pria</button>
+            <button class="cat-btn" onclick="filterTarget('women', this)"><span class="cat-icon">👩</span>Wanita</button>
+            <button class="cat-btn" onclick="filterTarget('baby', this)"><span class="cat-icon">👶</span>Baby</button>
+        </div>
+
+        <!-- Menu Ikon Kategori Ukuran Kecil (Grid 6 Kolom di BAWAH Target) -->
+        <div class="product-type-grid">
+            <button class="type-btn active-type" onclick="filterType('all', this)"><span class="type-icon">⚡</span>Semua</button>
+            <button class="type-btn" onclick="filterType('baju', this)"><span class="type-icon">👕</span>Baju</button>
+            <button class="type-btn" onclick="filterType('celana', this)"><span class="type-icon">👖</span>Celana</button>
+            <button class="type-btn" onclick="filterType('sandal', this)"><span class="type-icon">🩴</span>Sandal</button>
+            <button class="type-btn" onclick="filterType('sepatu', this)"><span class="type-icon">👟</span>Sepatu</button>
+            <button class="type-btn" onclick="filterType('jam', this)"><span class="type-icon">⌚</span>Jam</button>
+            <button class="type-btn" onclick="filterType('tas', this)"><span class="type-icon">👜</span>Tas</button>
+            <button class="type-btn" onclick="filterType('gadget', this)"><span class="type-icon">📱</span>Gadget</button>
+            <button class="type-btn" onclick="filterType('elektronik', this)"><span class="type-icon">💡</span>Elektronik</button>
+            <button class="type-btn" onclick="filterType('parfum', this)"><span class="type-icon">🌸</span>Parfum</button>
+            <button class="type-btn" onclick="filterType('topi', this)"><span class="type-icon">🧢</span>Topi</button>
+            <button class="type-btn" onclick="filterType('makanan', this)"><span class="type-icon">🍔</span>Makanan</button>
+        </div>
+
+        <div class="section-title-bar">
+            <span id="activeInfoLabel">SEMUA • Semua Kategori</span>
+        </div>
+
+        <!-- Daftar Produk Diskon -->
+        <div class="product-grid" id="productGrid"></div>
+
+        <!-- Footer Card -->
+        <div class="store-footer">
+            <p>🛒 AffiliateStore</p>
+            <p id="footerDesc">Update otomatis harga diskon real-time.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const allProducts = [
+        // --- MAN (Pria) ---
+        { title: "Kaos Polos Cotton Combed Pria Premium", target: "man", type: "baju", price: 45000, origPrice: 90000, discount: "50%", img: "https://via.placeholder.com/150?text=Baju+Pria" },
+        { title: "Celana Chinos Panjang Slim Fit Pria", target: "man", type: "celana", price: 95000, origPrice: 190000, discount: "50%", img: "https://via.placeholder.com/150?text=Celana+Pria" },
+        { title: "Sandal Selop Kulit Casual Pria", target: "man", type: "sandal", price: 50000, origPrice: 100000, discount: "50%", img: "https://via.placeholder.com/150?text=Sandal+Pria" },
+        { title: "Sepatu Sneakers Running Pria Sporty", target: "man", type: "sepatu", price: 125000, origPrice: 250000, discount: "50%", img: "https://via.placeholder.com/150?text=Sepatu+Pria" },
+        { title: "Jam Tangan Kulit Formal Pria Elegan", target: "man", type: "jam", price: 75000, origPrice: 150000, discount: "50%", img: "https://via.placeholder.com/150?text=Jam+Pria" },
+        { title: "Tas Ransel Laptop Anti Air Pria", target: "man", type: "tas", price: 110000, origPrice: 220000, discount: "50%", img: "https://via.placeholder.com/150?text=Tas+Pria" },
+        { title: "Smartwatch Bluetooth Sport Pria", target: "man", type: "gadget", price: 135000, origPrice: 270000, discount: "50%", img: "https://via.placeholder.com/150?text=Gadget+Pria" },
+        { title: "Kipas Angin Mini Portable USB Meja", target: "man", type: "elektronik", price: 55000, origPrice: 110000, discount: "50%", img: "https://via.placeholder.com/150?text=Elektronik" },
+        { title: "Parfum Pria Tahan Lama EDT Fresh", target: "man", type: "parfum", price: 65000, origPrice: 130000, discount: "50%", img: "https://via.placeholder.com/150?text=Parfum+Pria" },
+        { title: "Topi Baseball Distro Casual Pria", target: "man", type: "topi", price: 30000, origPrice: 60000, discount: "50%", img: "https://via.placeholder.com/150?text=Topi+Pria" },
+        { title: "Snack Keripik Pedas Gurih Premium", target: "man", type: "makanan", price: 20000, origPrice: 40000, discount: "50%", img: "https://via.placeholder.com/150?text=Makanan" },
+
+        // --- WOMEN (Wanita) ---
+        { title: "Dress Casual Wanita Korean Style", target: "women", type: "baju", price: 85000, origPrice: 170000, discount: "50%", img: "https://via.placeholder.com/150?text=Baju+Wanita" },
+        { title: "Celana Kulot Highwaist Rayon Wanita", target: "women", type: "celana", price: 70000, origPrice: 140000, discount: "50%", img: "https://via.placeholder.com/150?text=Celana+Wanita" },
+        { title: "Sandal Jelly Wanita Cantik Anti Slip", target: "women", type: "sandal", price: 40000, origPrice: 80000, discount: "50%", img: "https://via.placeholder.com/150?text=Sandal+Wanita" },
+        { title: "Sepatu Heels Wanita Pesta Elegan", target: "women", type: "sepatu", price: 95000, origPrice: 190000, discount: "50%", img: "https://via.placeholder.com/150?text=Sepatu+Wanita" },
+        { title: "Jam Tangan Rantai Rosegold Wanita Mewah", target: "women", type: "jam", price: 80000, origPrice: 160000, discount: "50%", img: "https://via.placeholder.com/150?text=Jam+Wanita" },
+        { title: "Tas Selempang Kulit Wanita Casual", target: "women", type: "tas", price: 75000, origPrice: 150000, discount: "50%", img: "https://via.placeholder.com/150?text=Tas+Wanita" },
+        { title: "TWS Earbuds Wireless Pastel Cute", target: "women", type: "gadget", price: 75000, origPrice: 150000, discount: "50%", img: "https://via.placeholder.com/150?text=Gadget+Wanita" },
+        { title: "Catokan Rambut Mini Travel Friendly", target: "women", type: "elektronik", price: 45000, origPrice: 90000, discount: "50%", img: "https://via.placeholder.com/150?text=Elektronik" },
+        { title: "Parfum Wanita Manis Fruity Floral", target: "women", type: "parfum", price: 70000, origPrice: 140000, discount: "50%", img: "https://via.placeholder.com/150?text=Parfum+Wanita" },
+        { title: "Topi Bucket Hat Wanita Korea Style", target: "women", type: "topi", price: 35000, origPrice: 70000, discount: "50%", img: "https://via.placeholder.com/150?text=Topi+Wanita" },
+        { title: "Kue Kering Nastar Keju Premium Toples", target: "women", type: "makanan", price: 55000, origPrice: 110000, discount: "50%", img: "https://via.placeholder.com/150?text=Makanan" },
+
+        // --- BABY ---
+        { title: "Setelan Baju Bayi Newborn Katun Halus", target: "baby", type: "baju", price: 35000, origPrice: 70000, discount: "50%", img: "https://via.placeholder.com/150?text=Baju+Bayi" },
+        { title: "Celana Pendek Bayi Katun Nyaman (Isi 3)", target: "baby", type: "celana", price: 25000, origPrice: 50000, discount: "50%", img: "https://via.placeholder.com/150?text=Celana+Bayi" },
+        { title: "Sandal Karet Bayi Bunyi Cit-Cit", target: "baby", type: "sandal", price: 22000, origPrice: 45000, discount: "50%", img: "https://via.placeholder.com/150?text=Sandal+Bayi" },
+        { title: "Sepatu Kaos Kaki Bayi Lucu Anti Slip", target: "baby", type: "sepatu", price: 25000, origPrice: 50000, discount: "50%", img: "https://via.placeholder.com/150?text=Sepatu+Bayi" },
+        { title: "Jam Proyektor Lampu Tidur Anak Lucu", target: "baby", type: "jam", price: 60000, origPrice: 120000, discount: "50%", img: "https://via.placeholder.com/150?text=Jam+Bayi" },
+        { title: "Tas Perlengkapan Bayi Komplet Multifungsi", target: "baby", type: "tas", price: 85000, origPrice: 170000, discount: "50%", img: "https://via.placeholder.com/150?text=Tas+Bayi" },
+        { title: "Termometer Digital Infrared Bayi", target: "baby", type: "gadget", price: 85000, origPrice: 170000, discount: "50%", img: "https://via.placeholder.com/150?text=Gadget+Bayi" },
+        { title: "Sterilizer Botol Susu Elektrik Portable", target: "baby", type: "elektronik", price: 150000, origPrice: 300000, discount: "50%", img: "https://via.placeholder.com/150?text=Elektronik" },
+        { title: "Baby Cologne Wangi Lembut Bayi", target: "baby", type: "parfum", price: 25000, origPrice: 50000, discount: "50%", img: "https://via.placeholder.com/150?text=Parfum+Bayi" },
+        { title: "Topi Bayi Kupluk Rajut Lucu", target: "baby", type: "topi", price: 20000, origPrice: 40000, discount: "50%", img: "https://via.placeholder.com/150?text=Topi+Bayi" },
+        { title: "Biskuit MPASI Bayi Sehat Bergizi", target: "baby", type: "makanan", price: 18000, origPrice: 35000, discount: "50%", img: "https://via.placeholder.com/150?text=Makanan" }
+    ];
+
+    const themes = {
+        shopee: { name: "Shopee", primary: "#ee4d2d", accent: "#ff7337", gradient: "linear-gradient(135deg, #ee4d2d, #1a1a1a)" },
+        tiktok: { name: "TikTok Shop", primary: "#fe2c55", accent: "#25f4ee", gradient: "linear-gradient(135deg, #121212, #fe2c55)" },
+        lazada: { name: "Lazada", primary: "#0f146d", accent: "#00b4d8", gradient: "linear-gradient(135deg, #0f146d, #7209b7)" },
+        tokopedia: { name: "Tokopedia", primary: "#03ac03", accent: "#00ff66", gradient: "linear-gradient(135deg, #03ac03, #085c08)" },
+        blibli: { name: "Blibli", primary: "#006cb7", accent: "#48cae4", gradient: "linear-gradient(135deg, #006cb7, #03045e)" }
+    };
+
+    let currentPlatform = 'shopee';
+    let currentTarget = 'all-target'; // Default Semua Target
+    let currentType = 'all';
+
+    function setTheme(platformKey) {
+        currentPlatform = platformKey;
+        const theme = themes[platformKey];
+        
+        document.documentElement.style.setProperty('--primary-color', theme.primary);
+        document.documentElement.style.setProperty('--accent-color', theme.accent);
+        document.documentElement.style.setProperty('--bg-gradient', theme.gradient);
+
+        document.getElementById('subHeader').innerText = `Khusus produk diskon ${theme.name}`;
+        document.getElementById('footerDesc').innerText = `Update otomatis harga diskon real-time via ${theme.name}.`;
+
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+
+        filterProducts();
+    }
+
+    function filterTarget(target, element) {
+        currentTarget = target;
+        
+        const catButtons = document.querySelectorAll('.cat-btn');
+        catButtons.forEach(btn => btn.classList.remove('active-cat'));
+        element.classList.add('active-cat');
+
+        filterProducts();
+    }
+
+    function filterType(type, element) {
+        currentType = type;
+        
+        const typeButtons = document.querySelectorAll('.type-btn');
+        typeButtons.forEach(btn => btn.classList.remove('active-type'));
+        element.classList.add('active-type');
+
+        filterProducts();
+    }
+
+    function formatRupiah(angka) {
+        return "Rp" + angka.toLocaleString('id-ID');
+    }
+
+    function filterProducts() {
+        const keyword = document.getElementById('searchInput').value.toLowerCase();
+        const sortOrder = document.getElementById('sortSelect').value;
+        const themeName = themes[currentPlatform].name;
+
+        let targetText = currentTarget === 'all-target' ? 'SEMUA' : currentTarget === 'man' ? 'PRIA' : currentTarget === 'women' ? 'WANITA' : 'BABY';
+        let typeText = currentType === 'all' ? 'Semua Kategori' : currentType.toUpperCase();
+        document.getElementById('activeInfoLabel').innerText = `${targetText} • ${typeText}`;
+
+        let filtered = allProducts.filter(item => {
+            const matchTarget = (currentTarget === 'all-target' || item.target === currentTarget);
+            const matchType = (currentType === 'all' || item.type === currentType);
+            const matchKeyword = item.title.toLowerCase().includes(keyword);
+            return matchTarget && matchType && matchKeyword;
+        });
+
+        filtered.sort((a, b) => {
+            if (sortOrder === 'asc') {
+                return a.price - b.price;
+            } else {
+                return b.price - a.price;
+            }
+        });
+
+        const gridContainer = document.getElementById('productGrid');
+        gridContainer.innerHTML = '';
+
+        if (filtered.length === 0) {
+            gridContainer.innerHTML = `<p style="grid-column: span 2; text-align:center; color:#aaa; padding: 20px;">Produk diskon tidak ditemukan.</p>`;
+            return;
+        }
+
+        filtered.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <div class="discount-badge">Disc ${product.discount}</div>
+                <img src="${product.img}" alt="${product.title}" class="product-img">
+                <div class="product-info">
+                    <div class="product-title">${product.title}</div>
+                    <div class="price-wrapper">
+                        <span class="original-price">${formatRupiah(product.origPrice)}</span>
+                        <span class="product-price">${formatRupiah(product.price)}</span>
+                    </div>
+                </div>
+                <button class="product-btn">Beli di ${themeName}</button>
+            `;
+            gridContainer.appendChild(card);
+        });
+    }
+
+    filterProducts();
+</script>
+
+</body>
+</html>
