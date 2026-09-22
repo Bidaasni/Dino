@@ -3,549 +3,1186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AffiliateStore - Diskon Realtime</title>
+
+    <!-- SEO DASAR -->
+    <title>Al-Qur'an Digital Noble - KitabKu.Online</title>
+    <meta name="description" content="Baca dan pelajari Al-Qur'an Digital 114 Surah lengkap dengan bahasa isyarat fokus dan mode audio sinkronisasi interaktif.">
+    <link rel="canonical" href="https://kitabku.online/index.html">
+
+    <!-- GOOGLE ADSENSE -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6256519943033171" crossorigin="anonymous"></script>
+
+    <!-- GOOGLE ANALYTICS -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZR6K9KQQB7"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ZR6K9KQQB7');
+    </script>
+
+    <!-- SPECULATION RULES (PREFETCH & PRERENDER) -->
+    <script type="speculationrules">
+    {
+      "prerender": [
+        {
+          "source": "list",
+          "urls": ["index.html", "doa.html", "ruqyah.html", "jadwal-sholat.html", "asmaulhusna.html", "radio.html", "tentang.html"]
+        }
+      ]
+    }
+    </script>
+
     <style>
+        /* ================================
+           PENGATURAN FONT ISYARAT (LPMQ)
+        ================================ */
+        @font-face {
+            font-family: 'LPMQIsyarat';
+            src: url('fonts/LPMQ-ISYARAT.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @view-transition {
+            navigation: auto;
+        }
+
+        /* ================================
+           TEMA DARK & LIGHT SAGE ELEGAN
+        ================================ */
         :root {
-            --primary-color: #ee4d2d; 
-            --accent-color: #ff7337; 
-            --bg-gradient: linear-gradient(135deg, #ee4d2d, #1a1a1a);
+            --hijau-gelap: #081a16;
+            --hijau-tua: #143028;
+            --hijau: #1c3f35;
+            
+            /* Kartu Tema Gelap */
+            --hijau-card: #2a4e41;
+            --hijau-card2: #345c4e;
+
+            --gold: #e3c85a;
+            --gold-terang: #f5e8b5;
+            --gold-lembut: #faf0ca;
+
+            /* Highlight aktif (menu & ayat) - Tema Gelap */
+            --active-bg: #14382e;
+            --active-text: #f5e8b5;
+            --active-border: #e3c85a;
+            --active-text-redup: #aabdb6;
+            --active-quote: #c9a227;
+            --theme-btn-bg: rgba(13, 48, 40, 0.25);
+
+            --teks: #ffffff;
+            --teks-redup: #c0d4cc;
+
+            --bg-gradient: radial-gradient(circle at top, #1a3a30 0%, var(--hijau-gelap) 60%, #04120e 100%);
+            --header-bg: linear-gradient(135deg, #0d241e, #1a3e33, #234d3f);
+            --nav-bg: rgba(13, 36, 30, 0.97);
+            --player-bg: rgba(10, 28, 23, 0.98);
+            
+            --mode-btn-bg: rgba(10, 28, 23, 0.5);
+            --mode-btn-active: var(--gold);
+            --mode-btn-active-text: #081a16;
+
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+            --border-color: rgba(227, 200, 90, 0.28);
+        }
+
+        /* MODE TERANG: SAGE LEMBUT & SEGAR */
+        [data-theme="light"] {
+            --hijau-gelap: #f4f8f5;
+            --hijau-tua: #e2ede6;
+            --hijau: #ffffff;
+
+            /* Kartu Sage Soft (Soft Eucalyptus) */
+            --hijau-card: #d0dcc9;
+            --hijau-card2: #c4d2bd;
+
+            --gold: #09241e;
+            --gold-terang: #0b3027; 
+            --gold-lembut: #123c32;
+
+            /* Highlight aktif (menu & ayat) - Tema Terang */
+            --active-bg: #a3ba98;
+            --active-text: #0b3027;
+            --active-border: #758f6b;
+            --active-text-redup: #2e4a3f;
+            --active-quote: #758f6b;
+            --theme-btn-bg: var(--hijau-card);
+
+            --teks: #0a261f;
+            --teks-redup: #2e4a3f;
+
+            --bg-gradient: radial-gradient(circle at top, #ffffff 0%, #edf4f0 55%, #e1ebe5 100%);
+            --header-bg: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2));
+            --nav-bg: rgba(237, 244, 240, 0.97);
+            --player-bg: rgba(255, 255, 255, 0.98);
+
+            --mode-btn-bg: #e2ede6;
+            --mode-btn-active: #a3ba98;
+            --mode-btn-active-text: #0b3027;
+
+            --shadow: 0 6px 20px rgba(9, 36, 30, 0.08);
+            --border-color: rgba(13, 48, 40, 0.2);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: #121212;
-            color: #e0e0e0;
-            display: flex;
-            justify-content: center;
-        }
-
-        .phone-container {
-            width: 100%;
-            max-width: 480px;
-            min-height: 100vh;
-            background: #18191a; 
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            transition: background 0.4s ease;
-        }
-
-        /* Header */
-        header {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: var(--bg-gradient);
-            padding: 20px 15px;
-            color: white;
+            color: var(--teks);
+            padding-bottom: 110px;
+            transition: background 0.35s ease, color 0.35s ease;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--header-bg);
+            color: var(--gold-terang);
             text-align: center;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.4);
-            transition: background 0.4s ease;
+            padding: 28px 16px;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
         }
 
         header h1 {
-            font-size: 1.2rem;
-            margin-bottom: 3px;
+            font-size: 26px;
             font-weight: 700;
+            color: var(--gold-terang);
         }
 
         header p {
-            font-size: 0.8rem;
-            opacity: 0.9;
+            margin-top: 6px;
+            font-size: 13px;
+            color: var(--teks-redup);
         }
 
-        /* Search & Filter Bar */
-        .search-filter-box {
-            padding: 10px 15px;
-            background: #242526;
-            border-bottom: 1px solid #3a3b3c;
+        .header-buttons {
             display: flex;
-            gap: 8px;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 14px;
         }
 
-        .search-filter-box input {
-            flex: 1;
-            padding: 8px 12px;
+        .theme-toggle-btn {
+            background: var(--theme-btn-bg);
+            border: 1px solid var(--border-color);
+            color: var(--gold-terang);
+            padding: 6px 14px;
             border-radius: 20px;
-            border: 1px solid #3a3b3c;
-            outline: none;
-            font-size: 0.85rem;
-            color: #fff;
-            background: #303031;
-        }
-
-        .search-filter-box input::placeholder {
-            color: #aaa;
-        }
-
-        .search-filter-box select {
-            padding: 0 10px;
-            border-radius: 20px;
-            border: 1px solid #3a3b3c;
-            background: #303031;
-            font-size: 0.8rem;
-            outline: none;
             cursor: pointer;
-            color: #fff;
+            font-size: 12px;
             font-weight: 600;
         }
 
-        /* Platform Selector Tabs */
-        .tabs {
+        nav {
+            background: var(--nav-bg);
             display: flex;
-            gap: 6px;
+            justify-content: flex-start;
+            gap: 10px;
+            padding: 12px 16px;
             overflow-x: auto;
-            padding: 8px 15px;
-            background: #242526;
-            white-space: nowrap;
-            border-bottom: 1px solid #3a3b3c;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+            scrollbar-width: none;
+            backdrop-filter: blur(10px);
         }
 
-        .tabs::-webkit-scrollbar {
+        nav::-webkit-scrollbar {
             display: none;
         }
 
-        .tab-btn {
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid #3a3b3c;
-            background: #303031;
-            font-size: 0.8rem;
-            color: #ccc;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.3s;
-        }
-
-        .tab-btn.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-            font-weight: bold;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-        }
-
-        /* Main Content Area */
-        .content {
-            flex: 1;
-            background: var(--bg-gradient);
-            padding: 12px 15px;
-            transition: background 0.4s ease;
-        }
-
-        /* Pilihan Target (Semua, Pria, Wanita, Baby) di Atas - Grid 4 Kolom */
-        .category-menu {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 5px;
-            margin-bottom: 10px;
-        }
-
-        .cat-btn {
-            background: rgba(24, 25, 26, 0.9);
-            border: 1px solid #3a3b3c;
-            border-radius: 6px;
-            padding: 6px 2px;
+        nav a {
+            flex: 0 0 auto;
+            min-width: 110px;
+            padding: 10px 16px;
             text-align: center;
-            cursor: pointer;
-            color: #fff;
-            font-size: 0.7rem;
+            text-decoration: none;
+            color: var(--teks-redup);
             font-weight: 600;
-            transition: all 0.2s;
+            font-size: 13px;
+            background: rgba(42, 78, 65, 0.15);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            transition: all 0.25s ease;
         }
 
-        .cat-btn:hover, .cat-btn.active-cat {
-            background: var(--accent-color);
-            color: #111;
-            border-color: var(--accent-color);
+        nav a:hover {
+            background: var(--hijau-card);
+            color: var(--gold-terang);
         }
 
-        .cat-icon {
-            font-size: 0.95rem;
-            display: block;
-            margin-bottom: 1px;
+        nav a.active {
+            background: var(--active-bg) !important;
+            color: var(--active-text) !important;
+            border-color: var(--active-border) !important;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(9, 36, 30, 0.2);
         }
 
-        /* Menu Ikon Kategori Ukuran Kecil (Grid 6 Kolom di Bawah Target) */
-        .product-type-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 5px;
+        main {
+            max-width: 860px;
+            width: 92%;
+            margin: 24px auto 0 auto;
+        }
+
+        .search-container {
+            background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .search-title-wrapper {
             margin-bottom: 12px;
         }
 
-        .type-btn {
-            background: rgba(24, 25, 26, 0.9);
-            border: 1px solid #3a3b3c;
-            border-radius: 6px;
-            padding: 5px 2px;
-            text-align: center;
-            cursor: pointer;
-            color: #bbb;
-            font-size: 0.55rem;
+        .search-title-wrapper h2 {
+            font-size: 16px;
+            color: var(--gold-terang);
             font-weight: 600;
+        }
+
+        .search-input-group {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            background: rgba(8, 26, 22, 0.12);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 4px 10px;
+            gap: 8px;
+            transition: border-color 0.3s ease;
+        }
+
+        [data-theme="dark"] .search-input-group {
+            background: rgba(8, 26, 22, 0.5);
+        }
+
+        .search-input-group:focus-within {
+            border-color: var(--gold);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px 4px;
+            border: none;
+            background: transparent;
+            color: var(--teks);
+            font-size: 14px;
+            outline: none;
+        }
+
+        .mic-btn {
+            background: rgba(13, 48, 40, 0.15);
+            border: 1px solid var(--border-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 42px;
-            transition: all 0.2s;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            outline: none;
         }
 
-        .type-btn:hover, .type-btn.active-type {
-            background: var(--accent-color);
-            color: #111;
-            border-color: var(--accent-color);
-            font-weight: bold;
+        .mic-icon {
+            font-size: 16px;
+            line-height: 1;
         }
 
-        .type-icon {
-            font-size: 0.9rem;
-            display: block;
-            margin-bottom: 1px;
+        .mic-btn.listening {
+            background: rgba(230, 57, 70, 0.25);
+            border-color: #e63946;
+            animation: redPulseLight 1.2s infinite;
         }
 
-        .section-title-bar {
-            background: rgba(24, 25, 26, 0.9);
-            backdrop-filter: blur(5px);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: #fff;
-            margin-bottom: 10px;
+        @keyframes redPulseLight {
+            0% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.8); transform: scale(1); }
+            50% { box-shadow: 0 0 14px 5px rgba(230, 57, 70, 0.7); transform: scale(1.08); }
+            100% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0); transform: scale(1); }
+        }
+
+        .daftar-surah {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 14px;
+        }
+
+        .surah-card {
+            background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2));
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.25s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
-        /* Product Grid */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            padding-bottom: 15px;
+        .surah-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-3px);
         }
 
-        .product-card {
-            background: #242526;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        .surah-info-left {
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border: 1px solid #3a3b3c;
-            position: relative;
+            align-items: center;
+            gap: 12px;
         }
 
-        /* Label Diskon Badge */
-        .discount-badge {
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            background: #ff4d4d;
-            color: white;
-            font-size: 0.6rem;
-            font-weight: bold;
-            padding: 2px 5px;
-            border-radius: 3px;
-            z-index: 2;
+        .nomor-surah {
+            width: 36px;
+            height: 36px;
+            background: rgba(8, 26, 22, 0.12);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--gold-terang);
+            font-size: 13px;
         }
 
-        .product-img {
-            width: 100%;
-            height: 120px;
-            background: #3a3b3c;
-            object-fit: cover;
-        }
-
-        .product-info {
-            padding: 8px;
-        }
-
-        .product-title {
-            font-size: 0.8rem;
-            color: #f0f2f5;
+        .detail-surah h3 {
+            font-size: 15px;
+            color: var(--gold-terang);
             font-weight: 600;
-            height: 34px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            margin-bottom: 4px;
         }
 
-        .price-wrapper {
+        .detail-surah p {
+            margin-top: 3px;
+            font-size: 11px;
+            color: var(--teks-redup);
+        }
+
+        .nama-arab-list {
+            font-size: 20px;
+            color: var(--gold-terang);
+            font-family: 'Traditional Arabic', 'Amiri', serif;
+        }
+
+        /* HEADER DETAIL SURAH */
+        .surah-view-header {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            margin-bottom: 18px;
+            background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2));
+            padding: 10px 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            gap: 12px;
+        }
+
+        .btn-back {
+            background: rgba(8, 26, 22, 0.12);
+            border: 1px solid var(--border-color);
+            color: var(--gold-terang);
+            padding: 8px 14px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s ease;
+        }
+
+        .btn-back:hover {
+            background: var(--active-bg);
+            color: var(--active-text);
+        }
+
+        .header-title-wrapper {
+            text-align: center;
+        }
+
+        .header-title-wrapper h2 {
+            font-size: 16px;
+            color: var(--gold-terang);
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .header-title-wrapper p {
+            font-size: 11px;
+            color: var(--teks-redup);
+            margin-top: 3px;
+        }
+
+        /* MODE SELECTOR */
+        .mode-selector-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: var(--mode-btn-bg);
+            padding: 6px;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            color: var(--teks-redup);
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            font-size: 13px;
+            transition: all 0.25s ease;
+        }
+
+        .mode-btn.active {
+            background: var(--mode-btn-active);
+            color: var(--mode-btn-active-text);
+            box-shadow: 0 4px 12px rgba(9, 36, 30, 0.15);
+        }
+
+        /* STYLING MODE MEMBACA (DENGAN FONT ISYARAT) */
+        .reading-vertical-container {
             display: flex;
             flex-direction: column;
+            gap: 16px;
+            padding-bottom: 30px;
         }
 
-        .original-price {
-            font-size: 0.7rem;
-            color: #aaa;
-            text-decoration: line-through;
+        .reading-ayat-card {
+            background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2));
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
 
-        .product-price {
-            color: #ff4d4d;
-            font-weight: 800;
-            font-size: 0.9rem;
+        .reading-ayat-header {
+            font-size: 12px;
+            color: var(--gold-terang);
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .product-btn {
-            width: 100%;
-            padding: 8px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            font-size: 0.7rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: opacity 0.3s;
+        .reading-arabic {
+            font-size: 28px;
+            text-align: right;
+            color: var(--gold-terang);
+            font-family: 'Traditional Arabic', 'Amiri', serif;
+            line-height: 2.2;
         }
 
-        .product-btn:hover {
-            opacity: 0.85;
+        /* Menerapkan Font Isyarat Kemenag */
+        .reading-isyarat {
+            font-family: 'LPMQIsyarat', sans-serif;
+            font-size: 32px;
+            text-align: right;
+            direction: rtl;
+            color: #52d1b2; 
+            line-height: 2.2;
+            padding: 4px 0;
         }
 
-        /* Footer Info */
-        .store-footer {
-            background: #111;
-            color: #aaa;
+        .reading-latin {
+            font-size: 13px;
+            color: var(--gold-terang);
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .reading-translation {
+            font-size: 13px;
+            color: var(--teks-redup);
+            line-height: 1.5;
+            border-left: 3px solid var(--gold);
+            padding-left: 12px;
+        }
+
+        /* STYLING MODE AUDIO */
+        .audio-horizontal-container {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 10px 5px 25px 5px;
+            scrollbar-width: none;
+            align-items: flex-start;
+        }
+
+        .audio-horizontal-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .audio-ayat-card-horizontal {
+            flex: 0 0 100%;
+            max-width: 100%;
+            scroll-snap-align: center;
+            background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2));
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .audio-ayat-card-horizontal.active-audio-highlight {
+            background: var(--active-bg) !important;
+            transform: scale(1.01);
+            box-shadow: 0 0 18px rgba(9, 36, 30, 0.35);
+            border-color: var(--active-border);
+        }
+
+        .audio-ayat-card-horizontal.active-audio-highlight .audio-ayat-header,
+        .audio-ayat-card-horizontal.active-audio-highlight .audio-arabic,
+        .audio-ayat-card-horizontal.active-audio-highlight .audio-latin {
+            color: var(--active-text) !important;
+        }
+
+        .audio-ayat-card-horizontal.active-audio-highlight .audio-translation {
+            color: var(--active-text-redup) !important;
+            border-left-color: var(--active-quote) !important;
+        }
+
+        .audio-ayat-header {
+            font-size: 12px;
+            color: var(--gold-terang);
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .audio-arabic {
+            font-size: 26px;
+            text-align: right;
+            color: var(--gold-terang);
+            font-family: 'Traditional Arabic', 'Amiri', serif;
+            line-height: 2.2;
+            padding: 10px 0;
+        }
+
+        .audio-latin {
+            font-size: 13px;
+            color: var(--gold-terang);
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .audio-translation {
+            font-size: 13px;
+            color: var(--teks-redup);
+            line-height: 1.5;
+            border-left: 3px solid var(--gold);
+            padding-left: 12px;
+        }
+
+        .loading {
             text-align: center;
-            padding: 12px;
-            font-size: 0.7rem;
-            margin-top: auto;
-            border-radius: 6px 6px 0 0;
-            border-top: 2px solid var(--accent-color);
+            color: var(--teks-redup);
+            padding: 40px;
+            font-size: 14px;
+        }
+
+        .audio-player-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--player-bg);
+            border-top: 2px solid var(--border-color);
+            box-shadow: 0 -6px 25px rgba(0,0,0,0.1);
+            padding: 12px 16px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .player-content {
+            max-width: 860px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .player-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--gold-terang);
+            font-weight: 700;
+        }
+
+        .player-status {
+            font-size: 10px;
+            color: var(--teks-redup);
+        }
+
+        audio {
+            width: 100%;
+            height: 36px;
+            border-radius: 6px;
+        }
+
+        footer {
+            background: var(--header-bg);
+            color: var(--teks-redup);
+            text-align: center;
+            padding: 18px;
+            margin-top: 35px;
+            border-top: 1px solid var(--border-color);
+            font-size: 12px;
         }
     </style>
 </head>
-<body>
+<body onload="initApp()">
 
-<div class="phone-container" id="appContainer">
-    <!-- Header -->
-    <header id="mainHeader">
-        <h1>🔥 Diskon Realtime</h1>
-        <p id="subHeader">Khusus produk diskon Shopee Pilihan</p>
-    </header>
+<header>
+    <h1>📖 Al-Qur'an Digital Noble</h1>
+    <p>Bahasa Isyarat & Mode Audio Sinkronisasi</p>
+    <div class="header-buttons">
+        <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">☀️ Ganti ke Mode Terang</button>
+    </div>
+</header>
 
-    <!-- Search & Sort Bar -->
-    <div class="search-filter-box">
-        <input type="text" id="searchInput" placeholder="Cari diskon barang..." oninput="filterProducts()">
-        <select id="sortSelect" onchange="filterProducts()">
-            <option value="asc">Harga ⬇️</option>
-            <option value="desc">Harga ⬆️</option>
-        </select>
+<nav>
+    <a href="index.html" class="active" id="activeMenu">📖 Al-Qur'an</a>
+    <a href="doa.html">🤲 Doa & Dzikir</a>
+    <a href="ruqyah.html">🛡️ Ruqyah Syar'i</a>
+    <a href="jadwal-sholat.html">🕌 Sholat</a>
+    <a href="asmaulhusna.html">❤️ Asmaul Husna</a>
+    <a href="radio.html">📻 Radio</a>
+    <a href="tentang.html">ℹ️ Tentang</a>
+</nav>
+
+<main id="mainContainer">
+    <div id="homeView">
+        <div class="search-container">
+            <div class="search-title-wrapper">
+                <h2>Daftar Surah Al-Qur'an</h2>
+            </div>
+            
+            <div class="search-input-group">
+                <button id="micBtn" class="mic-btn" onclick="mulaiPencarianSuara()" title="Pencarian Suara" aria-label="Pencarian Suara">
+                    <span id="micIcon" class="mic-icon">🎙️</span>
+                </button>
+                <input type="text" id="searchInput" class="search-box" placeholder="Cari surah (cth: annas, alfatihah, yasin)..." oninput="debounceCariSurah()" autocomplete="off" autocorrect="off" spellcheck="false">
+            </div>
+        </div>
+
+        <div id="daftarSurah" class="daftar-surah">
+            <div class="loading">Memuat 114 Surah...</div>
+        </div>
     </div>
 
-    <!-- Platform Selector Tabs -->
-    <div class="tabs">
-        <button class="tab-btn active" onclick="setTheme('shopee')">🛍️ Shopee</button>
-        <button class="tab-btn" onclick="setTheme('tiktok')">🎵 TikTok Shop</button>
-        <button class="tab-btn" onclick="setTheme('lazada')">💙 Lazada</button>
-        <button class="tab-btn" onclick="setTheme('tokopedia')">🟢 Tokopedia</button>
-        <button class="tab-btn" onclick="setTheme('blibli')">🔵 Blibli</button>
+    <!-- TAMPILAN DETAIL SURAH -->
+    <div id="detailView" style="display: none;">
+        <div class="surah-view-header">
+            <button class="btn-back" onclick="kembaliKeHome()">
+                <span>←</span> Kembali
+            </button>
+            <div class="header-title-wrapper">
+                <h2 id="detailSurahTitle">Surah</h2>
+                <p id="detailSurahSub">Jumlah Ayat</p>
+            </div>
+            <div style="width: 75px;"></div>
+        </div>
+
+        <div class="mode-selector-container">
+            <button id="btnModeMembaca" class="mode-btn active" onclick="ubahMode('membaca')">📖 Mode Membaca</button>
+            <button id="btnModeAudio" class="mode-btn" onclick="ubahMode('audio')">🎧 Mode Audio</button>
+        </div>
+
+        <div id="readingFocusView"></div>
+        <div id="audioListView" style="display: none;"></div>
     </div>
+</main>
 
-    <!-- Main Dynamic Content -->
-    <div class="content" id="mainContent">
-        
-        <!-- Pilihan Target (Semua, Pria, Wanita, Baby) di ATAS -->
-        <div class="category-menu">
-            <button class="cat-btn active-cat" onclick="filterTarget('all-target', this)"><span class="cat-icon">🔥</span>Semua</button>
-            <button class="cat-btn" onclick="filterTarget('man', this)"><span class="cat-icon">👨</span>Pria</button>
-            <button class="cat-btn" onclick="filterTarget('women', this)"><span class="cat-icon">👩</span>Wanita</button>
-            <button class="cat-btn" onclick="filterTarget('baby', this)"><span class="cat-icon">👶</span>Baby</button>
+<div id="playerBar" class="audio-player-bar">
+    <div class="player-content">
+        <div class="player-title">
+            <span id="playerNamaSurah">🎧 Memutar Audio</span>
+            <span id="playerStatus" class="player-status">🌐 Streaming</span>
         </div>
-
-        <!-- Menu Ikon Kategori Ukuran Kecil (Grid 6 Kolom di BAWAH Target) -->
-        <div class="product-type-grid">
-            <button class="type-btn active-type" onclick="filterType('all', this)"><span class="type-icon">⚡</span>Semua</button>
-            <button class="type-btn" onclick="filterType('baju', this)"><span class="type-icon">👕</span>Baju</button>
-            <button class="type-btn" onclick="filterType('celana', this)"><span class="type-icon">👖</span>Celana</button>
-            <button class="type-btn" onclick="filterType('sandal', this)"><span class="type-icon">🩴</span>Sandal</button>
-            <button class="type-btn" onclick="filterType('sepatu', this)"><span class="type-icon">👟</span>Sepatu</button>
-            <button class="type-btn" onclick="filterType('jam', this)"><span class="type-icon">⌚</span>Jam</button>
-            <button class="type-btn" onclick="filterType('tas', this)"><span class="type-icon">👜</span>Tas</button>
-            <button class="type-btn" onclick="filterType('gadget', this)"><span class="type-icon">📱</span>Gadget</button>
-            <button class="type-btn" onclick="filterType('elektronik', this)"><span class="type-icon">💡</span>Elektronik</button>
-            <button class="type-btn" onclick="filterType('parfum', this)"><span class="type-icon">🌸</span>Parfum</button>
-            <button class="type-btn" onclick="filterType('topi', this)"><span class="type-icon">🧢</span>Topi</button>
-            <button class="type-btn" onclick="filterType('makanan', this)"><span class="type-icon">🍔</span>Makanan</button>
-        </div>
-
-        <div class="section-title-bar">
-            <span id="activeInfoLabel">SEMUA • Semua Kategori</span>
-        </div>
-
-        <!-- Daftar Produk Diskon -->
-        <div class="product-grid" id="productGrid"></div>
-
-        <!-- Footer Card -->
-        <div class="store-footer">
-            <p>🛒 AffiliateStore</p>
-            <p id="footerDesc">Update otomatis harga diskon real-time.</p>
-        </div>
+        <audio id="mainAudioPlayer" controls></audio>
     </div>
 </div>
 
+<footer>
+    <p>© 2026 Al-Qur'an Digital • Semoga bermanfaat 🤲</p>
+</footer>
+
 <script>
-    const allProducts = [
-        // --- MAN (Pria) ---
-        { title: "Kaos Polos Cotton Combed Pria Premium", target: "man", type: "baju", price: 45000, origPrice: 90000, discount: "50%", img: "https://via.placeholder.com/150?text=Baju+Pria" },
-        { title: "Celana Chinos Panjang Slim Fit Pria", target: "man", type: "celana", price: 95000, origPrice: 190000, discount: "50%", img: "https://via.placeholder.com/150?text=Celana+Pria" },
-        { title: "Sandal Selop Kulit Casual Pria", target: "man", type: "sandal", price: 50000, origPrice: 100000, discount: "50%", img: "https://via.placeholder.com/150?text=Sandal+Pria" },
-        { title: "Sepatu Sneakers Running Pria Sporty", target: "man", type: "sepatu", price: 125000, origPrice: 250000, discount: "50%", img: "https://via.placeholder.com/150?text=Sepatu+Pria" },
-        { title: "Jam Tangan Kulit Formal Pria Elegan", target: "man", type: "jam", price: 75000, origPrice: 150000, discount: "50%", img: "https://via.placeholder.com/150?text=Jam+Pria" },
-        { title: "Tas Ransel Laptop Anti Air Pria", target: "man", type: "tas", price: 110000, origPrice: 220000, discount: "50%", img: "https://via.placeholder.com/150?text=Tas+Pria" },
-        { title: "Smartwatch Bluetooth Sport Pria", target: "man", type: "gadget", price: 135000, origPrice: 270000, discount: "50%", img: "https://via.placeholder.com/150?text=Gadget+Pria" },
-        { title: "Kipas Angin Mini Portable USB Meja", target: "man", type: "elektronik", price: 55000, origPrice: 110000, discount: "50%", img: "https://via.placeholder.com/150?text=Elektronik" },
-        { title: "Parfum Pria Tahan Lama EDT Fresh", target: "man", type: "parfum", price: 65000, origPrice: 130000, discount: "50%", img: "https://via.placeholder.com/150?text=Parfum+Pria" },
-        { title: "Topi Baseball Distro Casual Pria", target: "man", type: "topi", price: 30000, origPrice: 60000, discount: "50%", img: "https://via.placeholder.com/150?text=Topi+Pria" },
-        { title: "Snack Keripik Pedas Gurih Premium", target: "man", type: "makanan", price: 20000, origPrice: 40000, discount: "50%", img: "https://via.placeholder.com/150?text=Makanan" },
+const htmlElement = document.documentElement;
+const themeBtn = document.getElementById('themeToggleBtn');
 
-        // --- WOMEN (Wanita) ---
-        { title: "Dress Casual Wanita Korean Style", target: "women", type: "baju", price: 85000, origPrice: 170000, discount: "50%", img: "https://via.placeholder.com/150?text=Baju+Wanita" },
-        { title: "Celana Kulot Highwaist Rayon Wanita", target: "women", type: "celana", price: 70000, origPrice: 140000, discount: "50%", img: "https://via.placeholder.com/150?text=Celana+Wanita" },
-        { title: "Sandal Jelly Wanita Cantik Anti Slip", target: "women", type: "sandal", price: 40000, origPrice: 80000, discount: "50%", img: "https://via.placeholder.com/150?text=Sandal+Wanita" },
-        { title: "Sepatu Heels Wanita Pesta Elegan", target: "women", type: "sepatu", price: 95000, origPrice: 190000, discount: "50%", img: "https://via.placeholder.com/150?text=Sepatu+Wanita" },
-        { title: "Jam Tangan Rantai Rosegold Wanita Mewah", target: "women", type: "jam", price: 80000, origPrice: 160000, discount: "50%", img: "https://via.placeholder.com/150?text=Jam+Wanita" },
-        { title: "Tas Selempang Kulit Wanita Casual", target: "women", type: "tas", price: 75000, origPrice: 150000, discount: "50%", img: "https://via.placeholder.com/150?text=Tas+Wanita" },
-        { title: "TWS Earbuds Wireless Pastel Cute", target: "women", type: "gadget", price: 75000, origPrice: 150000, discount: "50%", img: "https://via.placeholder.com/150?text=Gadget+Wanita" },
-        { title: "Catokan Rambut Mini Travel Friendly", target: "women", type: "elektronik", price: 45000, origPrice: 90000, discount: "50%", img: "https://via.placeholder.com/150?text=Elektronik" },
-        { title: "Parfum Wanita Manis Fruity Floral", target: "women", type: "parfum", price: 70000, origPrice: 140000, discount: "50%", img: "https://via.placeholder.com/150?text=Parfum+Wanita" },
-        { title: "Topi Bucket Hat Wanita Korea Style", target: "women", type: "topi", price: 35000, origPrice: 70000, discount: "50%", img: "https://via.placeholder.com/150?text=Topi+Wanita" },
-        { title: "Kue Kering Nastar Keju Premium Toples", target: "women", type: "makanan", price: 55000, origPrice: 110000, discount: "50%", img: "https://via.placeholder.com/150?text=Makanan" },
+const savedTheme = localStorage.getItem('quranTheme');
+if (savedTheme) {
+    htmlElement.setAttribute('data-theme', savedTheme);
+    updateThemeButtonText(savedTheme);
+}
 
-        // --- BABY ---
-        { title: "Setelan Baju Bayi Newborn Katun Halus", target: "baby", type: "baju", price: 35000, origPrice: 70000, discount: "50%", img: "https://via.placeholder.com/150?text=Baju+Bayi" },
-        { title: "Celana Pendek Bayi Katun Nyaman (Isi 3)", target: "baby", type: "celana", price: 25000, origPrice: 50000, discount: "50%", img: "https://via.placeholder.com/150?text=Celana+Bayi" },
-        { title: "Sandal Karet Bayi Bunyi Cit-Cit", target: "baby", type: "sandal", price: 22000, origPrice: 45000, discount: "50%", img: "https://via.placeholder.com/150?text=Sandal+Bayi" },
-        { title: "Sepatu Kaos Kaki Bayi Lucu Anti Slip", target: "baby", type: "sepatu", price: 25000, origPrice: 50000, discount: "50%", img: "https://via.placeholder.com/150?text=Sepatu+Bayi" },
-        { title: "Jam Proyektor Lampu Tidur Anak Lucu", target: "baby", type: "jam", price: 60000, origPrice: 120000, discount: "50%", img: "https://via.placeholder.com/150?text=Jam+Bayi" },
-        { title: "Tas Perlengkapan Bayi Komplet Multifungsi", target: "baby", type: "tas", price: 85000, origPrice: 170000, discount: "50%", img: "https://via.placeholder.com/150?text=Tas+Bayi" },
-        { title: "Termometer Digital Infrared Bayi", target: "baby", type: "gadget", price: 85000, origPrice: 170000, discount: "50%", img: "https://via.placeholder.com/150?text=Gadget+Bayi" },
-        { title: "Sterilizer Botol Susu Elektrik Portable", target: "baby", type: "elektronik", price: 150000, origPrice: 300000, discount: "50%", img: "https://via.placeholder.com/150?text=Elektronik" },
-        { title: "Baby Cologne Wangi Lembut Bayi", target: "baby", type: "parfum", price: 25000, origPrice: 50000, discount: "50%", img: "https://via.placeholder.com/150?text=Parfum+Bayi" },
-        { title: "Topi Bayi Kupluk Rajut Lucu", target: "baby", type: "topi", price: 20000, origPrice: 40000, discount: "50%", img: "https://via.placeholder.com/150?text=Topi+Bayi" },
-        { title: "Biskuit MPASI Bayi Sehat Bergizi", target: "baby", type: "makanan", price: 18000, origPrice: 35000, discount: "50%", img: "https://via.placeholder.com/150?text=Makanan" }
-    ];
+function toggleTheme() {
+    const currentTheme = htmlElement.getAttribute('data-theme');
+    if (currentTheme === 'light') {
+        htmlElement.removeAttribute('data-theme');
+        localStorage.setItem('quranTheme', 'dark');
+        updateThemeButtonText('dark');
+    } else {
+        htmlElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('quranTheme', 'light');
+        updateThemeButtonText('light');
+    }
+}
 
-    const themes = {
-        shopee: { name: "Shopee", primary: "#ee4d2d", accent: "#ff7337", gradient: "linear-gradient(135deg, #ee4d2d, #1a1a1a)" },
-        tiktok: { name: "TikTok Shop", primary: "#fe2c55", accent: "#25f4ee", gradient: "linear-gradient(135deg, #121212, #fe2c55)" },
-        lazada: { name: "Lazada", primary: "#0f146d", accent: "#00b4d8", gradient: "linear-gradient(135deg, #0f146d, #7209b7)" },
-        tokopedia: { name: "Tokopedia", primary: "#03ac03", accent: "#00ff66", gradient: "linear-gradient(135deg, #03ac03, #085c08)" },
-        blibli: { name: "Blibli", primary: "#006cb7", accent: "#48cae4", gradient: "linear-gradient(135deg, #006cb7, #03045e)" }
+function updateThemeButtonText(theme) {
+    if (theme === 'light') {
+        themeBtn.innerHTML = '🌙 Ganti ke Mode Gelap';
+    } else {
+        themeBtn.innerHTML = '☀️ Ganti ke Mode Terang';
+    }
+}
+
+let listSurah = [];
+let modeAktif = 'membaca';
+let currentSurahData = null;
+let currentAyatIndex = 0;
+let currentLrcLines = [];
+
+let db;
+
+function initApp() {
+    const dbReq = indexedDB.open('quranAudioDB', 1);
+    dbReq.onupgradeneeded = function(e) {
+        db = e.target.result;
+        if (!db.objectStoreNames.contains('audios')) {
+            db.createObjectStore('audios');
+        }
     };
+    dbReq.onsuccess = function(e) {
+        db = e.target.result;
+    };
+    ambilDaftarSurah();
+}
 
-    let currentPlatform = 'shopee';
-    let currentTarget = 'all-target'; // Default Semua Target
-    let currentType = 'all';
+async function ambilDaftarSurah() {
+    try {
+        const response = await fetch('https://equran.id/api/v2/surat');
+        const result = await response.json();
+        listSurah = result.data;
+        tampilkanDaftarSurah(listSurah);
+    } catch (error) {
+        document.getElementById('daftarSurah').innerHTML = '<div class="loading">Gagal memuat daftar surah. Periksa koneksi internet Anda.</div>';
+    }
+}
 
-    function setTheme(platformKey) {
-        currentPlatform = platformKey;
-        const theme = themes[platformKey];
-        
-        document.documentElement.style.setProperty('--primary-color', theme.primary);
-        document.documentElement.style.setProperty('--accent-color', theme.accent);
-        document.documentElement.style.setProperty('--bg-gradient', theme.gradient);
+function tampilkanDaftarSurah(data) {
+    const container = document.getElementById('daftarSurah');
+    if (!container) return;
+    container.innerHTML = '';
 
-        document.getElementById('subHeader').innerText = `Khusus produk diskon ${theme.name}`;
-        document.getElementById('footerDesc').innerText = `Update otomatis harga diskon real-time via ${theme.name}.`;
-
-        const buttons = document.querySelectorAll('.tab-btn');
-        buttons.forEach(btn => btn.classList.remove('active'));
-        event.currentTarget.classList.add('active');
-
-        filterProducts();
+    if (data.length === 0) {
+        container.innerHTML = '<div class="loading">Surah tidak ditemukan.</div>';
+        return;
     }
 
-    function filterTarget(target, element) {
-        currentTarget = target;
-        
-        const catButtons = document.querySelectorAll('.cat-btn');
-        catButtons.forEach(btn => btn.classList.remove('active-cat'));
-        element.classList.add('active-cat');
+    const fragment = document.createDocumentFragment();
+    data.forEach(surah => {
+        const card = document.createElement('div');
+        card.className = 'surah-card';
+        card.onclick = () => bukaSurah(surah.nomor);
+        card.innerHTML = `
+            <div class="surah-info-left">
+                <div class="nomor-surah">${surah.nomor}</div>
+                <div class="detail-surah">
+                    <h3>${surah.namaLatin}</h3>
+                    <p>${surah.arti} • ${surah.jumlahAyat} Ayat</p>
+                </div>
+            </div>
+            <div class="nama-arab-list">${surah.nama}</div>
+        `;
+        fragment.appendChild(card);
+    });
+    container.appendChild(fragment);
+}
 
-        filterProducts();
-    }
+function parseLrc(lrcText) {
+    const lines = lrcText.split('\n');
+    const parsed = [];
+    const timeReg = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/;
 
-    function filterType(type, element) {
-        currentType = type;
-        
-        const typeButtons = document.querySelectorAll('.type-btn');
-        typeButtons.forEach(btn => btn.classList.remove('active-type'));
-        element.classList.add('active-type');
-
-        filterProducts();
-    }
-
-    function formatRupiah(angka) {
-        return "Rp" + angka.toLocaleString('id-ID');
-    }
-
-    function filterProducts() {
-        const keyword = document.getElementById('searchInput').value.toLowerCase();
-        const sortOrder = document.getElementById('sortSelect').value;
-        const themeName = themes[currentPlatform].name;
-
-        let targetText = currentTarget === 'all-target' ? 'SEMUA' : currentTarget === 'man' ? 'PRIA' : currentTarget === 'women' ? 'WANITA' : 'BABY';
-        let typeText = currentType === 'all' ? 'Semua Kategori' : currentType.toUpperCase();
-        document.getElementById('activeInfoLabel').innerText = `${targetText} • ${typeText}`;
-
-        let filtered = allProducts.filter(item => {
-            const matchTarget = (currentTarget === 'all-target' || item.target === currentTarget);
-            const matchType = (currentType === 'all' || item.type === currentType);
-            const matchKeyword = item.title.toLowerCase().includes(keyword);
-            return matchTarget && matchType && matchKeyword;
-        });
-
-        filtered.sort((a, b) => {
-            if (sortOrder === 'asc') {
-                return a.price - b.price;
-            } else {
-                return b.price - a.price;
+    lines.forEach(line => {
+        const match = timeReg.exec(line);
+        if (match) {
+            const minutes = parseInt(match[1], 10);
+            const seconds = parseInt(match[2], 10);
+            const milliseconds = parseInt(match[3].padEnd(3, '0'), 10);
+            const totalSeconds = (minutes * 60) + seconds + (milliseconds / 1000);
+            const text = line.replace(timeReg, '').trim();
+            if (text) {
+                parsed.push({ time: totalSeconds, text: text });
             }
-        });
+        }
+    });
+    return parsed;
+}
 
-        const gridContainer = document.getElementById('productGrid');
-        gridContainer.innerHTML = '';
+async function bukaSurah(nomor) {
+    document.getElementById('homeView').style.display = 'none';
+    document.getElementById('detailView').style.display = 'block';
+    currentAyatIndex = 0;
+    currentLrcLines = [];
 
-        if (filtered.length === 0) {
-            gridContainer.innerHTML = `<p style="grid-column: span 2; text-align:center; color:#aaa; padding: 20px;">Produk diskon tidak ditemukan.</p>`;
-            return;
+    document.getElementById('readingFocusView').innerHTML = '<div class="loading">Memuat ayat dan data sinkronisasi...</div>';
+
+    try {
+        const response = await fetch(`https://equran.id/api/v2/surat/${nomor}`);
+        const result = await response.json();
+        currentSurahData = result.data;
+
+        const nomorStr = String(nomor).padStart(3, '0');
+
+        try {
+            const lrcResponse = await fetch(`timer/${nomorStr}.lrc`);
+            if (lrcResponse.ok) {
+                const lrcText = await lrcResponse.text();
+                currentLrcLines = parseLrc(lrcText);
+            }
+        } catch (err) {
+            console.log("File LRC belum tersedia untuk surah ini.");
         }
 
-        filtered.forEach(product => {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            card.innerHTML = `
-                <div class="discount-badge">Disc ${product.discount}</div>
-                <img src="${product.img}" alt="${product.title}" class="product-img">
-                <div class="product-info">
-                    <div class="product-title">${product.title}</div>
-                    <div class="price-wrapper">
-                        <span class="original-price">${formatRupiah(product.origPrice)}</span>
-                        <span class="product-price">${formatRupiah(product.price)}</span>
-                    </div>
-                </div>
-                <button class="product-btn">Beli di ${themeName}</button>
-            `;
-            gridContainer.appendChild(card);
+        document.getElementById('detailSurahTitle').innerText = `Surah ${currentSurahData.namaLatin}`;
+        document.getElementById('detailSurahSub').innerText = `${currentSurahData.arti} • ${currentSurahData.jumlahAyat} Ayat`;
+        
+        const audioUrl = (currentSurahData.audioFull && currentSurahData.audioFull['05']) || 
+                         (currentSurahData.audioFull && Object.values(currentSurahData.audioFull)[0]) || '';
+        setupAudioPlayer(audioUrl, currentSurahData.namaLatin);
+        
+        modeAktif = 'membaca';
+        document.getElementById('btnModeMembaca').classList.add('active');
+        document.getElementById('btnModeAudio').classList.remove('active');
+        document.getElementById('readingFocusView').style.display = 'block';
+        document.getElementById('audioListView').style.display = 'none';
+        document.getElementById('playerBar').style.display = 'none';
+
+        renderReadingView();
+    } catch (e) {
+        document.getElementById('readingFocusView').innerHTML = '<div class="loading">Gagal memuat detail surah.</div>';
+    }
+}
+
+function kembaliKeHome() {
+    document.getElementById('detailView').style.display = 'none';
+    document.getElementById('homeView').style.display = 'block';
+    document.getElementById('playerBar').style.display = 'none';
+    const audio = document.getElementById('mainAudioPlayer');
+    audio.pause();
+}
+
+function ubahMode(mode) {
+    modeAktif = mode;
+
+    document.getElementById('btnModeMembaca').classList.toggle('active', mode === 'membaca');
+    document.getElementById('btnModeAudio').classList.toggle('active', mode === 'audio');
+
+    const playerBar = document.getElementById('playerBar');
+    const audio = document.getElementById('mainAudioPlayer');
+
+    if (mode === 'membaca') {
+        document.getElementById('readingFocusView').style.display = 'block';
+        document.getElementById('audioListView').style.display = 'none';
+        playerBar.style.display = 'none'; 
+        audio.pause();
+        renderReadingView();
+    } else {
+        document.getElementById('readingFocusView').style.display = 'none';
+        document.getElementById('audioListView').style.display = 'block';
+        playerBar.style.display = 'block'; 
+        renderAudioList();
+    }
+}
+
+/* FUNGSI RENDER MODE MEMBACA (DENGAN FONT ISYARAT) */
+function renderReadingView() {
+    if (!currentSurahData) return;
+    const container = document.getElementById('readingFocusView');
+    container.innerHTML = '';
+
+    const verticalContainer = document.createElement('div');
+    verticalContainer.className = 'reading-vertical-container';
+
+    currentSurahData.ayat.forEach((item) => {
+        const card = document.createElement('div');
+        card.className = 'reading-ayat-card';
+
+        card.innerHTML = `
+            <div class="reading-ayat-header">
+                <span>Ayat ${item.nomorAyat}</span>
+                <span>${currentSurahData.namaLatin}</span>
+            </div>
+            <!-- Teks Arab Asli -->
+            <div class="reading-arabic">${item.teksArab}</div>
+            <!-- Teks Menggunakan Font Isyarat (LPMQ) -->
+            <div class="reading-isyarat">${item.teksArab}</div>
+            <!-- Teks Latin -->
+            <div class="reading-latin">${item.teksLatin}</div>
+            <!-- Terjemahan Bahasa Indonesia -->
+            <div class="reading-translation">${item.teksIndonesia}</div>
+        `;
+        verticalContainer.appendChild(card);
+    });
+
+    container.appendChild(verticalContainer);
+}
+
+function renderAudioList() {
+    if (!currentSurahData) return;
+    const container = document.getElementById('audioListView');
+    container.innerHTML = '';
+
+    const sliderContainer = document.createElement('div');
+    sliderContainer.className = 'audio-horizontal-container';
+
+    currentSurahData.ayat.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'audio-ayat-card-horizontal';
+        if (index === currentAyatIndex) {
+            card.classList.add('active-audio-highlight');
+        }
+        card.id = `audio-ayat-${index}`;
+
+        card.innerHTML = `
+            <div class="audio-ayat-header">
+                <span>Ayat ${item.nomorAyat} dari ${currentSurahData.jumlahAyat}</span>
+                <span>${currentSurahData.namaLatin}</span>
+            </div>
+            <div class="audio-arabic">${item.teksArab}</div>
+            <div class="audio-latin">${item.teksLatin}</div>
+            <div class="audio-translation">${item.teksIndonesia}</div>
+        `;
+        sliderContainer.appendChild(card);
+    });
+    container.appendChild(sliderContainer);
+
+    setTimeout(() => {
+        const activeCard = document.getElementById(`audio-ayat-${currentAyatIndex}`);
+        if (activeCard) {
+            activeCard.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    }, 30);
+}
+
+function setupAudioPlayer(defaultUrl, namaLatin) {
+    const playerNama = document.getElementById('playerNamaSurah');
+    const playerStatus = document.getElementById('playerStatus');
+    const audio = document.getElementById('mainAudioPlayer');
+
+    playerNama.innerHTML = `🎧 Surah ${namaLatin}`;
+    audio.src = defaultUrl;
+    playerStatus.innerHTML = currentLrcLines.length > 0 ? "🟢 LRC Sinkron Aktif" : "🌐 Streaming Standar";
+
+    audio.ontimeupdate = function() {
+        if (modeAktif !== 'audio' || !currentSurahData) return;
+        
+        const waktuSekarang = audio.currentTime;
+        let indexAktif = 0;
+
+        if (currentLrcLines.length > 0) {
+            for (let i = 0; i < currentLrcLines.length; i++) {
+                if (waktuSekarang >= currentLrcLines[i].time) {
+                    indexAktif = i;
+                } else {
+                    break;
+                }
+            }
+            if (indexAktif >= currentSurahData.ayat.length) {
+                indexAktif = currentSurahData.ayat.length - 1;
+            }
+        } else {
+            const durasiTotal = audio.duration || 1;
+            const jumlahAyat = currentSurahData.ayat.length;
+            indexAktif = Math.min(Math.floor((waktuSekarang / durasiTotal) * jumlahAyat), jumlahAyat - 1);
+        }
+
+        currentAyatIndex = indexAktif;
+        document.querySelectorAll('.audio-ayat-card-horizontal').forEach((el, idx) => {
+            if (idx === indexAktif) {
+                el.classList.add('active-audio-highlight');
+                const activeCard = document.getElementById(`audio-ayat-${indexAktif}`);
+                if (activeCard) {
+                    activeCard.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                }
+            } else {
+                el.classList.remove('active-audio-highlight');
+            }
         });
+    };
+}
+
+let searchTimeout;
+function debounceCariSurah() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        jalankanPencarian();
+    }, 150);
+}
+
+function normalisasi(teks) {
+    if (!teks) return '';
+    return teks.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function normalisasiTanpaAl(teks) {
+    let clean = normalisasi(teks);
+    if (clean.startsWith('al')) {
+        clean = clean.substring(2);
+    }
+    return clean;
+}
+
+function hitungJarakTeks(a, b) {
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j] + 1
+                );
+            }
+        }
+    }
+    return matrix[b.length][a.length];
+}
+
+function jalankanPencarian() {
+    const rawInput = document.getElementById('searchInput').value.trim();
+    if (!rawInput) {
+        tampilkanDaftarSurah(listSurah);
+        return;
     }
 
-    filterProducts();
+    const inputClean = normalisasi(rawInput);
+    const inputNoAl = normalisasiTanpaAl(rawInput);
+
+    const scoredSurah = [];
+
+    listSurah.forEach(surah => {
+        const namaLatinClean = normalisasi(surah.namaLatin);
+        const namaLatinNoAl = normalisasiTanpaAl(surah.namaLatin);
+        const artiClean = normalisasi(surah.arti);
+        const nomorStr = surah.nomor.toString();
+
+        let score = 0;
+
+        if (nomorStr === rawInput || namaLatinClean === inputClean || namaLatinNoAl === inputNoAl) {
+            score = 1000;
+        }
+        else if (namaLatinNoAl.startsWith(inputNoAl) || namaLatinClean.startsWith(inputClean)) {
+            score = 800;
+        }
+        else if (namaLatinNoAl.includes(inputNoAl) || namaLatinClean.includes(inputClean)) {
+            score = 500;
+        }
+        else if (artiClean.includes(inputClean)) {
+            score = 300;
+        }
+        else if (inputClean.length >= 3) {
+            const dist1 = hitungJarakTeks(inputClean, namaLatinClean);
+            const dist2 = hitungJarakTeks(inputNoAl, namaLatinNoAl);
+            const minDist = Math.min(dist1, dist2);
+
+            if (minDist <= 2) {
+                score = 200 - (minDist * 30);
+            }
+        }
+
+        if (score > 0) {
+            scoredSurah.push({ surah, score });
+        }
+    });
+
+    scoredSurah.sort((a, b) => {
+        if (b.score !== a.score) {
+            return b.score - a.score;
+        }
+        return a.surah.nomor - b.surah.nomor;
+    });
+
+    const hasilTerbaik = scoredSurah.slice(0, 15).map(item => item.surah);
+    tampilkanDaftarSurah(hasilTerbaik);
+}
+
+function mulaiPencarianSuara() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Maaf, browser Anda tidak mendukung fitur pencarian suara.");
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'id-ID';
+    recognition.interimResults = false;
+
+    const micBtn = document.getElementById('micBtn');
+    const micIcon = document.getElementById('micIcon');
+    const searchInput = document.getElementById('searchInput');
+
+    recognition.onstart = function() {
+        micBtn.classList.add('listening');
+        micIcon.innerText = "🔴";
+    };
+
+    recognition.onresult = function(event) {
+        const hasilBicara = event.results[0][0].transcript;
+        searchInput.value = hasilBicara.replace(/\.$/, '');
+        jalankanPencarian();
+    };
+
+    recognition.onerror = function() {
+        alert("Gagal mendengarkan suara. Silakan coba lagi.");
+    };
+
+    recognition.onend = function() {
+        micBtn.classList.remove('listening');
+        micIcon.innerText = "🎙️";
+    };
+
+    recognition.start();
+}
 </script>
 
 </body>
