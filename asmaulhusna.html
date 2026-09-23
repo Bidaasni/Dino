@@ -198,7 +198,7 @@
         }
 
         .sidebar-header {
-            padding: 30px 20px 15px;
+            padding: 25px 20px 15px;
             text-align: center;
             border-bottom: 1px solid rgba(212, 175, 55, 0.25);
         }
@@ -209,7 +209,8 @@
         .sidebar-header h2 {
             font-family: 'Cinzel', serif;
             color: var(--gold);
-            font-size: 24px;
+            font-size: 22px;
+            line-height: 1.2;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
@@ -219,9 +220,9 @@
 
         .sidebar-header p {
             color: #e8f5e9;
-            font-size: 12px;
-            opacity: 0.7;
-            margin-top: 5px;
+            font-size: 11px;
+            opacity: 0.8;
+            margin-top: 4px;
             font-family: 'Poppins', sans-serif;
         }
         [data-theme="light"] .sidebar-header p {
@@ -355,7 +356,7 @@
         }
 
         /* ================================
-           HEADER UTAMA (Diberi Padding Atas agar tidak tertutup tombol menu)
+           HEADER UTAMA
         ================================ */
         header {
             background: var(--header-bg);
@@ -500,11 +501,11 @@
   <!-- SIDEBAR MENU ISLAMI LENGKAP -->
   <div class="sidebar" id="sidebar">
       <div class="sidebar-header">
-          <h2>Kitabku</h2>
-          <p>Eksplorasi Keislaman Online</p>
+          <h2>Kitabku<br>Online</h2>
+          <p>Al-Qur'an Digital</p>
       </div>
 
-      <!-- TOMBOL GESER (SLIDER SWITCH) DENGAN ICON 🌗 -->
+      <!-- TOMBOL GESER (SLIDER SWITCH) DENGAN ICON 🌗 (Kiri = Terang, Kanan = Gelap) -->
       <div class="sidebar-theme-switch">
           <span>🌗</span>
           <label class="switch-mode">
@@ -586,30 +587,33 @@
         overlay.classList.toggle('active');
     }
 
-    // TEMA GELAP TERANG DENGAN TOMBOL GESER
+    // TEMA GELAP TERANG DENGAN TOMBOL GESER (Kiri = Terang, Kanan = Gelap)
     const htmlElement = document.documentElement;
     const themeSwitch = document.getElementById('themeSwitch');
     const savedTheme = localStorage.getItem('quranTheme');
 
+    // Jika savedTheme adalah 'light', tombol di kiri (unchecked). Jika 'dark' atau default, tombol di kanan (checked).
     if (savedTheme === 'light') {
         htmlElement.setAttribute('data-theme', 'light');
-        if (themeSwitch) themeSwitch.checked = true;
+        if (themeSwitch) themeSwitch.checked = false;
     } else {
         htmlElement.removeAttribute('data-theme');
-        if (themeSwitch) themeSwitch.checked = false;
+        if (themeSwitch) themeSwitch.checked = true;
     }
 
     function toggleTheme() {
         if (themeSwitch.checked) {
-            htmlElement.setAttribute('data-theme', 'light');
-            localStorage.setItem('quranTheme', 'light');
-        } else {
+            // Geser ke kanan -> Mode Gelap
             htmlElement.removeAttribute('data-theme');
             localStorage.setItem('quranTheme', 'dark');
+        } else {
+            // Geser ke kiri -> Mode Terang
+            htmlElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('quranTheme', 'light');
         }
     }
 
-    // DATA LENGKAP 99 ASMAUL HUSNA[span_0](start_span)[span_0](end_span)
+    // DATA LENGKAP 99 ASMAUL HUSNA[span_4](start_span)[span_4](end_span)
     const asmaulHusnaData = [
       { id: 1, ar: "الرَّحْمَٰنُ", latin: "Ar-Rahman", mean: "Maha Pengasih", start: 9.65 },
       { id: 2, ar: "الرَّحِيمُ", latin: "Ar-Rahim", mean: "Maha Penyayang", start: 10.99 },
