@@ -5,11 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- SEO DASAR -->
-    <title>Al-Qur'an Digital & Teman Ibadah - KitabKu.Online</title>
+    <title>Al-Qur'an Digital - KitabKu.Online</title>
     <meta name="description" content="Platform Al-Qur'an Digital terlengkap dengan Bahasa Isyarat, Doa Harian, Ruqyah, Jadwal Sholat, Asmaul Husna, dan Radio Sunnah.">
-    
-    <!-- GOOGLE ADSENSE & ANALYTICS -->
+    <link rel="canonical" href="https://kitabku.online/index.html">
+
+    <!-- GOOGLE ADSENSE -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6256519943033171" crossorigin="anonymous"></script>
+
+    <!-- GOOGLE ANALYTICS -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZR6K9KQQB7"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -20,7 +23,7 @@
 
     <style>
         /* ================================
-           PENGATURAN FONT & VARIABEL TEMA
+           FONT & ROOT VARIABLES
         ================================ */
         @font-face {
             font-family: 'LPMQIsyarat';
@@ -64,99 +67,180 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg-gradient); color: var(--teks); transition: background 0.35s ease, color 0.35s ease; min-height: 100vh; display: flex; flex-direction: column; }
-        
+        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg-gradient); color: var(--teks); padding-bottom: 50px; transition: background 0.35s ease, color 0.35s ease; min-height: 100vh; display: flex; flex-direction: column; }
+
         /* ================================
-           HEADER & NAVIGASI 
+           HEADER & NAVIGASI (DENGAN SPA)
         ================================ */
         header { background: var(--header-bg); color: var(--gold-terang); text-align: center; padding: 28px 16px; border-bottom: 1px solid var(--border-color); box-shadow: var(--shadow); }
-        header h1 { font-size: 26px; font-weight: 700; }
+        header h1 { font-size: 26px; font-weight: 700; color: var(--gold-terang); margin: 0; }
         header p { margin-top: 6px; font-size: 13px; color: var(--teks-redup); }
         .header-buttons { display: flex; justify-content: center; gap: 12px; margin-top: 14px; }
-        .theme-toggle-btn { background: var(--theme-btn-bg); border: 1px solid var(--border-color); color: var(--gold-terang); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .theme-toggle-btn { background: var(--theme-btn-bg); border: 1px solid var(--border-color); color: var(--gold-terang); padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600; transition: 0.2s; }
+        .theme-toggle-btn:hover { background: var(--hijau-card); }
 
-        nav { background: var(--nav-bg); display: flex; justify-content: center; gap: 10px; padding: 12px 16px; overflow-x: auto; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); scrollbar-width: none; backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+        nav { background: var(--nav-bg); display: flex; justify-content: flex-start; gap: 10px; padding: 12px 16px; overflow-x: auto; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); scrollbar-width: none; backdrop-filter: blur(10px); }
         nav::-webkit-scrollbar { display: none; }
         nav a { flex: 0 0 auto; min-width: 110px; padding: 10px 16px; text-align: center; text-decoration: none; color: var(--teks-redup); font-weight: 600; font-size: 13px; background: rgba(42, 78, 65, 0.15); border: 1px solid var(--border-color); border-radius: 30px; transition: all 0.25s ease; cursor: pointer; }
         nav a:hover { background: var(--hijau-card); color: var(--gold-terang); }
-        nav a.active { background: var(--active-bg) !important; color: var(--active-text) !important; border-color: var(--active-border) !important; box-shadow: 0 4px 15px rgba(9, 36, 30, 0.25); font-weight: 700; }
-        @media (max-width: 768px) { nav { justify-content: flex-start; } }
+        nav a.active { background: var(--active-bg) !important; color: var(--active-text) !important; border-color: var(--active-border) !important; font-weight: 700; box-shadow: 0 4px 15px rgba(9, 36, 30, 0.25); }
+        @media (min-width: 768px) { nav { justify-content: center; } }
+
+        /* KONTEN SPA */
+        main { flex: 1; max-width: 860px; width: 92%; margin: 24px auto; }
+        .page-section { display: none; animation: fadeIn 0.4s ease forwards; opacity: 0; }
+        .page-section.active { display: block; }
+        @keyframes fadeIn { to { opacity: 1; } }
 
         /* ================================
-           SPA (SINGLE PAGE APP) SECTION
+           CSS AL-QUR'AN
         ================================ */
-        main { flex: 1; max-width: 860px; width: 92%; margin: 24px auto; padding-bottom: 60px; }
-        .page-section { display: none; animation: fadeIn 0.4s ease forwards; opacity: 0; transform: translateY(10px); }
-        .page-section.active { display: block; }
-        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-
-        /* UMUM & KARTU */
-        .card, .audio-card, .search-container, .location-card, .radio-card { background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: var(--shadow); }
-        
-        /* AL-QUR'AN STYLES */
         .unified-top-bar { display: flex; align-items: center; background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--active-border); border-radius: 40px; padding: 6px 8px; margin-bottom: 12px; gap: 10px; box-shadow: var(--shadow); position: relative; z-index: 90; }
-        .icon-btn-circle { width: 38px; height: 38px; border-radius: 50%; background: transparent; border: 1px solid var(--active-border); color: var(--gold-terang); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; transition: 0.2s; }
-        .search-wrapper { flex: 1; display: flex; align-items: center; border: 1px solid var(--active-border); border-radius: 30px; padding: 0 12px; height: 40px; position: relative; }
+        .icon-btn-circle { width: 38px; height: 38px; border-radius: 50%; background: transparent; border: 1px solid var(--active-border); color: var(--gold-terang); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; flex-shrink: 0; transition: 0.2s; }
+        .icon-btn-circle:hover { background: var(--active-bg); }
+        .search-wrapper { flex: 1; display: flex; align-items: center; background: transparent; border: 1px solid var(--active-border); border-radius: 30px; padding: 0 12px; height: 40px; position: relative; }
         .search-wrapper input { flex: 1; background: transparent; border: none; color: var(--teks); outline: none; font-size: 13.5px; margin-left: 8px; font-weight: 500; width: 100%; }
+        .search-wrapper input::placeholder { color: var(--teks-redup); }
         .divider-vertical { width: 1px; height: 22px; background: var(--active-border); opacity: 0.6; margin: 0 10px; }
-        .mic-btn-top { background: transparent; border: none; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .mic-btn-top { background: transparent; border: none; font-size: 16px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; padding: 0; }
         
         .search-dropdown { position: absolute; top: calc(100% + 12px); left: 0; right: 0; z-index: 999; list-style: none; padding: 0; margin: 0; max-height: 280px; overflow-y: auto; background: var(--hijau-tua); border: 1px solid var(--gold); border-radius: 16px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); display: none; }
-        [data-theme="light"] .search-dropdown { background: var(--hijau-card); }
-        .search-dropdown li { padding: 14px 18px; border-bottom: 1px solid rgba(227, 200, 90, 0.15); cursor: pointer; display: flex; gap: 14px; }
+        [data-theme="light"] .search-dropdown { background: var(--hijau-card); border-color: var(--active-border); box-shadow: 0 8px 30px rgba(9, 36, 30, 0.15); }
+        .search-dropdown li { padding: 14px 18px; border-bottom: 1px solid rgba(227, 200, 90, 0.15); cursor: pointer; font-size: 14px; color: var(--teks); display: flex; align-items: center; gap: 14px; transition: all 0.2s ease; }
+        [data-theme="light"] .search-dropdown li { border-bottom-color: rgba(13, 48, 40, 0.12); }
         .search-dropdown li:hover { background: rgba(227, 200, 90, 0.1); }
-        
-        .unified-toggle-bar { display: flex; align-items: center; justify-content: space-around; background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--active-border); border-radius: 30px; padding: 10px 16px; margin-bottom: 24px; box-shadow: var(--shadow); gap: 8px; }
-        .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+        [data-theme="light"] .search-dropdown li:hover { background: var(--active-bg); }
+
+        .unified-toggle-bar { display: flex; align-items: center; justify-content: space-around; background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--active-border); border-radius: 30px; padding: 10px 16px; margin-bottom: 24px; box-shadow: var(--shadow); flex-wrap: nowrap; gap: 8px; }
+        .toggle-item { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+        .toggle-label { font-size: 13px; font-weight: 700; color: var(--gold-terang); display: flex; align-items: center; gap: 4px; }
+        .font-size-select { background: var(--input-bg); border: 1px solid var(--border-color); color: var(--teks); font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 12px; outline: none; cursor: pointer; }
+        .font-size-select option { background: var(--hijau-tua); color: var(--teks); }
+        .switch { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.3); transition: .3s; border-radius: 22px; border: 1px solid var(--border-color); }
         .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--toggle-active); border-color: var(--toggle-active); }
         input:checked + .slider:before { transform: translateX(18px); background-color: var(--hijau-tua); }
-        .info-card-home { background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border-radius: 16px; padding: 40px 20px; text-align: center; border: 1px solid var(--border-color); color: var(--teks-redup); }
-        
-        .surah-reading-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 12px 18px; background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border-radius: 16px; border: 1px solid var(--border-color); }
-        .reading-horizontal-container { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 5px; scrollbar-width: none; }
-        .reading-ayat-card-horizontal { flex: 0 0 100%; scroll-snap-align: center; background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--border-color); border-radius: 18px; padding: 22px; display: flex; flex-direction: column; gap: 14px; transition: all 0.3s ease; }
-        .reading-ayat-card-horizontal.active-reading-highlight { background: var(--active-bg) !important; border-color: var(--active-border); box-shadow: 0 0 18px rgba(9, 36, 30, 0.35); }
+        .info-card-home { background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--border-color); border-radius: 16px; padding: 40px 20px; text-align: center; box-shadow: var(--shadow); color: var(--teks-redup); font-size: 14.5px; line-height: 1.6; }
+
+        .surah-reading-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 12px 18px; background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow); }
+        .surah-title-center { text-align: center; flex: 1; padding: 0 10px; }
+        .surah-title-center h2 { color: var(--gold-terang); font-size: 18px; line-height: 1.2; margin-bottom: 2px; }
+        .surah-title-center p { color: var(--teks-redup); font-size: 12px; }
+        .surah-title-left, .surah-title-right { display: flex; align-items: center; justify-content: center; position: relative; z-index: 5; }
+        .play-btn-title { background: var(--circle-btn-bg); border: 1px solid var(--active-border); color: var(--gold-terang); font-size: 13px; font-weight: 700; border-radius: 20px; cursor: pointer; padding: 6px 14px; display: flex; align-items: center; gap: 6px; transition: background 0.2s; white-space: nowrap; }
+        .play-btn-title:hover { background: var(--active-bg); }
+        .ayat-label { color: var(--gold-terang); font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .ayat-form { display: flex; align-items: center; gap: 6px; }
+        .jump-input-tiny { width: 46px; height: 32px; background: var(--input-bg); border: 1px solid var(--border-color); border-radius: 16px; color: var(--teks); font-size: 13px; text-align: center; outline: none; font-weight: bold; transition: border 0.2s; }
+        .go-btn-tiny { background: var(--btn-accent-bg); color: var(--btn-accent-text); border: none; padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+
+        .reading-horizontal-container { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 5px 5px 20px 5px; scrollbar-width: none; align-items: flex-start; position: relative; }
+        .reading-ayat-card-horizontal { flex: 0 0 100%; max-width: 100%; scroll-snap-align: center; background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--border-color); border-radius: 18px; padding: 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; transition: all 0.3s ease; }
+        .reading-ayat-card-horizontal.active-reading-highlight { background: var(--active-bg) !important; transform: scale(1.01); box-shadow: 0 0 18px rgba(9, 36, 30, 0.35); border-color: var(--active-border); }
+        .reading-ayat-header { font-size: 12px; color: var(--gold-terang); font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
         .reading-arabic { font-size: var(--arabic-size); text-align: right; color: var(--gold-terang); font-family: 'Traditional Arabic', serif; line-height: 2.2; }
-        .reading-isyarat { font-family: 'LPMQIsyarat', sans-serif; font-size: var(--isyarat-size); text-align: right; direction: rtl; color: var(--isyarat-color); line-height: 2.2; }
-        .reading-latin { font-size: var(--latin-size); color: var(--gold-terang); font-style: italic; }
-        .reading-translation { font-size: var(--indo-size); color: var(--teks-redup); border-left: 3px solid var(--gold); padding-left: 12px; }
-
-        /* MODALS UMUM */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 2000; opacity: 0; visibility: hidden; transition: 0.3s; backdrop-filter: blur(4px); }
-        .modal-overlay.show { opacity: 1; visibility: visible; }
-        .modal-content-surat, .modal-box { background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--border-color); border-radius: 18px; max-width: 450px; width: 92%; padding: 20px; max-height: 85vh; display: flex; flex-direction: column; position: relative; }
+        .reading-isyarat { font-family: 'LPMQIsyarat', sans-serif; font-size: var(--isyarat-size); text-align: right; direction: rtl; color: var(--isyarat-color); line-height: 2.2; padding: 4px 0; }
+        .reading-latin { font-size: var(--latin-size); color: var(--gold-terang); font-style: italic; font-weight: 600; }
+        .reading-translation { font-size: var(--indo-size); color: var(--teks-redup); line-height: 1.5; border-left: 3px solid var(--gold); padding-left: 12px; }
+        .icon-btn { background: var(--circle-btn-bg); border: 1px solid var(--border-color); color: var(--gold-terang); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; transition: 0.2s; margin-left: auto; }
+        .icon-btn:hover { background: var(--active-bg); }
         
-        /* DOA & DZIKIR STYLES */
+        #readingFocusView.hide-isyarat .reading-isyarat { display: none !important; }
+        #readingFocusView.hide-latin .reading-latin { display: none !important; }
+        #readingFocusView.hide-indo .reading-translation { display: none !important; }
+
+        /* ================================
+           CSS UMUM KARTU & MODALS
+        ================================ */
+        .card, .audio-card, .search-container, .location-card, .radio-card { background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--border-color); border-radius: 18px; padding: 22px; margin-bottom: 25px; box-shadow: 0 7px 20px rgba(0,0,0,.25); }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 15px; }
+        .modal-overlay.show { display: flex; }
+        .modal-content-surat, .modal-box { background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--border-color); border-radius: 18px; max-width: 650px; width: 100%; padding: 20px; display: flex; flex-direction: column; gap: 12px; max-height: 85vh; overflow-y: auto; position: relative; }
+        .modal-box h3 { color: var(--gold-terang); font-size: 1.2rem; margin-bottom: 15px; text-align: center; }
+        .modal-box ul { padding-left: 18px; color: var(--teks); font-size: 0.92rem; line-height: 1.6; margin-bottom: 20px; }
+        .modal-box li { margin-bottom: 8px; }
+        .modal-text-content { white-space: pre-line; font-size: 0.95rem; line-height: 1.7; color: var(--teks); background: rgba(0, 0, 0, 0.15); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .modal-arabic-content { font-size: 1.3rem; line-height: 2.2; color: var(--gold-terang); text-align: right; }
+        .modal-close-x { position: absolute; top: 15px; right: 18px; background: transparent; border: none; color: var(--gold-terang); font-size: 1.6rem; cursor: pointer; font-weight: bold; }
+        .btn-tutup-modal { background: var(--gold); color: var(--hijau-gelap); border: none; padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 1rem; cursor: pointer; width: 100%; margin-top: 15px; }
+
+        /* ================================
+           CSS DOA & DZIKIR
+        ================================ */
+        .search-title-wrapper h2 { font-size: 16px; color: var(--gold-terang); font-weight: 600; }
         .search-input-group { display: flex; align-items: center; background: rgba(8, 26, 22, 0.12); border: 1px solid var(--border-color); border-radius: 12px; padding: 4px 10px; gap: 8px; position: relative; }
-        .search-input-group input { width: 100%; padding: 10px 4px; border: none; background: transparent; color: var(--teks); outline: none; }
-        .mic-btn-doa { background: rgba(13, 48, 40, 0.15); border: 1px solid var(--border-color); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .search-box { width: 100%; padding: 10px 4px; border: none; background: transparent; color: var(--teks); font-size: 14px; outline: none; }
+        .mic-btn { background: rgba(13, 48, 40, 0.15); border: 1px solid var(--border-color); width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .search-results-list { position: absolute; top: calc(100% + 8px); left: 0; right: 0; z-index: 99; list-style: none; padding: 0; margin: 0; max-height: 220px; overflow-y: auto; background: var(--hijau-tua); border: 1px solid var(--gold); border-radius: 12px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); display:none; }
+        [data-theme="light"] .search-results-list { background: var(--hijau-card); border-color: var(--active-border); }
+        .search-results-list li { padding: 14px 16px; border-bottom: 1px solid rgba(227, 200, 90, 0.15); cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 12px; }
 
-        /* JADWAL SHOLAT STYLES */
-        .jadwal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .sholat-card { background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px 6px; text-align: center; }
-        .sholat-card.active-sholat { background: var(--active-bg) !important; border-color: var(--active-border) !important; }
-        .sholat-time { font-size: 18px; font-weight: 700; color: var(--gold-terang); margin-top: 4px; }
+        /* ================================
+           CSS RUQYAH
+        ================================ */
+        .btn-panduan-inline { background: var(--gold); color: var(--hijau-gelap); border: none; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 11px; font-weight: bold; transition: 0.2s; box-shadow: 0 2px 8px rgba(201, 162, 39, 0.4); }
+
+        /* ================================
+           CSS JADWAL SHOLAT
+        ================================ */
+        .location-info h2 { font-size: 16px; color: var(--gold-terang); font-weight: 700; }
+        .location-info p { font-size: 11px; color: var(--teks-redup); margin-top: 2px; }
+        .gps-btn { background: rgba(13, 48, 40, 0.15); border: 1px solid var(--border-color); color: var(--gold-terang); padding: 8px 14px; border-radius: 10px; cursor: pointer; font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .features-grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        .feature-btn { background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px 10px; color: var(--gold-terang); text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; font-weight: 700; text-align: center; box-shadow: 0 7px 20px rgba(0,0,0,.08); cursor: pointer; }
+        .jadwal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; min-height: 280px; }
+        .sholat-card { background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px 6px; text-align: center; box-shadow: 0 7px 20px rgba(0,0,0,.08); display: flex; flex-direction: column; justify-content: center; min-height: 85px; }
+        .sholat-card.active-sholat { background: var(--active-bg) !important; transform: scale(1.02); border-color: var(--active-border) !important; box-shadow: 0 4px 15px rgba(9, 36, 30, 0.35); }
+        .sholat-card.active-sholat .sholat-name, .sholat-card.active-sholat .sholat-time { color: var(--active-text) !important; }
+        .sholat-name { font-size: 12px; color: var(--teks-redup); font-weight: 600; }
+        .sholat-time { font-size: 18px; font-weight: 700; color: var(--gold-terang); margin-top: 4px; font-variant-numeric: tabular-nums; }
+        .timer-card-inline { grid-column: span 2; background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--border-color); border-radius: 14px; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .countdown-digits-inline { font-size: 18px; font-weight: 800; color: var(--gold-terang); margin-top: 4px; background: rgba(8, 26, 22, 0.15); border: 1px solid var(--border-color); padding: 4px 12px; border-radius: 8px; }
+
+        /* ================================
+           CSS ASMAUL HUSNA & TENTANG
+        ================================ */
+        .grid-container-asma { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .card-asma { background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px 10px; display: flex; flex-direction: column; align-items: center; transition: all 0.2s ease; }
+        .card-asma.active { background: var(--active-bg) !important; transform: scale(1.05); box-shadow: 0 4px 15px rgba(9, 36, 30, 0.35); border-color: var(--active-border); }
+        .card-asma .arabic { font-size: 1.6rem; color: var(--gold-terang); margin-bottom: 5px; font-weight: bold; }
         
-        /* ASMAUL HUSNA STYLES */
-        .grid-container-asmaul { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
-        .card-asma { background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px 10px; text-align: center; }
-        .card-asma.active { background: var(--active-bg) !important; border-color: var(--active-border); transform: scale(1.05); }
+        .ad-card { background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2)); border: 1px dashed var(--border-color); border-radius: 12px; padding: 15px 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 140px; text-align: center; }
+        .mode-select { background-color: var(--hijau-gelap); color: var(--gold-terang); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; outline: none; }
+        .floating-btn { position: fixed; left: 15px; bottom: 25px; z-index: 9999; background-color: var(--gold); color: var(--hijau-gelap); border: 2px solid #ffffff; padding: 12px 20px; border-radius: 30px; font-size: 0.95rem; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); cursor: pointer; display: flex; align-items: center; gap: 6px; }
 
-        audio { width: 100%; margin-top: 15px; border-radius: 25px; height: 40px; outline: none; }
+        .radio-icon { font-size: 50px; margin-bottom: 15px; }
+        .fitur { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 15px; text-align: left; }
+        .fitur-item { background: var(--fitur-bg); padding: 15px; border-radius: 12px; color: var(--fitur-text); border: 1px solid var(--border-color); }
+        .fitur-item strong { color: var(--gold-terang); display: block; margin-bottom: 4px; font-size: 14px; }
+        .sosmed-btn { background: var(--fitur-bg); color: var(--gold-terang); border: 1px solid var(--border-color); padding: 9px 16px; border-radius: 20px; text-decoration: none; font-size: 13px; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; }
+        .posisi-iklan-img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border-color); cursor: pointer; margin-top: 10px; transition: transform 0.25s ease; }
+        .posisi-iklan-img:hover { transform: scale(1.02); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); }
+
+        .image-modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); justify-content: center; align-items: center; padding: 20px; }
+        .image-modal img { max-width: 95%; max-height: 90vh; border-radius: 10px; box-shadow: 0 5px 25px rgba(0,0,0,0.5); }
+
+        audio { width: 100%; height: 40px; border-radius: 8px; outline: none; margin-top: 15px; }
         footer { background: var(--header-bg); color: var(--teks-redup); text-align: center; padding: 18px; border-top: 1px solid var(--border-color); font-size: 12px; margin-top: auto; }
-        
-        /* GLOBAL TWEAKS */
-        .hide-isyarat .reading-isyarat, .hide-latin .reading-latin, .hide-indo .reading-translation { display: none !important; }
+
+        @media (max-width: 500px) {
+            .unified-toggle-bar { padding: 8px 10px; justify-content: space-between; gap: 4px; }
+            .toggle-label { font-size: 11px; }
+            .surah-reading-title { padding: 10px; }
+            .surah-title-center h2 { font-size: 14px; }
+            .jump-input-tiny { width: 38px; height: 28px; font-size: 12px; }
+            .go-btn-tiny { padding: 5px 8px; font-size: 11px; }
+        }
     </style>
 </head>
 <body onload="initSPA()">
 
 <header>
     <h1>📖 KitabKu.Online</h1>
-    <p>Teman Ibadah Digital Setiap Hari</p>
+    <p>Al-Qur'an & Teman Ibadah Digital Harian</p>
     <div class="header-buttons">
         <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">☀️ Ganti ke Mode Terang</button>
     </div>
@@ -173,32 +257,36 @@
 </nav>
 
 <main>
-    <!-- ==================== HALAMAN AL-QUR'AN ==================== -->
+    <!-- ==============================================
+         HALAMAN 1: AL-QUR'AN
+    =============================================== -->
     <section id="page-quran" class="page-section active">
         <div class="unified-top-bar">
-            <button class="icon-btn-circle" onclick="bukaModal('modalPilihSurat')" title="Daftar Surat">☰</button>
+            <button class="icon-btn-circle" onclick="document.getElementById('modalPilihSurat').classList.add('show')" title="Daftar Surat">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="18" x2="20" y2="18"></line></svg>
+            </button>
             <div class="search-wrapper">
                 <input type="text" id="searchInput" placeholder="Ketik Nomor / Nama / Arti Surah" oninput="debounceCariSurah()" autocomplete="off">
                 <div class="divider-vertical"></div>
-                <button class="mic-btn-top" onclick="mulaiPencarianSuaraQuran()">🎙️</button>
+                <button class="mic-btn-top" onclick="mulaiPencarianSuara('searchInput', debounceCariSurah)">🎙️</button>
                 <ul id="searchDropdownList" class="search-dropdown"></ul>
             </div>
         </div>
 
         <div class="unified-toggle-bar">
-            <div style="display:flex; gap:6px; font-size: 12px; font-weight:bold; color:var(--gold-terang); align-items:center;">
-                Size: <select id="fontSizeSelect" onchange="ubahUkuranFont(this.value)" style="background:var(--input-bg); color:var(--teks); border:1px solid var(--border-color); border-radius:8px; padding:2px;">
+            <div class="toggle-item"><span class="toggle-label">Size</span>
+                <select id="fontSizeSelect" class="font-size-select" onchange="ubahUkuranFont(this.value)">
                     <option value="kecil">Kecil</option><option value="normal" selected>Normal</option><option value="besar">Besar</option>
                 </select>
             </div>
-            <div style="display:flex; gap:6px; font-size: 12px; font-weight:bold; color:var(--gold-terang); align-items:center;">
-                Isyarat <label class="switch"><input type="checkbox" id="toggleIsyarat" checked onchange="updateToggleTampilan()"><span class="slider"></span></label>
+            <div class="toggle-item"><span class="toggle-label">Isyarat</span>
+                <label class="switch"><input type="checkbox" id="toggleIsyarat" checked onchange="updateToggleTampilan()"><span class="slider"></span></label>
             </div>
-            <div style="display:flex; gap:6px; font-size: 12px; font-weight:bold; color:var(--gold-terang); align-items:center;">
-                Latin <label class="switch"><input type="checkbox" id="toggleLatin" checked onchange="updateToggleTampilan()"><span class="slider"></span></label>
+            <div class="toggle-item"><span class="toggle-label">Latin</span>
+                <label class="switch"><input type="checkbox" id="toggleLatin" checked onchange="updateToggleTampilan()"><span class="slider"></span></label>
             </div>
-            <div style="display:flex; gap:6px; font-size: 12px; font-weight:bold; color:var(--gold-terang); align-items:center;">
-                Indo <label class="switch"><input type="checkbox" id="toggleTerjemah" checked onchange="updateToggleTampilan()"><span class="slider"></span></label>
+            <div class="toggle-item"><span class="toggle-label">Indo</span>
+                <label class="switch"><input type="checkbox" id="toggleTerjemah" checked onchange="updateToggleTampilan()"><span class="slider"></span></label>
             </div>
         </div>
 
@@ -208,116 +296,386 @@
 
         <div id="detailViewQuran" style="display: none;">
             <div class="surah-reading-title">
-                <button class="icon-btn-circle" onclick="tutupSurah()" style="border-radius:10px; width:auto; padding:0 10px; font-size:12px;">Kembali</button>
-                <div style="text-align: center; flex: 1;">
-                    <h2 id="detailSurahTitle" style="color:var(--gold-terang); font-size:18px;">Surah</h2>
-                    <p id="detailSurahSub" style="color:var(--teks-redup); font-size:12px;">Jumlah Ayat</p>
+                <div class="surah-title-left"><button class="play-btn-title" id="btnPlayPauseQuran" onclick="togglePlayPauseQuran()">Play</button></div>
+                <div class="surah-title-center">
+                    <h2 id="detailSurahTitle">Surah</h2>
+                    <p id="detailSurahSub">Jumlah Ayat</p>
+                </div>
+                <div class="surah-title-right">
+                    <form class="ayat-form" onsubmit="event.preventDefault(); lompatKeAyat();">
+                        <span class="ayat-label">Ayat</span>
+                        <input type="number" id="inputNomorAyat" class="jump-input-tiny" min="1" placeholder="-">
+                        <button type="button" class="go-btn-tiny" onclick="lompatKeAyat()">Go</button>
+                    </form>
                 </div>
             </div>
-            <audio id="quranAudioPlayer" controls></audio>
-            <div id="readingFocusView" style="margin-top: 15px;"></div>
+            <div style="display:none;"><audio id="mainAudioPlayer" controls></audio></div>
+            <div id="readingFocusView"></div>
         </div>
     </section>
 
-    <!-- ==================== HALAMAN DOA ==================== -->
+    <!-- ==============================================
+         HALAMAN 2: DOA & DZIKIR
+    =============================================== -->
     <section id="page-doa" class="page-section">
         <div class="search-container">
-            <h2 style="color:var(--gold-terang); margin-bottom:12px;">Cari Doa & Dzikir</h2>
+            <div class="search-title-wrapper"><h2>Cari Doa & Dzikir</h2></div>
             <div class="search-input-group">
-                <button class="mic-btn-doa" onclick="mulaiCariSuaraDoa()">🎙️</button>
-                <input type="text" id="searchDoa" placeholder="Cari doa (cth: makan, tidur)..." oninput="filterDoa()">
-                <ul id="listHasilDoa" class="search-dropdown" style="top:calc(100% + 5px);"></ul>
+                <button class="mic-btn" onclick="mulaiPencarianSuara('searchDoa', filterDoa)">🎙️</button>
+                <input type="text" id="searchDoa" class="search-box" placeholder="Cari doa atau dzikir (cth: makan)..." oninput="filterDoa()" autocomplete="off">
+                <ul id="listHasilDoa" class="search-results-list"></ul>
             </div>
-            <p id="labelDoaSelected" style="margin-top:16px; font-size:13px; color:var(--teks-redup);">🎧 Pilih doa dari pencarian</p>
-            <audio id="audioDoa" controls></audio>
+            <p id="labelDoaSelected" style="margin-top: 16px; font-size: 13px; color: var(--teks-redup);">🎧 Pilih doa dari hasil pencarian</p>
+            <audio id="audioSearchDoa" controls></audio>
         </div>
     </section>
 
-    <!-- ==================== HALAMAN RUQYAH ==================== -->
+    <!-- ==============================================
+         HALAMAN 3: RUQYAH SYAR'I
+    =============================================== -->
     <section id="page-ruqyah" class="page-section">
-        <div class="card" style="text-align:center;">
-            <p style="font-weight: bold; color: var(--gold-terang); font-size:18px;">✨ Ta'awwudz Khusus Ruqyah</p>
-            <div style="font-size: 22px; color: var(--gold-terang); margin: 15px 0;">أَعُوذُ بِاللَّهِ السَّمِيعِ الْعَلِيمِ مِنَ الشَّيْطَانِ الرَّجِيمِ</div>
-            <p style="font-style: italic; color: var(--teks); font-size: 14px;">"Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari gangguan setan..."</p>
+        <div class="card" style="text-align: center;">
+            <p style="font-weight: bold; color: var(--gold-terang); margin-bottom: 15px;">✨ Ta'awwudz Khusus Ruqyah</p>
+            <div style="font-size: 1.5rem; color: var(--gold-terang); margin-bottom: 12px; font-weight: bold;">أَعُوذُ بِاللَّهِ السَّمِيعِ الْعَلِيمِ مِنَ الشَّيْطَانِ الرَّجِيمِ مِنْ هَمْزِهِ وَنَفْخِهِ وَنَفْثِهِ</div>
+            <div style="font-style: italic; color: var(--teks); font-size: 0.95rem; margin-bottom: 10px;">"A'udzu billahis sami'il 'alim minasy syaithanir rajim, min hamzihi wa nafkhihi wa naftsih."</div>
+            <div style="color: var(--teks-redup); font-size: 0.9rem;">"Aku berlindung kepada Allah Yang Maha Mendengar lagi Maha Mengetahui dari gangguan setan yang terkutuk, dari kegilaannya, kesombongannya, dan syairnya yang tercela."</div>
+            <div style="font-size: 0.85rem; color: var(--teks-redup); margin-top: 8px; font-weight: bold;">(HR. Abu Daud, no. 775 dan Tirmidzi, no. 242)</div>
         </div>
-        <div class="audio-card" style="text-align:center;">
-            <p style="font-weight:bold; color:var(--gold-terang); font-size:16px;">🎧 Ayat Ruqyah Syar'i (Standar)</p>
+
+        <div class="audio-card" style="text-align: center;">
+            <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+                <button class="btn-panduan-inline" onclick="document.getElementById('modalLatin').classList.add('show')">🔤 Latin</button>
+                <button class="btn-panduan-inline" onclick="document.getElementById('modalPanduan1').classList.add('show')">📖 Lihat Panduan</button>
+                <button class="btn-panduan-inline" onclick="document.getElementById('modalArab').classList.add('show')">☪️ Arab</button>
+            </div>
+            <p style="font-weight: bold; color: var(--gold-terang); font-size: 1.1rem;">🎧 Ayat Ruqyah Syar'i</p>
+            <p style="font-size: 0.85rem; color: var(--teks-redup); margin-top: 6px; line-height: 1.5;">"Dan Kami turunkan dari Al Quran suatu yang menjadi penawar dan rahmat bagi orang-orang yang beriman.”<br><strong>(QS. Al-Isra’: 82)</strong></p>
             <audio controls src="ruqyah.mp3"></audio>
         </div>
-        <div class="audio-card" style="text-align:center;">
-            <p style="font-weight:bold; color:var(--gold-terang); font-size:16px;">✋ Ruqyah Memegang Bagian Tubuh</p>
+
+        <div class="audio-card" style="text-align: center;">
+            <div style="margin-bottom: 12px;"><button class="btn-panduan-inline" onclick="document.getElementById('modalPanduan2').classList.add('show')">📖 Lihat Panduan</button></div>
+            <p style="font-weight: bold; color: var(--gold-terang); font-size: 1.1rem;">✋ Ruqyah Memegang Bagian Tubuh</p>
+            <p style="font-size: 0.85rem; color: var(--teks-redup); margin-top: 6px;"> A’udzu billahi wa qudrotihi min syarri maa Ajidu- wa uhaadzir</p>
             <audio controls src="ruqyah-tubuh.mp3"></audio>
         </div>
-        <div class="audio-card" style="text-align:center;">
-            <p style="font-weight:bold; color:var(--gold-terang); font-size:16px;">🌙 Ruqyah Sebelum Tidur</p>
+        
+        <div class="audio-card" style="text-align: center;">
+            <div style="margin-bottom: 12px;"><button class="btn-panduan-inline" onclick="document.getElementById('modalPanduan3').classList.add('show')">📖 Lihat Panduan</button></div>
+            <p style="font-weight: bold; color: var(--gold-terang); font-size: 1.1rem;">🌙 Audio Ruqyah Sebelum Tidur</p>
+            <p style="font-size: 0.85rem; color: var(--teks-redup); margin-top: 6px;">Bismika allahumma amuutu wa ahyaa.</p>
             <audio controls src="ruqyah-tidur.mp3"></audio>
         </div>
     </section>
 
-    <!-- ==================== HALAMAN JADWAL ==================== -->
+    <!-- ==============================================
+         HALAMAN 4: JADWAL SHOLAT
+    =============================================== -->
     <section id="page-jadwal" class="page-section">
-        <div class="location-card" style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
-                <h2 id="locationTitle" style="color:var(--gold-terang); font-size:16px;">📍 Mendeteksi lokasi...</h2>
-                <p id="currentDateText" style="color:var(--teks-redup); font-size:12px;">Memuat tanggal...</p>
+        <div class="location-card" style="display: flex; align-items: center; justify-content: space-between;">
+            <div class="location-info">
+                <h2 id="locationTitle">📍 Mendeteksi lokasi...</h2>
+                <p id="currentDateText">Memuat tanggal...</p>
             </div>
-            <button onclick="dapatkanLokasiGPS()" style="background:var(--circle-btn-bg); color:var(--gold-terang); border:1px solid var(--border-color); padding:8px 12px; border-radius:10px; cursor:pointer;">🎯 Auto</button>
+            <button class="gps-btn" onclick="dapatkanLokasiGPS()">🎯 GPS Auto</button>
+        </div>
+        <div class="features-grid-2col">
+            <a href="https://qiblafinder.withgoogle.com/" target="_blank" rel="noopener" class="feature-btn">🧭 Kompas Kiblat</a>
+            <div onclick="bukaMasjidTerdekat()" class="feature-btn">🕌 Masjid Terdekat</div>
         </div>
         <div class="jadwal-grid" id="jadwalGrid">
-            <div style="grid-column: span 3; text-align: center; color: var(--teks-redup);">Memuat jadwal sholat...</div>
+            <div style="grid-column: span 3; text-align: center; color: var(--teks-redup); padding: 40px;">Memuat jadwal sholat...</div>
         </div>
     </section>
 
-    <!-- ==================== HALAMAN ASMAUL HUSNA ==================== -->
+    <!-- ==============================================
+         HALAMAN 5: ASMAUL HUSNA
+    =============================================== -->
     <section id="page-asmaul" class="page-section">
-        <div class="audio-card" style="text-align:center; max-width:600px; margin: 0 auto 20px auto;">
-            <p style="font-weight:bold; color:var(--gold-terang); font-size:18px;">🎧 Audio Asmaul Husna</p>
+        <!-- Floating Button Asmaul Husna -->
+        <button id="floatingPlayBtn" class="floating-btn">▶️ Putar</button>
+        
+        <div class="audio-card" style="text-align:center; max-width:500px; margin: 0 auto 20px auto;">
+            <p style="font-weight: bold; color: var(--gold-terang);">🎧 Audio Asmaul Husna</p>
+            <p id="teksDukunganPalestina" style="font-size: 0.85rem; color: var(--gold-terang); margin-top: 5px; font-weight: bold;">We ❤️ 🇵🇸 Memuat...</p>
             <audio id="asmaAudio" controls src="asmaulhusna.mp3"></audio>
+            
+            <div style="margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.9rem; color: var(--gold-terang);">
+                <label for="repeatMode">Mode:</label>
+                <select id="repeatMode" class="mode-select">
+                    <option value="1">1x ❤️</option>
+                    <option value="3" selected>3x ❤️</option>
+                    <option value="unlimited">Unlimited ❤️</option>
+                </select>
+            </div>
         </div>
-        <div class="grid-container-asmaul" id="asmaulGridContainer"></div>
+        <div class="grid-container-asma" id="gridContainerAsmaul"></div>
     </section>
 
-    <!-- ==================== HALAMAN RADIO ==================== -->
+    <!-- ==============================================
+         HALAMAN 6: RADIO
+    =============================================== -->
     <section id="page-radio" class="page-section">
-        <div class="radio-card" style="text-align:center; padding: 50px 20px;">
-            <div style="font-size: 60px; margin-bottom: 20px;">🎙️</div>
-            <h2 style="color:var(--gold-terang);">Radio Rodja 756 AM</h2>
-            <p style="color:var(--teks-redup); margin-bottom: 30px;">Kajian Islam & Syiar Sunnah 24 Jam</p>
-            <audio controls preload="none">
-                <source src="https://live2.radiorodja.com/rodja.mp3" type="audio/mpeg">
-            </audio>
+        <div class="radio-card" style="text-align:center; max-width:500px; margin: 0 auto;">
+            <div style="font-size: 50px; margin-bottom: 15px;">🎙️</div>
+            <div style="font-size: 24px; font-weight: bold; color: var(--gold-terang); margin-bottom: 8px;">Radio Rodja 756 AM</div>
+            <div style="font-size: 14px; color: var(--teks-redup); margin-bottom: 25px;">Kajian Islam & Syiar Sunnah 24 Jam</div>
+            <audio controls preload="none"><source src="https://live2.radiorodja.com/rodja.mp3" type="audio/mpeg"></audio>
         </div>
     </section>
 
-    <!-- ==================== HALAMAN TENTANG ==================== -->
+    <!-- ==============================================
+         HALAMAN 7: TENTANG
+    =============================================== -->
     <section id="page-tentang" class="page-section">
         <div class="card" style="text-align:center;">
-            <h3 style="color:var(--gold-terang); margin-bottom:15px;">📖 KitabKu.Online</h3>
-            <p style="color:var(--teks); font-size:14px; line-height:1.6;">Aplikasi Web (Single Page) Islami yang menyediakan fitur Al-Qur'an Digital dengan sinkronisasi Audio, Ruqyah, Doa harian, dan fitur lainnya tanpa perlu menginstal aplikasi.</p>
-            <button onclick="shareWebsite()" style="margin-top:20px; background:var(--gold); color:var(--hijau-gelap); border:none; padding:10px 20px; border-radius:20px; font-weight:bold; cursor:pointer;">Bagikan Website Ini</button>
+            <h3 style="color:var(--gold-terang); margin-bottom:15px;">📖 Tentang KitabKu.Online</h3>
+            <p>KitabKu.Online adalah platform digital yang dibuat untuk menjadi teman setia dalam beribadah dan membantu memudahkan umat Islam dalam menjalankan aktivitas harian.</p>
+            <div class="fitur">
+                <div class="fitur-item"><strong>📖 Al-Qur'an & Ruqyah</strong><span style="font-size:12px;">Membaca dan mendengarkan Al-Qur'an digital.</span></div>
+                <div class="fitur-item"><strong>🤲 Doa, Dzikir & Sholat</strong><span style="font-size:12px;">Doa harian, jadwal sholat akurat, & pencari masjid.</span></div>
+                <div class="fitur-item"><strong>🧭 Arah Kiblat & Asmaul Husna</strong><span style="font-size:12px;">Kompas kiblat presisi & 99 Nama Allah.</span></div>
+                <div class="fitur-item"><strong>📻 Radio Sunnah</strong><span style="font-size:12px;">Streaming Kajian Islam & Syiar 24 Jam.</span></div>
+            </div>
+        </div>
+        
+        <!-- SPACE IKLAN 1 -->
+        <div class="card" style="text-align: center;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 style="margin: 0; color:var(--gold-terang);">📢 Space Iklan</h3>
+                <a href="https://t.me/KitabKuOnline_bot" target="_blank" style="background: var(--gold); color: var(--hijau-gelap); padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; text-decoration: none;">Pasang Iklan</a>
+            </div>
+            <img src="1000313569.jpg" alt="Daftar Posisi Iklan" class="posisi-iklan-img" onclick="openImageModal(this.src)">
+            <p style="font-size: 11px; color: var(--teks-redup); margin-top: 8px;">*(Ketuk gambar untuk memperbesar)*</p>
+        </div>
+
+        <!-- SPACE IKLAN 2 -->
+        <div class="card" style="text-align: center; border: 1px solid var(--active-border);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="color: var(--gold-terang); margin: 0;">✨ [ SPACE IKLAN TERSEDIA ] ✨</h3>
+                <a href="https://t.me/KitabKuOnline_bot" target="_blank" style="background: var(--gold); color: var(--hijau-gelap); padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; text-decoration: none;">Pasang Iklan</a>
+            </div>
+            <p style="font-size: 14px; margin-bottom: 15px; color: var(--teks-redup);">Banner / Promosi Usaha Anda Bisa Ditampilkan Disini</p>
+            <img src="iklanx.jpg" alt="Space Iklan Tersedia" class="posisi-iklan-img" onclick="openImageModal(this.src)">
+            <p style="font-size: 11px; color: var(--teks-redup); margin-top: 8px;">*(Ketuk gambar untuk memperbesar)*</p>
+        </div>
+
+        <div class="card" style="text-align: center;">
+            <h3 style="margin-bottom: 18px; color: var(--gold-terang);">Bagikan & Kunjungi Kami Disini</h3>
+            <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;">
+                <a href="https://facebook.com/link-facebook-kamu" target="_blank" class="sosmed-btn"> Facebook</a>
+                <button onclick="shareWebsite()" class="sosmed-btn" style="cursor: pointer;">Bagikan Website</button>
+                <a href="https://tiktok.com/@link-tiktok-kamu" target="_blank" class="sosmed-btn"> TikTok</a>
+                <a href="https://instagram.com/link-instagram-kamu" target="_blank" class="sosmed-btn"> Instagram</a>
+                <a href="https://youtube.com/@link-youtube-kamu" target="_blank" class="sosmed-btn"> YouTube</a>
+            </div>
         </div>
     </section>
 </main>
 
-<!-- MODALS -->
-<div class="modal-overlay" id="modalPilihSurat" onclick="tutupModal(event, 'modalPilihSurat')">
+<!-- =================================================================
+     SEMUA MODAL (POP-UP) DIKUMPULKAN DI SINI
+================================================================== -->
+
+<!-- Modal Pilih Surat (Al-Qur'an) -->
+<div class="modal-overlay" id="modalPilihSurat" onclick="if(event.target.id==='modalPilihSurat') this.classList.remove('show')">
     <div class="modal-content-surat">
-        <h3 style="color:var(--gold-terang); margin-bottom:10px; border-bottom:1px solid var(--border-color); padding-bottom:10px;">📖 Pilih Surat</h3>
-        <input type="text" id="modalSuratSearch" placeholder="Cari surat..." oninput="cariDiModalSurat()" style="width:100%; padding:10px; border-radius:10px; border:1px solid var(--border-color); background:var(--input-bg); color:var(--teks); margin-bottom:10px;">
-        <div id="modalSurahList" style="overflow-y:auto; flex:1; max-height:400px; display:flex; flex-direction:column;"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; color:var(--gold-terang); font-weight:bold; border-bottom:1px solid var(--border-color); padding-bottom:10px;">
+            <span>📖 Daftar 114 Surat</span><button style="background:none; border:none; color:var(--gold-terang); font-size:16px; cursor:pointer;" onclick="document.getElementById('modalPilihSurat').classList.remove('show')">✕</button>
+        </div>
+        <input type="text" id="modalSuratSearch" placeholder="Cari nama surat, nomor, arti..." oninput="cariDiModalSurat()" style="width:100%; padding:10px; border-radius:12px; border:1px solid var(--border-color); background:var(--input-bg); color:var(--teks); margin-top:10px;">
+        <div id="modalSurahList" style="overflow-y:auto; flex:1; margin-top:10px; display:flex; flex-direction:column;"></div>
+    </div>
+</div>
+
+<!-- Modal Lokasi (Jadwal Sholat) -->
+<div class="modal-overlay" id="locationModal">
+    <div class="modal-box" style="max-width: 400px; text-align: center;">
+        <h3>📍 Akses Lokasi Diperlukan</h3>
+        <p style="font-size:12px; color:var(--teks-redup); margin-bottom:15px; line-height: 1.5;">Akses lokasi dibutuhkan agar jadwal sholat dan fitur <b>Masjid Terdekat</b> akurat sesuai posisi kamu.<br><br>Mohon <b>Izinkan (Allow)</b> akses lokasi pada browser Anda.</p>
+        <button class="btn-tutup-modal" onclick="document.getElementById('locationModal').classList.remove('show')">Saya Mengerti</button>
+    </div>
+</div>
+
+<!-- Modal Palestina (Asmaul Husna) -->
+<div class="modal-overlay" id="modalPalestina">
+    <div class="modal-box" style="max-width: 340px; text-align: center;">
+        <img src="1000314334.jpg" alt="Doa untuk Palestina" style="width:100%; border-radius:10px; margin-bottom:15px;">
+        <h3>🇵🇸 Doa untuk Palestina</h3>
+        <p style="font-size: 0.95rem; font-style: italic; color:var(--teks);">"Ya Allah, lindungilah kaum muslimin dan saudara-saudara kami yang tertindas di Palestina. Limpahkanlah kesabaran, kuatkan keteguhan mereka, dan turunkan pertolongan-Mu."</p>
+        <div style="background:rgba(0,0,0,0.2); padding:8px; border-radius:8px; margin:15px 0; border:1px dashed var(--border-color);">
+            <div style="font-size:11px; color:var(--teks-redup);">Total Dukungan Doa Global:</div>
+            <span id="likeCountLoading" style="color:var(--gold-terang); font-weight:bold; font-size:15px;">Memuat...</span>
+        </div>
+        <button class="btn-tutup-modal" onclick="document.getElementById('modalPalestina').classList.remove('show')">Aamiin 🤲</button>
+    </div>
+</div>
+
+<!-- Modal Zoom Gambar Iklan (Tentang) -->
+<div id="imageModal" class="image-modal" onclick="closeImageModal()">
+    <span style="position: absolute; top: 20px; right: 30px; color: #fff; font-size: 35px; font-weight: bold; cursor: pointer;">&times;</span>
+    <img id="modalImg" src="" alt="Zoom Image">
+</div>
+
+<!-- Modal Ruqyah: Latin -->
+<div class="modal-overlay" id="modalLatin">
+    <div class="modal-box">
+        <button class="modal-close-x" onclick="document.getElementById('modalLatin').classList.remove('show')">&times;</button>
+        <h3>🔤 Bacaan Latin Ayat Ruqyah</h3>
+        <div class="modal-text-content">
+Surah Al-Fatihah (1 - 7)
+1. Bismillaahir-rahmaanir-rahiim.
+2. Alhamdu lillaahi rabbil-'aalamiin.
+3. Ar-rahmaanir-rahiim.
+4. Maaliki yawmid-diin.
+5. Iyyaaka na'budu wa iyyaaka nasta'iin.
+6. Ihdinash-shiraathal-mustaqiim.
+7. Shiraathal-ladziina an'amta 'alayhim, ghayril-maghdhuubi 'alayhim wa ladh-dhaaaalliin.
+
+Surah Al-Baqarah (1 - 5)
+1. Alif-laaam-miim.
+2. Dzaalikal-kitaabu laa rayba fiih, hudal-lilmuttaqiin.
+3. Alladziina yu'minuuna bil-ghaybi wa yuqiimuunash-shalaata wa mimmaa razaqnaahum yunfiquun.
+4. Walladziina yu'minuuna bimaa unzila ilayka wa maa unzila min qablik, wa bil-aakhirati hum yuuqinuun.
+5. Ulaa'ika 'alaa hudam-mir-rabbihim, wa ulaa'ika humul-muflihuun.
+
+Surah Al-Baqarah (102 - 103)
+102. Wattaba'uu maa tatlusy-syayaathiinu 'alaa mulki Sulaymaan...
+103. Wa law annahum aamanuu wattaqaw lamatsuubatum min 'indillaahi khayr, law kaanuu ya'lamuun.
+
+Surah Al-Baqarah (137)
+137. Fa'in aamanuu bimitsli maa aamantum bihii faqadihtadaw...
+
+Surah Al-Baqarah (255) / Ayat Kursi
+255. Allaahu laa ilaaha illaa huwal-hayyul-qayyuum...
+
+Surah Al-Baqarah (284 - 286)
+284. Lillaahi maa fis-samaawaati wa maa fil-ardh...
+285. Aamanar-rasuulu bimaa unzila ilayhi mir-rabbihii wal-mu'minuun...
+286. Laa yukallifullaahu nafsan illaa wus'ahaa...
+
+Surah Ali 'Imran (1 - 5)
+1. Alif-laaam-miim.
+2. Allaahu laa ilaaha illaa huwal-hayyul-qayyuum.
+3. Nazzala 'alaykal-kitaaba bil-haqqi mushaddiqal-limaa bayna yadayhi wa anzalat-Tawraata wal-Injiil.
+4. Min qablu hudal-linnaasi wa anzala furqaan.
+5. Innallaaha laa yakhfaa 'alayhi syai'un fil-ardhi wa laa fis-samaa'.
+
+Surah Ali 'Imran (85), (173 - 174)
+Surah Al-An'am (17)
+Surah Yunus (79 - 82)
+Surah Taha (65 - 69)
+Surah Al-Mu'minun (115 - 118)
+Surah Yasin (1 - 9)
+Surah As-Saffat (1 - 10)
+Surah Ghafir / Al-Mu'min (1 - 3)
+Surah Al-Ahqaf (29 - 32)
+Surah Ar-Rahman (33 - 35)
+Surah Al-Hasyr (21)
+Surah Al-Jinn (1 - 10)
+        </div>
+        <button class="btn-tutup-modal" onclick="document.getElementById('modalLatin').classList.remove('show')">Tutup ✖</button>
+    </div>
+</div>
+
+<!-- Modal Ruqyah: Arab -->
+<div class="modal-overlay" id="modalArab">
+    <div class="modal-box">
+        <button class="modal-close-x" onclick="document.getElementById('modalArab').classList.remove('show')">&times;</button>
+        <h3>☪️ Bacaan Arab Ayat Ruqyah</h3>
+        <div class="modal-text-content modal-arabic-content">
+Surah Al-Fatihah (1 - 7)
+1. بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
+2. ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَـٰلَمِينَ
+3. ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ
+4. مَـٰلِكِ يَوْمِ ٱلدِّينِ
+5. إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ
+6. ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ
+7. صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ
+
+Surah Al-Baqarah (1 - 5)
+1. الٓمٓ
+2. ذَٰلِكَ ٱلْكِتَـٰبُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ
+3. ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَـٰهُمْ يُنفِقُونَ
+4. وَٱلَّذِينَ يُؤْمِنُونَ بِمَآ أُنزِلَ إِلَيْكَ وَمَآ أُنزِلَ مِن قَبْلِكَ وَبِٱلْـَٔاخِرَةِ هُمْ يُوقِنُونَ
+5. أُو۟لَـٰٓئِكَ عَلَىٰ هُدًى مِّن رَّبِّهِمْ ۖ وَأُو۟لَـٰٓئِكَ هُمُ ٱلْمُفْلِحُونَ
+
+Surah Al-Baqarah (102 - 103), (137), (255), (284 - 286)
+Surah Ali 'Imran (1 - 5), (85), (173 - 174)
+Surah Al-An'ام (17)
+Surah Yunus (79 - 82)
+Surah Taha (65 - 69)
+Surah Al-Mu'minun (115 - 118)
+Surah Yasin (1 - 9)
+Surah As-Saffat (1 - 10)
+Surah Ghafir / Al-Mu'min (1 - 3)
+Surah Al-Ahqaf (29 - 32)
+Surah Ar-Rahman (33 - 35)
+Surah Al-Hasyr (21)
+Surah Al-Jinn (1 - 10)
+        </div>
+        <button class="btn-tutup-modal" onclick="document.getElementById('modalArab').classList.remove('show')">Tutup ✖</button>
+    </div>
+</div>
+
+<!-- Modal Panduan Ruqyah 1, 2, 3 -->
+<div class="modal-overlay" id="modalPanduan1">
+    <div class="modal-box">
+        <button class="modal-close-x" onclick="document.getElementById('modalPanduan1').classList.remove('show')">&times;</button>
+        <h3>📌 Panduan & Adab Ruqyah Syar'i</h3>
+        <ul>
+            <li>Niat meyakini bahwa Al-Qur'an adalah kalam Allah yang mendatangkan berkah dan kesembuhan</li>
+            <li>Disarankan berwudhu terlebih dahulu / mandi besar</li>
+            <li>Siapkan air Minum, Bisa DiGelas Ataupun DiBotol (Untuk diminum Maupun Di Tuangkan Untuk Mandi)</li>
+            <li>Khusus Surah Al-fatihah Setiap Ayat diJeda 3 Detik Untuk Meniup Air Dengan lembut</li>
+            <li>Untuk Ayat Selanjutnya Setelah Al-Fatihah Cukup Di Dengarkan Secara Fokus</li>
+            <li>Disarankan Meruqyah diri Sendiri Ataupun DiDampingi Keluarga Kandung</li>
+            <li>Disarankan MenGunakan Pakaian Yang Tertutup Seluruh Aurat</li>
+            <li>Posisikan Duduk / Tidur Saat Mendengarkan Audio Dan Wajib di tempat yang bersih Hindari Sambil Berkendara</li>
+            <li>Hindari Bantuan Orang Lain Yang Bukan Mahram Ataupun Dukun Berkedok Paham Agama</li>
+            <li>Hindari Mandi Kembang Dan Mencelupkan Ayat² atau Jimat Dan Syarat² Yang Aneh</li>
+            <li>Sebelum Mendengarkan Audio, Di Anjurkan Baca Ta'awwudz Yang Telah Saya Sediakan Di Atas</li>
+        </ul>
+        <button class="btn-tutup-modal" onclick="document.getElementById('modalPanduan1').classList.remove('show')">Saya Mengerti & Lanjut 🤲</button>
+    </div>
+</div>
+<div class="modal-overlay" id="modalPanduan2">
+    <div class="modal-box">
+        <button class="modal-close-x" onclick="document.getElementById('modalPanduan2').classList.remove('show')">&times;</button>
+        <h3>📌 Panduan Ruqyah Bagian Tubuh</h3>
+        <ul>
+            <li>Letakkan tangan kanan di bagian tubuh yang terasa sakit.</li>
+            <li>Niatkan dalam hati memohon kesembuhan hanya kepada Allah.</li>
+            <li>Ikuti bacaan pada audio dengan khusyuk.</li>
+        </ul>
+        <button class="btn-tutup-modal" onclick="document.getElementById('modalPanduan2').classList.remove('show')">Saya Mengerti & Lanjut 🤲</button>
+    </div>
+</div>
+<div class="modal-overlay" id="modalPanduan3">
+    <div class="modal-box">
+        <button class="modal-close-x" onclick="document.getElementById('modalPanduan3').classList.remove('show')">&times;</button>
+        <h3>📌 Panduan Ruqyah Sebelum Tidur</h3>
+        <ul>
+            <li>Berwudhu sebelum tidur sesuai sunnah.</li>
+            <li>Kibas tempat tidur sambil membaca Bismillah dan Ayat Kursi</li>
+            <li>Duduklah di Atas Kasur Dengan ikuti Bacaan Surah Pada Audio</li>
+            <li>Setelah Semua Dibaca, Lanjut MemBaca Bismika allahumma amuutu wa ahyaa</li>
+            <li>Selanjutnya Tiupkan Kedua Telapak Tangan Dengan Lembut Lalu Usapkan keseluruh tubuh, Ulangi Tiup Dan Usap Sampai 3x</li>
+        </ul>
+        <button class="btn-tutup-modal" onclick="document.getElementById('modalPanduan3').classList.remove('show')">Saya Mengerti & Lanjut 🤲</button>
     </div>
 </div>
 
 <footer>
-    <p>© 2026 Al-Qur'an Digital • KitabKu.Online</p>
+    <p>© 2026 Al-Qur'an Digital • Semoga bermanfaat 🤲</p>
 </footer>
 
 <script>
-/* ==========================================
-   SISTEM SPA (SINGLE PAGE APPLICATION) & TEMA
-========================================== */
+/* =========================================================
+   1. SISTEM SPA (SINGLE PAGE APPLICATION) & THEME & AUDIO GLOBAL
+========================================================= */
 const htmlElement = document.documentElement;
-let initFlags = { quran: false, doa: false, ruqyah: false, jadwal: false, asmaul: false };
+let initFlags = { quran: false, doa: false, ruqyah: false, jadwal: false, asmaul: false, radio: false, tentang: false };
 
 function initSPA() {
     const savedTheme = localStorage.getItem('quranTheme');
@@ -327,7 +685,7 @@ function initSPA() {
     // Inisialisasi awal halaman QUR'AN
     switchPage('quran');
 
-    // SISTEM PENGATUR AUDIO (Audio Manager)
+    // Hentikan audio yang sedang menyala jika audio lain diputar (Menghindari suara bertumpuk)
     document.addEventListener('play', function(e){
         if(e.target.tagName === 'AUDIO'){
             document.querySelectorAll('audio').forEach(audio => {
@@ -345,16 +703,20 @@ function toggleTheme() {
     }
     updateThemeBtn();
 }
+
 function updateThemeBtn() {
     const btn = document.getElementById('themeToggleBtn');
-    btn.innerHTML = htmlElement.getAttribute('data-theme') === 'light' ? '🌙 Mode Gelap' : '☀️ Mode Terang';
+    btn.innerHTML = htmlElement.getAttribute('data-theme') === 'light' ? '🌙 Ganti ke Mode Gelap' : '☀️ Ganti ke Mode Terang';
 }
 
 function switchPage(pageId, navElement = null) {
     // Navigasi UI
     document.querySelectorAll('#mainNav a').forEach(el => el.classList.remove('active'));
     if(navElement) { navElement.classList.add('active'); } 
-    else { document.querySelector(`#mainNav a[onclick*="${pageId}"]`).classList.add('active'); }
+    else { 
+        const nav = document.querySelector(`#mainNav a[onclick*="${pageId}"]`);
+        if(nav) nav.classList.add('active'); 
+    }
 
     // Ganti Section (dengan Animasi fade)
     document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
@@ -363,89 +725,185 @@ function switchPage(pageId, navElement = null) {
     // Hentikan Semua Audio saat pindah menu
     document.querySelectorAll('audio').forEach(a => a.pause());
 
-    // Jalankan Inisialisasi Khusus Tiap Halaman jika belum
+    // Inisialisasi Khusus Tiap Halaman (Hanya dipanggil sekali)
     if (pageId === 'quran' && !initFlags.quran) { ambilDaftarSurah(); initFlags.quran = true; }
     if (pageId === 'jadwal' && !initFlags.jadwal) { initJadwal(); initFlags.jadwal = true; }
     if (pageId === 'asmaul' && !initFlags.asmaul) { renderAsmaulHusna(); initFlags.asmaul = true; }
 
+    // Scroll ke atas
     window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
-function bukaModal(id) { document.getElementById(id).classList.add('show'); }
-function tutupModal(e, id) { if(e.target.id === id || e === id) document.getElementById(id).classList.remove('show'); }
-
-/* ==========================================
-   AL-QUR'AN LOGIC
-========================================== */
+/* =========================================================
+   2. LOGIKA AL-QUR'AN
+========================================================= */
 let listSurah = [];
 let currentSurahData = null;
+let currentAyatIndex = 0;
+let currentLrcLines = [];
+let searchTimeout;
+let isUserJumping = false; 
 
 async function ambilDaftarSurah() {
     try {
         const res = await fetch('https://equran.id/api/v2/surat');
         const result = await res.json();
         listSurah = result.data;
-        document.getElementById('infoCardMsg').innerHTML = 'Silakan cari surah atau klik tombol ☰ untuk daftar lengkap.';
+        document.getElementById('infoCardMsg').innerHTML = '<span style="font-size:40px; margin-bottom:10px; display:block;">📖</span>Gunakan <strong>kolom pencarian</strong> di atas,<br>atau klik ikon <strong>☰</strong> untuk melihat<br>daftar lengkap 114 Surah.';
         renderModalSurahList(listSurah);
     } catch (e) {
-        document.getElementById('infoCardMsg').innerHTML = 'Gagal memuat API Al-Qur\'an.';
+        document.getElementById('infoCardMsg').innerHTML = 'Gagal memuat API Al-Qur\'an. Periksa internet.';
     }
 }
 
 function debounceCariSurah() {
-    const val = document.getElementById('searchInput').value.toLowerCase();
-    const drop = document.getElementById('searchDropdownList');
-    if(!val) { drop.style.display = 'none'; return; }
-    
-    const hasil = listSurah.filter(s => s.namaLatin.toLowerCase().includes(val) || s.nomor.toString() === val);
-    drop.innerHTML = hasil.map(s => `<li onclick="bukaSurah(${s.nomor}); document.getElementById('searchDropdownList').style.display='none';"><div style="flex:1"><b style="color:var(--gold-terang)">${s.nomor}. ${s.namaLatin}</b><br><span style="font-size:11px; color:var(--teks-redup)">${s.arti}</span></div></li>`).join('');
-    drop.style.display = 'block';
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => { 
+        const val = document.getElementById('searchInput').value.toLowerCase().replace(/\s+/g, ' ').trim();
+        const drop = document.getElementById('searchDropdownList');
+        if(!val) { drop.style.display = 'none'; return; }
+        
+        const queryWords = val.split(' ');
+        const hasil = listSurah.filter(s => {
+            const namaLatinLower = s.namaLatin.toLowerCase();
+            const artiLower = s.arti.toLowerCase();
+            const nomorStr = s.nomor.toString();
+            return queryWords.every(word => nomorStr === word || namaLatinLower.includes(word) || artiLower.includes(word));
+        });
+        
+        if (hasil.length === 0) {
+            drop.innerHTML = '<li style="justify-content:center; color:var(--teks-redup);">Surah tidak ditemukan</li>';
+        } else {
+            drop.innerHTML = hasil.map(s => `<li onclick="bukaSurah(${s.nomor}); document.getElementById('searchDropdownList').style.display='none'; document.getElementById('searchInput').value='';"><span style="font-size: 20px;">📖</span><div style="flex:1"><b style="color:var(--gold-terang)">${s.nomor}. Surah ${s.namaLatin}</b><br><span style="font-size:12px; color:var(--teks-redup)">${s.arti} • ${s.jumlahAyat} Ayat</span></div></li>`).join('');
+        }
+        drop.style.display = 'block';
+    }, 150);
 }
 
 function renderModalSurahList(data) {
     const cont = document.getElementById('modalSurahList');
-    cont.innerHTML = data.map(s => `<div style="padding:10px; border-bottom:1px solid rgba(227,200,90,0.2); cursor:pointer; display:flex; justify-content:space-between;" onclick="bukaSurah(${s.nomor}); tutupModal('modalPilihSurat', 'modalPilihSurat')"><div><b style="color:var(--gold-terang)">${s.nomor}. ${s.namaLatin}</b><br><span style="font-size:11px">${s.arti}</span></div><div style="font-family:'Traditional Arabic', serif; font-size:18px; color:var(--gold-terang);">${s.nama}</div></div>`).join('');
+    if (data.length === 0) { cont.innerHTML = '<div style="text-align:center; padding:30px; color:var(--teks-redup); font-size:13px;">Surah tidak ditemukan.</div>'; return; }
+    cont.innerHTML = data.map(s => `<div style="padding:12px; border-bottom:1px solid rgba(227,200,90,0.15); cursor:pointer; display:flex; justify-content:space-between; align-items:center;" onclick="bukaSurah(${s.nomor}); document.getElementById('modalPilihSurat').classList.remove('show');"><div style="display:flex; gap:12px;"><div style="width:34px; height:34px; background:var(--circle-btn-bg); border:1px solid var(--border-color); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--gold-terang); font-size:12px; font-weight:bold;">${s.nomor}</div><div><b style="color:var(--gold-terang)">${s.namaLatin}</b><br><span style="font-size:11px; color:var(--teks-redup);">${s.arti}</span></div></div><div style="font-family:'Traditional Arabic', serif; font-size:18px; color:var(--gold-terang);">${s.nama}</div></div>`).join('');
 }
 function cariDiModalSurat() {
-    const val = document.getElementById('modalSuratSearch').value.toLowerCase();
-    renderModalSurahList(listSurah.filter(s => s.namaLatin.toLowerCase().includes(val)));
+    const val = document.getElementById('modalSuratSearch').value.toLowerCase().replace(/\s+/g, ' ').trim();
+    const queryWords = val.split(' ');
+    renderModalSurahList(listSurah.filter(s => {
+        return queryWords.every(word => s.nomor.toString() === word || s.namaLatin.toLowerCase().includes(word) || s.arti.toLowerCase().includes(word));
+    }));
 }
 
 async function bukaSurah(nomor) {
     document.getElementById('homeViewQuran').style.display = 'none';
     document.getElementById('detailViewQuran').style.display = 'block';
-    document.getElementById('readingFocusView').innerHTML = 'Memuat...';
+    document.getElementById('readingFocusView').innerHTML = '<div style="text-align:center; padding:40px; color:var(--teks-redup);">Memuat ayat...</div>';
+    currentAyatIndex = 0; currentLrcLines = [];
 
     try {
         const res = await fetch(`https://equran.id/api/v2/surat/${nomor}`);
         const result = await res.json();
         currentSurahData = result.data;
-        document.getElementById('detailSurahTitle').innerText = currentSurahData.namaLatin;
-        document.getElementById('detailSurahSub').innerText = `${currentSurahData.jumlahAyat} Ayat`;
+        document.getElementById('detailSurahTitle').innerText = `Surah ${currentSurahData.namaLatin}`;
+        document.getElementById('detailSurahSub').innerText = `${currentSurahData.arti} • ${currentSurahData.jumlahAyat} Ayat`;
         
-        document.getElementById('quranAudioPlayer').src = currentSurahData.audioFull['05'];
-        
-        let html = '<div class="reading-horizontal-container">';
-        currentSurahData.ayat.forEach(a => {
-            html += `<div class="reading-ayat-card-horizontal">
-                <div style="color:var(--gold-terang); font-size:12px; font-weight:bold;">Ayat ${a.nomorAyat}</div>
-                <div class="reading-arabic">${a.teksArab}</div>
-                <div class="reading-isyarat">${a.teksArab}</div>
-                <div class="reading-latin">${a.teksLatin}</div>
-                <div class="reading-translation">${a.teksIndonesia}</div>
-            </div>`;
-        });
-        html += '</div>';
-        document.getElementById('readingFocusView').innerHTML = html;
-        updateToggleTampilan();
-    } catch(e) {}
-}
-function tutupSurah() {
-    document.getElementById('detailViewQuran').style.display = 'none';
-    document.getElementById('homeViewQuran').style.display = 'block';
-    document.getElementById('quranAudioPlayer').pause();
+        // LRC Fetch
+        const nomorStr = String(nomor).padStart(3, '0');
+        try {
+            const lrcResponse = await fetch(`timer/${nomorStr}.lrc`);
+            if (lrcResponse.ok) currentLrcLines = parseLrc(await lrcResponse.text());
+        } catch (err) {}
+
+        const audioUrl = currentSurahData.audioFull['05'] || Object.values(currentSurahData.audioFull)[0];
+        setupAudioPlayer(audioUrl);
+        renderReadingView();
+    } catch(e) {
+        document.getElementById('readingFocusView').innerHTML = '<div style="text-align:center; padding:40px; color:var(--teks-redup);">Gagal memuat detail surah.</div>';
+    }
 }
 
+function parseLrc(lrcText) {
+    const lines = lrcText.split('\n'); const parsed = [];
+    const timeReg = /\[(\d+):(\d{2})\.(\d{2,3})\]/; 
+    lines.forEach(line => {
+        const match = timeReg.exec(line);
+        if (match) parsed.push({ time: (parseInt(match[1]) * 60) + parseInt(match[2]) + (parseInt(match[3].padEnd(3,'0')) / 1000) });
+    });
+    return parsed;
+}
+
+function renderReadingView() {
+    let html = '<div class="reading-horizontal-container">';
+    currentSurahData.ayat.forEach((a, i) => {
+        html += `<div class="reading-ayat-card-horizontal" id="reading-ayat-${i}">
+            <div class="reading-ayat-header"><span>Ayat ${a.nomorAyat} dari ${currentSurahData.jumlahAyat}</span><button class="icon-btn" onclick="salinAyat(${i})" title="Salin ayat">⧉</button></div>
+            <div class="reading-arabic">${a.teksArab}</div>
+            <div class="reading-isyarat">${a.teksArab}</div>
+            <div class="reading-latin">${a.teksLatin}</div>
+            <div class="reading-translation">${a.teksIndonesia}</div>
+        </div>`;
+    });
+    html += '</div>';
+    document.getElementById('readingFocusView').innerHTML = html;
+    updateToggleTampilan();
+    renderHighlightAyat(currentAyatIndex, false);
+}
+
+function renderHighlightAyat(index, shouldScroll=true) {
+    const cards = document.querySelectorAll('.reading-ayat-card-horizontal');
+    cards.forEach((card, idx) => {
+        if (idx === index) {
+            card.classList.add('active-reading-highlight');
+            if (shouldScroll && card.parentElement) {
+                const par = card.parentElement;
+                const scrollPos = par.scrollLeft + card.getBoundingClientRect().left - par.getBoundingClientRect().left - (par.getBoundingClientRect().width/2) + (card.getBoundingClientRect().width/2);
+                par.scrollTo({ left: scrollPos, behavior: 'smooth' });
+            }
+        } else { card.classList.remove('active-reading-highlight'); }
+    });
+}
+
+function setupAudioPlayer(url) {
+    const audio = document.getElementById('mainAudioPlayer');
+    audio.src = url;
+    const btn = document.getElementById('btnPlayPauseQuran');
+    btn.innerHTML = 'Play';
+    audio.onplay = () => btn.innerHTML = 'Stop';
+    audio.onpause = () => btn.innerHTML = 'Play';
+
+    audio.ontimeupdate = function() {
+        if (!currentSurahData || isUserJumping || audio.paused) return;
+        const waktuSekarang = audio.currentTime;
+        let indexAktif = 0; const jumlahAyat = currentSurahData.ayat.length;
+        
+        if (currentLrcLines.length >= jumlahAyat) {
+            for (let i = 0; i < currentLrcLines.length; i++) {
+                if (waktuSekarang >= currentLrcLines[i].time) indexAktif = i; else break;
+            }
+        } else {
+            const durasi = audio.duration || (jumlahAyat * 5);
+            indexAktif = Math.min(Math.floor((waktuSekarang / durasi) * jumlahAyat), jumlahAyat - 1);
+        }
+        if (currentAyatIndex !== indexAktif) { currentAyatIndex = indexAktif; renderHighlightAyat(indexAktif, true); }
+    };
+}
+function togglePlayPauseQuran() {
+    const audio = document.getElementById('mainAudioPlayer');
+    if (!audio.src) return;
+    audio.paused ? audio.play() : audio.pause();
+}
+function lompatKeAyat() {
+    const inputVal = parseInt(document.getElementById('inputNomorAyat').value);
+    if (!currentSurahData || isNaN(inputVal)) return;
+    const targetIndex = currentSurahData.ayat.findIndex(a => a.nomorAyat === inputVal);
+    if (targetIndex !== -1) {
+        isUserJumping = true; currentAyatIndex = targetIndex;
+        renderHighlightAyat(targetIndex, true);
+        const audio = document.getElementById('mainAudioPlayer');
+        if (currentLrcLines.length > targetIndex) audio.currentTime = currentLrcLines[targetIndex].time + 0.1;
+        setTimeout(() => isUserJumping = false, 500);
+        document.getElementById('inputNomorAyat').value = '';
+    }
+}
 function updateToggleTampilan() {
     const cont = document.getElementById('readingFocusView');
     if(!cont) return;
@@ -455,107 +913,353 @@ function updateToggleTampilan() {
 }
 function ubahUkuranFont(size) {
     const root = document.documentElement;
-    if(size === 'kecil'){ root.style.setProperty('--arabic-size', '22px'); root.style.setProperty('--isyarat-size', '26px'); }
-    else if(size === 'besar'){ root.style.setProperty('--arabic-size', '34px'); root.style.setProperty('--isyarat-size', '38px'); }
-    else { root.style.setProperty('--arabic-size', '26px'); root.style.setProperty('--isyarat-size', '30px'); }
+    localStorage.setItem('quranFontSize', size);
+    if(size === 'kecil'){ root.style.setProperty('--arabic-size', '22px'); root.style.setProperty('--isyarat-size', '26px'); root.style.setProperty('--latin-size', '11px'); root.style.setProperty('--indo-size', '11px'); }
+    else if(size === 'besar'){ root.style.setProperty('--arabic-size', '34px'); root.style.setProperty('--isyarat-size', '38px'); root.style.setProperty('--latin-size', '15px'); root.style.setProperty('--indo-size', '15px'); }
+    else { root.style.setProperty('--arabic-size', '26px'); root.style.setProperty('--isyarat-size', '30px'); root.style.setProperty('--latin-size', '13px'); root.style.setProperty('--indo-size', '13px'); }
+}
+function salinAyat(index) {
+    if (!currentSurahData) return;
+    const item = currentSurahData.ayat[index];
+    const teks = `${item.teksArab}\n${item.teksLatin}\n${item.teksIndonesia}`;
+    if (navigator.clipboard) navigator.clipboard.writeText(teks).then(() => alert("Ayat disalin!"));
 }
 
-/* ==========================================
-   DOA & DZIKIR LOGIC
-========================================== */
+/* =========================================================
+   3. LOGIKA DOA & DZIKIR
+========================================================= */
 const dataDoa = [
-    { nama: 'Doa Sebelum Makan', url: 'audio/doa-sebelum-makan.mp3' },
-    { nama: 'Doa Sesudah Makan', url: 'audio/doa-sesudah-makan.mp3' },
-    { nama: 'Doa Sebelum Tidur', url: 'audio/doa-sebelum-tidur.mp3' },
-    { nama: 'Doa Bangun Tidur', url: 'audio/doa-bangun-tidur.mp3' },
-    { nama: 'Dzikir Pagi', url: 'dzikirpagi.mp3' },
-    { nama: 'Dzikir Petang', url: 'dzikirpetang.mp3' }
+    { id: 'doa_makan', nama: 'Doa Sebelum Makan', url: 'audio/doa-sebelum-makan.mp3', tags: 'makan makanan sarapan mau hendak' },
+    { id: 'doa_sesudah_makan', nama: 'Doa Sesudah Makan', url: 'audio/doa-sesudah-makan.mp3', tags: 'makan makanan selesai habis sesudah setelah' },
+    { id: 'doa_tidur', nama: 'Doa Sebelum Tidur', url: 'audio/doa-sebelum-tidur.mp3', tags: 'tidur malam merem' },
+    { id: 'doa_bangun_tidur', nama: 'Doa Bangun Tidur', url: 'audio/doa-bangun-tidur.mp3', tags: 'bangun pagi melek' },
+    { id: 'doa_masuk_masjid', nama: 'Doa Masuk Masjid', url: 'audio/doa-masuk-masjid.mp3', tags: 'masjid mesjid' },
+    { id: 'doa_keluar_masjid', nama: 'Doa Keluar Masjid', url: 'audio/doa-keluar-masjid.mp3', tags: 'masjid mesjid' },
+    { id: 'doa_masuk_wc', nama: 'Doa Masuk WC atau Toilet', url: 'audio/doa-masuk-wc.mp3', tags: 'wc toilet mandi kamar kencing berak buang air' },
+    { id: 'doa_keluar_wc', nama: 'Doa Keluar WC atau Toilet', url: 'audio/doa-keluar-wc.mp3', tags: 'wc toilet mandi kamar kencing berak buang air' },
+    { id: 'doa_memakai_pakaian', nama: 'Doa Memakai Pakaian Baru', url: 'audio/doa-memakai-pakaian.mp3', tags: 'pakaian baju busana memakai' },
+    { id: 'doa_melepas_pakaian', nama: 'Doa Melepas Pakaian', url: 'audio/doa-melepas-pakaian.mp3', tags: 'pakaian baju lepas copot' },
+    { id: 'doa_sebelum_wudhu', nama: 'Doa Sebelum Wudhu', url: 'audio/doa-sebelum-wudhu.mp3', tags: 'wudhu wudu bersuci' },
+    { id: 'doa_sesudah_wudhu', nama: 'Doa Sesudah Wudhu', url: 'audio/doa-sesudah-wudhu.mp3', tags: 'wudhu wudu selesai setelah bersuci' },
+    { id: 'doa_keluar_rumah', nama: 'Doa Keluar Rumah', url: 'audio/doa-keluar-rumah.mp3', tags: 'rumah bepergian jalan' },
+    { id: 'doa_masuk_rumah', nama: 'Doa Masuk Rumah', url: 'audio/doa-masuk-rumah.mp3', tags: 'rumah pulang' },
+    { id: 'doa_naik_kendaraan', nama: 'Doa Naik Kendaraan', url: 'audio/doa-naik-kendaraan.mp3', tags: 'kendaraan mobil motor perjalanan' },
+    { id: 'doa_cermin', nama: 'Doa Ketika Bercermin', url: 'audio/doa-cermin.mp3', tags: 'cermin kaca dandan rias' },
+    { id: 'doa_masuk_pasar', nama: 'Doa Masuk Pasar', url: 'audio/doa-masuk-pasar.mp3', tags: 'pasar belanja mall' },
+    { id: 'doa_ketika_hujan', nama: 'Doa Ketika Turun Hujan', url: 'audio/doa-ketika-hujan.mp3', tags: 'hujan air mendung' },
+    { id: 'doa_ketika_marah', nama: 'Doa Ketika Marah', url: 'audio/doa-ketika-marah.mp3', tags: 'marah emosi kesal' },
+    { id: 'doa_kebaikannya_dunia_akhirat', nama: 'Doa Sapu Jagat', url: 'audio/doa-sapu-jagat.mp3', tags: 'sapu jagat dunia akhirat selamat' },
+    { id: 'dzikir_pagi', nama: 'Dzikir Pagi', url: 'dzikirpagi.mp3', tags: 'dzikir pagi zikir subuh' },
+    { id: 'dzikir_petang', nama: 'Dzikir Petang', url: 'dzikirpetang.mp3', tags: 'dzikir petang zikir sore malam' }
 ];
 
 function filterDoa() {
-    const val = document.getElementById('searchDoa').value.toLowerCase();
+    const val = document.getElementById('searchDoa').value.toLowerCase().replace(/(.)\1+/g, '$1');
     const list = document.getElementById('listHasilDoa');
     if(!val) { list.style.display = 'none'; return; }
     
-    const hasil = dataDoa.filter(d => d.nama.toLowerCase().includes(val));
-    list.innerHTML = hasil.map(d => `<li onclick="pilihDoa('${d.nama}', '${d.url}')">🤲 ${d.nama}</li>`).join('');
+    let synonyms = [val];
+    if (val.includes('selesai') || val.includes('setelah') || val.includes('habis')) synonyms.push('sesudah');
+    if (val.includes('mau') || val.includes('hendak')) synonyms.push('sebelum');
+    if (val.includes('kamar mandi')) synonyms.push('wc');
+
+    const hasil = dataDoa.filter(item => {
+        const titleLower = item.nama.toLowerCase();
+        const tagsLower = item.tags.toLowerCase();
+        return synonyms.some(term => {
+            const words = term.split(/\s+/);
+            return words.every(word => titleLower.includes(word) || tagsLower.includes(word));
+        });
+    });
+
+    if (hasil.length > 0) {
+        list.innerHTML = hasil.map(d => `<li onclick="pilihDoa('${d.nama}', '${d.url}')"><span>🤲</span> <span>${d.nama}</span></li>`).join('');
+    } else {
+        list.innerHTML = `<li style="justify-content:center; color:var(--teks-redup); cursor:default;">Doa tidak ditemukan</li>`;
+    }
     list.style.display = 'block';
 }
 
 function pilihDoa(nama, url) {
     document.getElementById('labelDoaSelected').innerHTML = `🎧 Memutar: <b style="color:var(--gold-terang)">${nama}</b>`;
     document.getElementById('listHasilDoa').style.display = 'none';
-    const audio = document.getElementById('audioDoa');
+    document.getElementById('searchDoa').value = nama;
+    const audio = document.getElementById('audioSearchDoa');
     audio.src = url;
     audio.play().catch(()=>{});
 }
 
-function mulaiPencarianSuaraQuran() { initMic('searchInput', debounceCariSurah); }
-function mulaiCariSuaraDoa() { initMic('searchDoa', filterDoa); }
-function initMic(inputId, callback) {
+function mulaiPencarianSuara(inputId, callback) {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if(!SR) return alert("Browser tidak mendukung Voice Search");
+    if(!SR) return alert("Maaf, browser tidak mendukung fitur Voice Search");
     const rec = new SR(); rec.lang = 'id-ID';
-    rec.onresult = e => { document.getElementById(inputId).value = e.results[0][0].transcript; callback(); }
+    rec.onresult = e => { document.getElementById(inputId).value = e.results[0][0].transcript.replace(/\.$/, ''); callback(); }
+    rec.onerror = () => alert("Gagal mendengarkan suara.");
     rec.start();
 }
 
-/* ==========================================
-   JADWAL SHOLAT LOGIC
-========================================== */
+/* =========================================================
+   4. LOGIKA JADWAL SHOLAT
+========================================================= */
+let prayerTimings = {};
+let timerIntervalJadwal = null;
+let userLat = null; let userLng = null;
+
 function initJadwal() {
     const now = new Date();
-    document.getElementById('currentDateText').innerText = now.toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    const hari = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    document.getElementById('currentDateText').innerText = `${hari[now.getDay()]}, ${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
     dapatkanLokasiGPS();
 }
 
 function dapatkanLokasiGPS() {
-    document.getElementById('locationTitle').innerText = 'Mencari lokasi...';
+    document.getElementById('locationTitle').innerText = '📍 Mencari lokasi...';
     if(navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(pos => {
-            fetch(`https://api.aladhan.com/v1/timings?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&method=11`)
-            .then(res => res.json()).then(data => renderJadwal(data.data.timings));
-            document.getElementById('locationTitle').innerText = 'Lokasi GPS Ditemukan';
-        }, () => fallbackIP());
+            userLat = pos.coords.latitude; userLng = pos.coords.longitude;
+            fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${userLat}&longitude=${userLng}&localityLanguage=id`)
+                .then(r=>r.json()).then(d => document.getElementById('locationTitle').innerText = `📍 ${d.city || d.locality || "Lokasi Anda"}`).catch(()=>{});
+            
+            fetch(`https://api.aladhan.com/v1/timings?latitude=${userLat}&longitude=${userLng}&method=11`)
+                .then(r=>r.json()).then(d => { renderJadwal(d.data.timings); });
+        }, err => {
+            if(err.code === 1) document.getElementById('locationModal').classList.add('show');
+            fallbackIP();
+        }, { timeout: 7000 });
     } else { fallbackIP(); }
 }
-
 function fallbackIP() {
     document.getElementById('locationTitle').innerText = '📍 Jakarta (Default)';
     fetch(`https://api.aladhan.com/v1/timingsByCity?city=Jakarta&country=Indonesia&method=11`)
-    .then(res => res.json()).then(data => renderJadwal(data.data.timings));
+        .then(r=>r.json()).then(d => renderJadwal(d.data.timings)).catch(()=>document.getElementById('jadwalGrid').innerHTML = '<div style="grid-column:span 3;text-align:center;">Gagal memuat jadwal.</div>');
 }
-
 function renderJadwal(t) {
+    prayerTimings = t;
     const grid = document.getElementById('jadwalGrid');
-    const sholat = [
-        {name:'Subuh', val:t.Fajr}, {name:'Terbit', val:t.Sunrise}, {name:'Dzuhur', val:t.Dhuhr}, 
-        {name:'Ashar', val:t.Asr}, {name:'Maghrib', val:t.Maghrib}, {name:'Isya', val:t.Isha}
-    ];
-    grid.innerHTML = sholat.map(s => `<div class="sholat-card"><div style="font-size:12px; color:var(--teks-redup);">${s.name}</div><div class="sholat-time">${s.val}</div></div>`).join('');
+    const sholat = [ {k:'Imsak', n:'Imsak'}, {k:'Fajr', n:'Subuh'}, {k:'Sunrise', n:'Terbit'}, {k:'Dhuhr', n:'Dzuhur'}, {k:'Asr', n:'Ashar'}, {k:'Maghrib', n:'Maghrib'}, {k:'Isha', n:'Isya'} ];
+    grid.innerHTML = sholat.map(s => `<div class="sholat-card" id="card-${s.k}"><div class="sholat-name">${s.n}</div><div class="sholat-time">${t[s.k]?t[s.k].split(' ')[0]:'--:--'}</div></div>`).join('');
+    grid.innerHTML += `<div class="timer-card-inline"><div style="font-size:11px; color:var(--teks-redup); font-weight:600;">Menuju <span id="nextPrayerName" style="color:var(--gold-terang); font-weight:800; text-transform:uppercase;">--</span></div><div class="countdown-digits-inline" id="countdownDigits">00:00:00</div></div>`;
+    
+    if(timerIntervalJadwal) clearInterval(timerIntervalJadwal);
+    timerIntervalJadwal = setInterval(updateTimerJadwal, 1000);
+}
+function updateTimerJadwal() {
+    if(!prayerTimings.Fajr) return;
+    const now = new Date();
+    const listKey = [{k:'Fajr', n:'Subuh'}, {k:'Dhuhr', n:'Dzuhur'}, {k:'Asr', n:'Ashar'}, {k:'Maghrib', n:'Maghrib'}, {k:'Isha', n:'Isya'}];
+    let nextP = null; let nextD = null;
+    
+    for(let i of listKey) {
+        const p = prayerTimings[i.k].split(' ')[0].split(':');
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(p[0]), parseInt(p[1]));
+        if(d > now) { nextP = i; nextD = d; break; }
+    }
+    if(!nextP) { nextP = listKey[0]; const p = prayerTimings.Fajr.split(' ')[0].split(':'); nextD = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, parseInt(p[0]), parseInt(p[1])); }
+    
+    document.querySelectorAll('.sholat-card').forEach(e=>e.classList.remove('active-sholat'));
+    if(document.getElementById(`card-${nextP.k}`)) document.getElementById(`card-${nextP.k}`).classList.add('active-sholat');
+    document.getElementById('nextPrayerName').innerText = nextP.n;
+    
+    const diff = Math.floor((nextD - now) / 1000);
+    document.getElementById('countdownDigits').innerText = `${String(Math.floor(diff/3600)).padStart(2,'0')}:${String(Math.floor((diff%3600)/60)).padStart(2,'0')}:${String(diff%60).padStart(2,'0')}`;
+}
+function bukaMasjidTerdekat() {
+    if(userLat && userLng) window.open(`https://www.google.com/maps/search/masjid/@${userLat},${userLng},15z`, '_blank');
+    else document.getElementById('locationModal').classList.add('show');
 }
 
-/* ==========================================
-   ASMAUL HUSNA LOGIC
-========================================== */
+/* =========================================================
+   5. LOGIKA ASMAUL HUSNA (KOMPLIT 99)
+========================================================= */
 const asmaulData = [
-    { id:1, ar:"الرَّحْمَٰنُ", lat:"Ar-Rahman", arti:"Maha Pengasih" },
-    { id:2, ar:"الرَّحِيمُ", lat:"Ar-Rahim", arti:"Maha Penyayang" },
-    { id:3, ar:"الْمَلِكُ", lat:"Al-Malik", arti:"Maha Merajai" },
-    { id:4, ar:"الْقُدُّوسُ", lat:"Al-Quddus", arti:"Maha Suci" },
-    { id:5, ar:"السَّلَامُ", lat:"As-Salam", arti:"Maha Memberi Senang" },
-    { id:6, ar:"الْمُؤْمِنُ", lat:"Al-Mu'min", arti:"Maha Memberi Keamanan" }
-    // Memotong list untuk efisiensi output, bisa ditambahkan hingga 99.
+  { id: 1, ar: "الرَّحْمَٰنُ", lat: "Ar-Rahman", arti: "Maha Pengasih", start: 9.65 },
+  { id: 2, ar: "الرَّحِيمُ", lat: "Ar-Rahim", arti: "Maha Penyayang", start: 10.99 },
+  { id: 3, ar: "الْمَلِكُ", lat: "Al-Malik", arti: "Maha Merajai", start: 12.04 },
+  { id: 4, ar: "الْقُدُّوسُ", lat: "Al-Quddus", arti: "Maha Suci", start: 13.11 },
+  { id: 5, ar: "السَّلَامُ", lat: "As-Salam", arti: "Maha Memberi Senang", start: 14.44 },
+  { id: 6, ar: "الْمُؤْمِنُ", lat: "Al-Mu'min", arti: "Maha Memberi Keamanan", start: 15.76 },
+  { id: 7, ar: "الْمُهَيْمِنُ", lat: "Al-Muhaimin", arti: "Maha Pemelihara", start: 17.09 },
+  { id: 8, ar: "الْعَزِيزُ", lat: "Al-Aziz", arti: "Maha Perkasa", start: 18.42 },
+  { id: 9, ar: "الْجَبَّارُ", lat: "Al-Jabbar", arti: "Maha Gagah", start: 19.75 },
+  { id: 10, ar: "الْمُتَكَبِّرُ", lat: "Al-Mutakabbir", arti: "Maha Megah", start: 21.07 },
+  { id: 11, ar: "الْخَالِقُ", lat: "Al-Khaliq", arti: "Maha Pencipta", start: 22.67 },
+  { id: 12, ar: "الْبَارِئُ", lat: "Al-Bari'", arti: "Maha Melepaskan", start: 24.08 },
+  { id: 13, ar: "الْمُصَوِّرُ", lat: "Al-Musawwir", arti: "Maha Membentuk", start: 25.40 },
+  { id: 14, ar: "الْغَفَّارُ", lat: "Al-Ghaffar", arti: "Maha Pengampun", start: 26.65 },
+  { id: 15, ar: "الْقَهَّارُ", lat: "Al-Qahhar", arti: "Maha Menundukkan", start: 27.98 },
+  { id: 16, ar: "الْوَهَّابُ", lat: "Al-Wahhab", arti: "Maha Pemberi Karunia", start: 29.31 },
+  { id: 17, ar: "الرَّزَّاقُ", lat: "Ar-Razzaq", arti: "Maha Pemberi Rezeki", start: 30.64 },
+  { id: 18, ar: "الْفَتَّاحُ", lat: "Al-Fattah", arti: "Maha Pembuka Rahmat", start: 31.97 },
+  { id: 19, ar: "الْعَلِيمُ", lat: "Al-'Alim", arti: "Maha Mengetahui", start: 33.30 },
+  { id: 20, ar: "الْقَابِضُ", lat: "Al-Qabidh", arti: "Maha Menyempitkan", start: 35.42 },
+  { id: 21, ar: "الْبَاسِطُ", lat: "Al-Basit", arti: "Maha Melapangkan", start: 36.48 },
+  { id: 22, ar: "الْخَافِضُ", lat: "Al-Khafidh", arti: "Maha Merendahkan", start: 38.07 },
+  { id: 23, ar: "الرَّافِعُ", lat: "Ar-Rafi'", arti: "Maha Meninggikan", start: 39.41 },
+  { id: 24, ar: "الْمُعِزُّ", lat: "Al-Mu'izz", arti: "Maha Memuliakan", start: 40.77 },
+  { id: 25, ar: "الْمُذِلُّ", lat: "Al-Mudhill", arti: "Maha Hina", start: 42.18 },
+  { id: 26, ar: "السَّمِيعُ", lat: "As-Sami'", arti: "Maha Mendengar", start: 43.24 },
+  { id: 27, ar: "الْبَصِيرُ", lat: "Al-Basir", arti: "Maha Melihat", start: 44.57 },
+  { id: 28, ar: "الْحَكَمُ", lat: "Al-Hakam", arti: "Maha Menetapkan", start: 45.63 },
+  { id: 29, ar: "الْعَدْلُ", lat: "Al-'Adl", arti: "Maha Adil", start: 46.80 },
+  { id: 30, ar: "اللَّطِيفُ", lat: "Al-Latif", arti: "Maha Lembut", start: 47.42 },
+  { id: 31, ar: "الْخَبِيرُ", lat: "Al-Khabir", arti: "Maha Mengenal", start: 48.48 },
+  { id: 32, ar: "الْحَلِيمُ", lat: "Al-Halim", arti: "Maha Penyantun", start: 49.54 },
+  { id: 33, ar: "الْعَظِيمُ", lat: "Al-'Azim", arti: "Maha Agung", start: 50.61 },
+  { id: 34, ar: "الْغَفُورُ", lat: "Al-Ghafur", arti: "Maha Pengampun", start: 51.94 },
+  { id: 35, ar: "الشَّكُورُ", lat: "Ash-Shakur", arti: "Maha Pembalas Budi", start: 53.00 },
+  { id: 36, ar: "الْعَلِيُّ", lat: "Al-'Aliyy", arti: "Maha Tinggi", start: 54.05 },
+  { id: 37, ar: "الْكَبِيرُ", lat: "Al-Kabir", arti: "Maha Besar", start: 55.38 },
+  { id: 38, ar: "الْحَفِيظُ", lat: "Al-Hafiz", arti: "Maha Memelihara", start: 56.45 },
+  { id: 39, ar: "الْمُقِيتُ", lat: "Al-Muqit", arti: "Maha Memberi Kecukupan", start: 57.51 },
+  { id: 40, ar: "الْحَسِيبُ", lat: "Al-Hasib", arti: "Maha Membuat Perhitungan", start: 58.90 },
+  { id: 41, ar: "الْجَلِيلُ", lat: "Al-Jalil", arti: "Maha Luhur", start: 60.23 },
+  { id: 42, ar: "الْكَرِيمُ", lat: "Al-Karim", arti: "Maha Pemurah", start: 61.29 },
+  { id: 43, ar: "الرَّقِيبُ", lat: "Ar-Raqib", arti: "Maha Mengawasi", start: 62.35 },
+  { id: 44, ar: "الْمُجِيبُ", lat: "Al-Mujib", arti: "Maha Mengabulkan", start: 63.68 },
+  { id: 45, ar: "الْوَاسِعُ", lat: "Al-Wasi'", arti: "Maha Luas", start: 64.81 },
+  { id: 46, ar: "الْحَكِيمُ", lat: "Al-Hakim", arti: "Maha Bijaksana", start: 66.34 },
+  { id: 47, ar: "الْوَدُودُ", lat: "Al-Wadud", arti: "Maha Mengasihi", start: 67.77 },
+  { id: 48, ar: "الْمَجِيدُ", lat: "Al-Majid", arti: "Maha Mulia", start: 68.73 },
+  { id: 49, ar: "الْبَاعِثُ", lat: "Al-Ba'ith", arti: "Maha Membangkitkan", start: 70.06 },
+  { id: 50, ar: "الشَّهِيدُ", lat: "Ash-Shahid", arti: "Maha Menyaksikan", start: 71.65 },
+  { id: 51, ar: "الْحَقُّ", lat: "Al-Haqq", arti: "Maha Benar", start: 73.28 },
+  { id: 52, ar: "الْوَكِيلُ", lat: "Al-Wakil", arti: "Maha Memelihara", start: 74.08 },
+  { id: 53, ar: "الْقَوِيُّ", lat: "Al-Qawiyy", arti: "Maha Kuat", start: 75.15 },
+  { id: 54, ar: "الْمَتِينُ", lat: "Al-Matin", arti: "Maha Kokoh", start: 76.21 },
+  { id: 55, ar: "الْوَلِيُّ", lat: "Al-Waliyy", arti: "Maha Melindungi", start: 77.05 },
+  { id: 56, ar: "الْحَمِيدُ", lat: "Al-Hamid", arti: "Maha Terpuji", start: 78.38 },
+  { id: 57, ar: "الْمُحْصِي", lat: "Al-Muhsi", arti: "Maha Mengalkulasi", start: 79.75 },
+  { id: 58, ar: "الْمُبْدِئُ", lat: "Al-Mubdi'", arti: "Maha Memulai", start: 80.82 },
+  { id: 59, ar: "الْمُعِيدُ", lat: "Al-Mu'id", arti: "Maha Mengembalikan", start: 81.68 },
+  { id: 60, ar: "الْمُحْيِي", lat: "Al-Muhyi", arti: "Maha Menghidupkan", start: 83.01 },
+  { id: 61, ar: "الْمُمِيتُ", lat: "Al-Mumit", arti: "Maha Mematikan", start: 84.24 },
+  { id: 62, ar: "الْحَيُّ", lat: "Al-Hayy", arti: "Maha Hidup", start: 85.04 },
+  { id: 63, ar: "الْقَيُّومُ", lat: "Al-Qayyum", arti: "Maha Mandiri", start: 86.10 },
+  { id: 64, ar: "الْوَاجِدُ", lat: "Al-Wajid", arti: "Maha Penemu", start: 87.44 },
+  { id: 65, ar: "الْمَاجِدُ", lat: "Al-Majid", arti: "Maha Mulia", start: 88.49 },
+  { id: 66, ar: "الْوَاحِدُ", lat: "Al-Wahid", arti: "Maha Tunggal", start: 89.82 },
+  { id: 67, ar: "الْأَحَدُ", lat: "Al-Ahad", arti: "Maha Esa", start: 91.23 },
+  { id: 68, ar: "الصَّمَدُ", lat: "As-Samad", arti: "Maha Dibutuhkan", start: 91.76 },
+  { id: 69, ar: "الْقَادِرُ", lat: "Al-Qadir", arti: "Maha Menentukan", start: 92.63 },
+  { id: 70, ar: "الْمُقْتَدِرُ", lat: "Al-Muqtadir", arti: "Maha Berkuasa", start: 93.95 },
+  { id: 71, ar: "الْمُقَدِّمُ", lat: "Al-Muqaddim", arti: "Maha Mendahulukan", start: 95.28 },
+  { id: 72, ar: "الْمُؤَخِّرُ", lat: "Al-Mu'akhkhir", arti: "Maha Mengakhirkan", start: 96.61 },
+  { id: 73, ar: "الْأَوَّلُ", lat: "Al-Awwal", arti: "Maha Awal", start: 97.99 },
+  { id: 74, ar: "الْآخِرُ", lat: "Al-Akhir", arti: "Maha Akhir", start: 99.32 },
+  { id: 75, ar: "الظَّاهِرُ", lat: "Az-Zahir", arti: "Maha Nyata", start: 100.33 },
+  { id: 76, ar: "الْبَاطِنُ", lat: "Al-Batin", arti: "Maha Gaib", start: 101.66 },
+  { id: 77, ar: "الْوَالِي", lat: "Al-Wali", arti: "Maha Memerintah", start: 103.10 },
+  { id: 78, ar: "الْمُتَعَالِي", lat: "Al-Muta'ali", arti: "Maha Tinggi", start: 104.18 },
+  { id: 79, ar: "الْبَرُّ", lat: "Al-Barr", arti: "Maha Penderma", start: 105.68 },
+  { id: 80, ar: "التَّوَّابُ", lat: "At-Tawwab", arti: "Maha Penerima Tobat", start: 106.38 },
+  { id: 81, ar: "الْمُنْتَقِمُ", lat: "Al-Muntaqim", arti: "Maha Balas Dendam", start: 107.88 },
+  { id: 82, ar: "الْعَفُوُّ", lat: "Al-'Afuww", arti: "Maha Pemaaf", start: 109.21 },
+  { id: 83, ar: "الرَّؤُوفُ", lat: "Ar-Ra'uf", arti: "Maha Pengasuh", start: 110.28 },
+  { id: 84, ar: "مَالِكُ الْمُلْكِ", lat: "Malikul Mulk", arti: "Maha Pemilik Kerajaan", start: 111.63 },
+  { id: 85, ar: "ذُو الْجَلَالِ وَالْإِكْرَامِ", lat: "Dhul Jalali wal Ikram", arti: "Maha Pemilik Keagungan", start: 113.29 },
+  { id: 86, ar: "الْمُقْسِطُ", lat: "Al-Muqsit", arti: "Maha Pemberi Keadilan", start: 117.49 },
+  { id: 87, ar: "الْجَامِعُ", lat: "Al-Jami'", arti: "Maha Mengumpulkan", start: 118.66 },
+  { id: 88, ar: "الْغَنِيُّ", lat: "Al-Ghaniyy", arti: "Maha Kaya", start: 120.15 },
+  { id: 89, ar: "الْمُغْنِي", lat: "Al-Mughni", arti: "Maha Memberi Kekayaan", start: 121.21 },
+  { id: 90, ar: "الْمَانِعُ", lat: "Al-Mani'", arti: "Maha Mencegah", start: 121.78 },
+  { id: 91, ar: "الضَّارُّ", lat: "Ad-Darr", arti: "Maha Penimpa Kemudharatan", start: 123.38 },
+  { id: 92, ar: "النَّافِعُ", lat: "An-Nafi'", arti: "Maha Memberi Manfaat", start: 126.54 },
+  { id: 93, ar: "النُّورُ", lat: "An-Nur", arti: "Maha Bercahaya", start: 127.60 },
+  { id: 94, ar: "الْهَادِي", lat: "Al-Hadi", arti: "Maha Pemberi Petunjuk", start: 128.92 },
+  { id: 95, ar: "الْبَدِيعُ", lat: "Al-Badi'", arti: "Maha Pencipta Tiada Banding", start: 129.99 },
+  { id: 96, ar: "الْبَاقِي", lat: "Al-Baqi", arti: "Maha Kekal", start: 131.14 },
+  { id: 97, ar: "الْوَارِثُ", lat: "Al-Warith", arti: "Maha Pewaris", start: 132.77 },
+  { id: 98, ar: "الْرَّشِيدُ", lat: "Ar-Rashid", arti: "Maha Pandai", start: 134.09 },
+  { id: 99, ar: "الصَّبُورُ", lat: "As-Sabur", arti: "Maha Sabar", start: 135.99 }
 ];
 
+let totalWaktuDengarAsmaul = 0;
+let timerAsmaul = null;
+
 function renderAsmaulHusna() {
-    const grid = document.getElementById('asmaulGridContainer');
-    grid.innerHTML = asmaulData.map(a => `<div class="card-asma"><div style="color:var(--gold-terang); font-size:24px; font-weight:bold;">${a.ar}</div><div style="font-weight:bold; font-size:14px; margin-top:5px;">${a.lat}</div><div style="font-size:11px; color:var(--teks-redup);">${a.arti}</div></div>`).join('');
+    const grid = document.getElementById('gridContainerAsmaul');
+    grid.innerHTML = asmaulData.map(a => `<div class="card-asma" id="asma-${a.id}"><div style="width:28px; height:28px; border:1px solid var(--border-color); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--gold-terang); margin-bottom:8px;">${a.id}</div><div class="arabic">${a.ar}</div><div style="font-weight:bold; font-size:14px; margin-top:5px;">${a.lat}</div><div style="font-size:11px; color:var(--teks-redup);">${a.arti}</div></div>`).join('');
+    
+    const adCard = document.createElement('div');
+    adCard.className = 'ad-card';
+    adCard.innerHTML = `<span style="font-size: 0.75rem; color: var(--gold-terang); font-weight: bold; margin-bottom: 4px;">📢 SPESIAL IKLAN</span><span style="font-size: 0.7rem; color: var(--teks-redup);">Pasang Iklan Anda Di Sini</span>`;
+    grid.appendChild(adCard);
+
+    // Tampilkan Modal Palestina jika belum hari ini
+    const lastClick = localStorage.getItem('waktuDoaPalestina');
+    if (!lastClick || (new Date().getTime() - parseInt(lastClick) > 86400000)) {
+        setTimeout(() => document.getElementById('modalPalestina').classList.add('show'), 1500);
+    }
+    ambilJumlahDoa();
 }
 
+async function ambilJumlahDoa() {
+    try {
+        const res = await fetch(`https://countapi.mileshilliard.com/api/v1/get/kitabku_online_palestine_support_2026`);
+        const data = await res.json();
+        document.getElementById('likeCountLoading').textContent = data.value + " Doa";
+        document.getElementById('teksDukunganPalestina').textContent = `We ❤️ 🇵🇸 ${data.value}`;
+    } catch (e) {
+        document.getElementById('likeCountLoading').textContent = "Banyak Doa Terkumpul";
+        document.getElementById('teksDukunganPalestina').textContent = "We ❤️ 🇵🇸";
+    }
+}
+
+// Fitur Highlight & Floating Button Asmaul Husna
+const asmaAudio = document.getElementById('asmaAudio');
+const floatingPlayBtn = document.getElementById('floatingPlayBtn');
+let activeCardId = null;
+
+floatingPlayBtn.addEventListener('click', () => { asmaAudio.paused ? asmaAudio.play() : asmaAudio.pause(); });
+asmaAudio.addEventListener('play', () => floatingPlayBtn.innerHTML = '⏸️ Pause');
+asmaAudio.addEventListener('pause', () => floatingPlayBtn.innerHTML = '▶️ Putar');
+
+asmaAudio.addEventListener('timeupdate', function() {
+    const ct = this.currentTime; let curr = null;
+    for (let i = 0; i < asmaulData.length; i++) {
+        if (ct >= asmaulData[i].start) curr = asmaulData[i]; else break;
+    }
+    if (curr && activeCardId !== curr.id) {
+        if (activeCardId) {
+            const prev = document.getElementById(`asma-${activeCardId}`);
+            if (prev) prev.classList.remove('active');
+        }
+        const cCard = document.getElementById(`asma-${curr.id}`);
+        if(cCard) { cCard.classList.add('active'); cCard.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        activeCardId = curr.id;
+    } else if (!curr && activeCardId) {
+        const prev = document.getElementById(`asma-${activeCardId}`);
+        if(prev) prev.classList.remove('active');
+        activeCardId = null;
+    }
+});
+
+let playCount = 1;
+asmaAudio.addEventListener('ended', () => {
+    const selectedMode = document.getElementById('repeatMode').value;
+    if (selectedMode === '3') {
+        if (playCount < 3) { playCount++; asmaAudio.currentTime = 0; asmaAudio.play(); } 
+        else { playCount = 1; }
+    } else if (selectedMode === 'unlimited') {
+        asmaAudio.currentTime = 0; asmaAudio.play();
+    }
+});
+
+/* =========================================================
+   6. LOGIKA TENTANG (SHARE & MODAL IKLAN)
+========================================================= */
 function shareWebsite() {
-    if(navigator.share) { navigator.share({title:'KitabKu.Online', url:'https://kitabku.online'}); }
-    else { navigator.clipboard.writeText('https://kitabku.online').then(() => alert('Link disalin!')); }
+    if(navigator.share) { navigator.share({title:'Al-Qur\'an Digital', text:'Yuk kunjungi KitabKu.Online', url:'https://kitabku.online'}); }
+    else { navigator.clipboard.writeText('https://kitabku.online').then(() => alert('📋 Link disalin!')); }
+}
+
+function openImageModal(imgSrc) {
+    document.getElementById('imageModal').style.display = "flex";
+    document.getElementById('modalImg').src = imgSrc;
+}
+function closeImageModal() {
+    document.getElementById('imageModal').style.display = "none";
 }
 </script>
 
