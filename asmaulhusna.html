@@ -63,6 +63,10 @@
             
             --shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
             --border-color: rgba(227, 200, 90, 0.28);
+
+            /* Warna Tombol Mengambang (Floating Play Button) Tema Gelap */
+            --float-btn-bg: #e3c85a;
+            --float-btn-text: #081a16;
         }
 
         /* MODE TERANG: SAGE LEMBUT & SEGAR */
@@ -93,6 +97,10 @@
 
             --shadow: 0 6px 20px rgba(9, 36, 30, 0.08);
             --border-color: rgba(13, 48, 40, 0.2);
+
+            /* Warna Tombol Mengambang (Floating Play Button) Tema Terang */
+            --float-btn-bg: #0b3027;
+            --float-btn-text: #f5e8b5;
         }
 
         * {
@@ -180,7 +188,6 @@
             flex-direction: column;
         }
 
-        /* Warna latar belakang sidebar saat Mode Terang (Menyesuaikan Sage) */
         [data-theme="light"] .sidebar {
             background: linear-gradient(145deg, var(--hijau-card), var(--hijau-card2));
             border-right: 2px solid var(--border-color);
@@ -215,13 +222,14 @@
             font-size: 12px;
             opacity: 0.7;
             margin-top: 5px;
+            font-family: 'Poppins', sans-serif;
         }
         [data-theme="light"] .sidebar-header p {
             color: var(--teks-redup);
             opacity: 1;
         }
 
-        /* --- TOMBOL GESER (SLIDER SWITCH) TEPAT DI BAWAH JUDUL & ICON --- */
+        /* --- TOMBOL GESER (SLIDER SWITCH) DENGAN ICON 🌗 --- */
         .sidebar-theme-switch {
             padding: 12px 25px;
             border-bottom: 1px solid rgba(212, 175, 55, 0.25);
@@ -237,29 +245,27 @@
 
         .sidebar-theme-switch span {
             color: var(--gold);
-            font-size: 14px;
-            font-weight: 500;
-            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
         }
         [data-theme="light"] .sidebar-theme-switch span {
             color: var(--gold-terang);
         }
 
         /* CSS Toggle Switch */
-        .switch {
+        .switch-mode {
             position: relative;
             display: inline-block;
             width: 50px;
             height: 26px;
         }
 
-        .switch input { 
+        .switch-mode input { 
             opacity: 0;
             width: 0;
             height: 0;
         }
 
-        .slider {
+        .slider-mode {
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -268,12 +274,12 @@
             border: 1px solid var(--gold);
             border-radius: 34px;
         }
-        [data-theme="light"] .slider {
+        [data-theme="light"] .slider-mode {
             background-color: #c4d2bd;
             border: 1px solid var(--border-color);
         }
 
-        .slider:before {
+        .slider-mode:before {
             position: absolute;
             content: "";
             height: 18px;
@@ -284,22 +290,22 @@
             transition: .4s;
             border-radius: 50%;
         }
-        [data-theme="light"] .slider:before {
+        [data-theme="light"] .slider-mode:before {
             background-color: #09241e;
         }
 
-        input:checked + .slider {
+        input:checked + .slider-mode {
             background-color: var(--gold);
         }
-        [data-theme="light"] input:checked + .slider {
+        [data-theme="light"] input:checked + .slider-mode {
             background-color: var(--gold-terang);
         }
 
-        input:checked + .slider:before {
+        input:checked + .slider-mode:before {
             transform: translateX(24px);
             background-color: #061e12;
         }
-        [data-theme="light"] input:checked + .slider:before {
+        [data-theme="light"] input:checked + .slider-mode:before {
             background-color: #ffffff;
         }
 
@@ -349,13 +355,13 @@
         }
 
         /* ================================
-           HEADER UTAMA
+           HEADER UTAMA (Diberi Padding Atas agar tidak tertutup tombol menu)
         ================================ */
         header {
             background: var(--header-bg);
             color: var(--gold-terang);
             text-align: center;
-            padding: 28px 16px;
+            padding: 75px 16px 28px 16px;
             border-bottom: 1px solid var(--border-color);
             box-shadow: var(--shadow);
         }
@@ -395,12 +401,14 @@
         .mode-container { margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.9rem; color: var(--gold-terang); }
         .mode-select { background-color: var(--hijau-gelap); color: var(--gold-terang); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; outline: none; }
 
+        /* TOMBOL MENGAMBANG (FLOATING PLAY BUTTON) */
         .floating-btn {
             position: fixed; left: 15px; bottom: 25px; z-index: 9999;
-            background-color: var(--gold); color: var(--hijau-gelap);
-            border: 2px solid #ffffff; padding: 12px 20px; border-radius: 30px;
+            background-color: var(--float-btn-bg); color: var(--float-btn-text);
+            border: 2px solid var(--border-color); padding: 12px 20px; border-radius: 30px;
             font-size: 0.95rem; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
             cursor: pointer; display: flex; align-items: center; gap: 6px;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
         /* POP-UP MODAL PALESTINA */
@@ -496,12 +504,12 @@
           <p>Eksplorasi Keislaman Online</p>
       </div>
 
-      <!-- TOMBOL GESER (SLIDER SWITCH) TEPAT DI BAWAH JUDUL & ICON -->
+      <!-- TOMBOL GESER (SLIDER SWITCH) DENGAN ICON 🌗 -->
       <div class="sidebar-theme-switch">
-          <span>Mode Terang</span>
-          <label class="switch">
+          <span>🌗</span>
+          <label class="switch-mode">
               <input type="checkbox" id="themeSwitch" onclick="toggleTheme()">
-              <span class="slider"></span>
+              <span class="slider-mode"></span>
           </label>
       </div>
 
@@ -601,7 +609,7 @@
         }
     }
 
-    // DATA LENGKAP 99 ASMAUL HUSNA[span_3](start_span)[span_3](end_span)
+    // DATA LENGKAP 99 ASMAUL HUSNA[span_0](start_span)[span_0](end_span)
     const asmaulHusnaData = [
       { id: 1, ar: "الرَّحْمَٰنُ", latin: "Ar-Rahman", mean: "Maha Pengasih", start: 9.65 },
       { id: 2, ar: "الرَّحِيمُ", latin: "Ar-Rahim", mean: "Maha Penyayang", start: 10.99 },
