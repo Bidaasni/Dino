@@ -67,6 +67,10 @@
             /* Warna Tombol Mengambang (Floating Play Button) Tema Gelap */
             --float-btn-bg: #e3c85a;
             --float-btn-text: #081a16;
+
+            /* Warna Player Custom - Tema Gelap */
+            --player-bg: #081a16;
+            --player-track: rgba(255, 255, 255, 0.15);
         }
 
         /* MODE TERANG: SAGE LEMBUT & SEGAR */
@@ -101,6 +105,10 @@
             /* Warna Tombol Mengambang (Floating Play Button) Tema Terang */
             --float-btn-bg: #0b3027;
             --float-btn-text: #f5e8b5;
+
+            /* Warna Player Custom - Tema Terang */
+            --player-bg: #ffffff;
+            --player-track: rgba(9, 36, 30, 0.15);
         }
 
         * {
@@ -137,14 +145,22 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        [data-theme="light"] .menu-toggle {
+            box-shadow: 0 4px 10px rgba(9, 36, 30, 0.15);
         }
 
         .menu-toggle:hover {
             background: var(--gold);
             color: var(--hijau-gelap);
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+        }
+        [data-theme="light"] .menu-toggle:hover {
+            background: var(--gold-terang);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(11, 48, 39, 0.3);
         }
 
         .menu-toggle span {
@@ -197,8 +213,9 @@
             left: 0;
         }
 
+        /* Padding atas ditambah agar tidak tertutup tombol menu melayang */
         .sidebar-header {
-            padding: 25px 20px 15px;
+            padding: 75px 20px 15px 20px;
             text-align: center;
             border-bottom: 1px solid rgba(212, 175, 55, 0.25);
         }
@@ -397,10 +414,107 @@
             box-shadow: var(--shadow);
         }
 
-        audio { width: 100%; margin-top: 12px; border-radius: 30px; height: 45px; outline: none; }
+        /* ================================
+           CUSTOM AUDIO PLAYER (ganti kontrol bawaan browser)
+        ================================ */
+        .custom-player {
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--player-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 40px;
+            padding: 8px 10px 8px 8px;
+            transition: background 0.35s ease, border-color 0.35s ease;
+        }
 
-        .mode-container { margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.9rem; color: var(--gold-terang); }
-        .mode-select { background-color: var(--hijau-gelap); color: var(--gold-terang); border: 1px solid var(--border-color); padding: 6px 12px; border-radius: 8px; font-weight: bold; cursor: pointer; outline: none; }
+        .play-pill {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: transparent;
+            border: 1.5px solid var(--gold);
+            color: var(--gold-terang);
+            border-radius: 30px;
+            padding: 9px 18px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+        }
+        [data-theme="light"] .play-pill {
+            border-color: var(--gold-terang);
+            color: var(--gold-terang);
+        }
+        .play-pill:hover {
+            background: var(--gold);
+            color: var(--hijau-gelap);
+        }
+        [data-theme="light"] .play-pill:hover {
+            background: var(--gold-terang);
+            color: #ffffff;
+        }
+
+        .player-time {
+            font-size: 0.72rem;
+            color: var(--teks-redup);
+            min-width: 72px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .player-progress-wrap {
+            flex: 1;
+            height: 6px;
+            background: var(--player-track);
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .player-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--gold);
+            border-radius: 10px;
+            transition: width 0.1s linear;
+        }
+        [data-theme="light"] .player-progress-fill {
+            background: var(--gold-terang);
+        }
+
+        .mode-container {
+            margin-top: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--gold-terang);
+            background: var(--player-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            padding: 8px 18px;
+            transition: background 0.35s ease, border-color 0.35s ease;
+        }
+        .mode-select {
+            background-color: transparent;
+            color: var(--gold-terang);
+            border: none;
+            padding: 4px 6px;
+            font-weight: bold;
+            cursor: pointer;
+            outline: none;
+            font-size: 0.85rem;
+        }
+        .mode-select option {
+            background-color: var(--hijau-gelap);
+            color: var(--gold-terang);
+        }
 
         /* TOMBOL MENGAMBANG (FLOATING PLAY BUTTON) */
         .floating-btn {
@@ -410,6 +524,9 @@
             font-size: 0.95rem; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
             cursor: pointer; display: flex; align-items: center; gap: 6px;
             transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        [data-theme="light"] .floating-btn {
+            box-shadow: 0 4px 15px rgba(9, 36, 30, 0.25);
         }
 
         /* POP-UP MODAL PALESTINA */
@@ -467,7 +584,7 @@
         .card.active {
             background: var(--active-bg) !important;
             transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(9, 36, 30, 0.35);
+            box-shadow: 0 4px 15px rgba(9, 36, 39, 0.35);
             border-color: var(--active-border);
         }
         .card.active .number-badge { background-color: rgba(8, 26, 22, 0.15); border-color: var(--active-border); color: var(--active-text); }
@@ -558,7 +675,17 @@
         We ❤️ 🇵🇸 Memuat...
       </p>
 
-      <audio id="asmaAudio" controls controlsList="nodownload" oncontextmenu="return false;" src="asmaulhusna.mp3" preload="metadata"></audio>
+      <!-- Audio asli disembunyikan, dikontrol lewat player custom di bawah -->
+      <audio id="asmaAudio" oncontextmenu="return false;" src="asmaulhusna.mp3" preload="metadata" style="display:none;"></audio>
+
+      <div class="custom-player">
+        <button id="customPlayBtn" class="play-pill" type="button">▶ Play</button>
+        <span class="player-time" id="playerTime">0:00 / 0:00</span>
+        <div class="player-progress-wrap" id="progressWrap">
+          <div class="player-progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
       <div class="mode-container">
         <label for="repeatMode">Mode:</label>
         <select id="repeatMode" class="mode-select">
@@ -592,7 +719,6 @@
     const themeSwitch = document.getElementById('themeSwitch');
     const savedTheme = localStorage.getItem('quranTheme');
 
-    // Jika savedTheme adalah 'light', tombol di kiri (unchecked). Jika 'dark' atau default, tombol di kanan (checked).
     if (savedTheme === 'light') {
         htmlElement.setAttribute('data-theme', 'light');
         if (themeSwitch) themeSwitch.checked = false;
@@ -613,7 +739,7 @@
         }
     }
 
-    // DATA LENGKAP 99 ASMAUL HUSNA[span_4](start_span)[span_4](end_span)
+    // DATA LENGKAP 99 ASMAUL HUSNA
     const asmaulHusnaData = [
       { id: 1, ar: "الرَّحْمَٰنُ", latin: "Ar-Rahman", mean: "Maha Pengasih", start: 9.65 },
       { id: 2, ar: "الرَّحِيمُ", latin: "Ar-Rahim", mean: "Maha Penyayang", start: 10.99 },
@@ -720,6 +846,10 @@
     const audio = document.getElementById('asmaAudio');
     const repeatModeSelect = document.getElementById('repeatMode');
     const floatingPlayBtn = document.getElementById('floatingPlayBtn');
+    const customPlayBtn = document.getElementById('customPlayBtn');
+    const playerTime = document.getElementById('playerTime');
+    const progressWrap = document.getElementById('progressWrap');
+    const progressFill = document.getElementById('progressFill');
 
     // Buat 99 kartu
     asmaulHusnaData.forEach(item => {
@@ -828,8 +958,27 @@
         perbaruiTeksDukungan(); 
     }
 
+    // ================================
+    // KONTROL PLAY / PAUSE (tombol mengambang + tombol player custom)
+    // ================================
+    function handlePlayPause() {
+      if (audio.paused) {
+        // Kalau mulai dari awal (bukan lanjut dari pause), reset hitungan pengulangan
+        if (audio.currentTime === 0) {
+          playCount = 0;
+        }
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+
+    floatingPlayBtn.addEventListener('click', handlePlayPause);
+    customPlayBtn.addEventListener('click', handlePlayPause);
+
     audio.addEventListener('play', () => {
       floatingPlayBtn.innerHTML = '⏸️ Pause';
+      customPlayBtn.innerHTML = '⏸ Pause';
       if (!timerInterval) {
         timerInterval = setInterval(() => {
           if (!audio.paused) {
@@ -841,6 +990,19 @@
 
     audio.addEventListener('pause', () => {
       floatingPlayBtn.innerHTML = '▶️ Putar';
+      customPlayBtn.innerHTML = '▶ Play';
+    });
+
+    // ================================
+    // PERBAIKAN BUG MODE PENGULANGAN (1x / 3x / Unlimited)
+    // Sebelumnya "playCount" dideklarasikan ulang tiap kali audio selesai,
+    // sehingga hitungannya selalu reset ke 1 dan tidak pernah berhenti di 3x.
+    // Sekarang playCount disimpan di luar (persisten) dan direset saat mode diganti.
+    // ================================
+    let playCount = 0;
+
+    repeatModeSelect.addEventListener('change', () => {
+      playCount = 0;
     });
 
     audio.addEventListener('ended', () => {
@@ -854,20 +1016,56 @@
         timerInterval = null;
       }
 
-      let playCount = 1;
+      playCount++;
       const selectedMode = repeatModeSelect.value;
+
       if (selectedMode === '3') {
-        if (playCount < 3) { playCount++; audio.currentTime = 0; audio.play(); } else { playCount = 1; }
+        if (playCount < 3) {
+          audio.currentTime = 0;
+          audio.play();
+        } else {
+          playCount = 0; // sudah 3x, berhenti dan siap untuk sesi berikutnya
+        }
       } else if (selectedMode === 'unlimited') {
-        audio.currentTime = 0; audio.play();
+        audio.currentTime = 0;
+        audio.play();
+      } else {
+        // mode 1x
+        playCount = 0;
       }
+    });
+
+    // ================================
+    // TAMPILAN WAKTU & PROGRESS BAR PLAYER CUSTOM
+    // ================================
+    function formatTime(sec) {
+      if (isNaN(sec) || sec === Infinity) return '0:00';
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    audio.addEventListener('loadedmetadata', () => {
+      playerTime.textContent = `0:00 / ${formatTime(audio.duration)}`;
+    });
+
+    progressWrap.addEventListener('click', (e) => {
+      if (!audio.duration) return;
+      const rect = progressWrap.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = Math.min(Math.max(clickX / rect.width, 0), 1);
+      audio.currentTime = pct * audio.duration;
     });
 
     let activeCardId = null;
 
-    floatingPlayBtn.addEventListener('click', () => { audio.paused ? audio.play() : audio.pause(); });
-
     audio.addEventListener('timeupdate', () => {
+      // Update waktu & progress bar player custom
+      playerTime.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+      const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+      progressFill.style.width = pct + '%';
+
+      // Highlight kartu Asmaul Husna yang sedang dibacakan
       const currentTime = audio.currentTime;
       let currentItem = null;
       for (let i = 0; i < asmaulHusnaData.length; i++) {
