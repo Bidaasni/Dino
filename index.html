@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kitabku Online</title>
+<meta name="description" content="Logo Kitabku Online - menuju ke halaman utama kitabku.online">
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* ================================
+       TEMA DARK & LIGHT SAGE ELEGAN
+    ================================ */
+    :root {
+        --hijau-gelap: #081a16;
+        --gold: #e3c85a;
+        --border-color: rgba(227, 200, 90, 0.28);
+        --bg-gradient: radial-gradient(circle at top, #1a3a30 0%, var(--hijau-gelap) 60%, #04120e 100%);
+    }
+
+    [data-theme="light"] {
+        --hijau-gelap: #f4f8f5;
+        --gold: #09241e;
+        --border-color: rgba(13, 48, 40, 0.2);
+        --bg-gradient: radial-gradient(circle at top, #9cc2a6 0%, #edf4f0 55%, #e1ebe5 100%);
+    }
+
+    body {
+        background: var(--bg-gradient);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: background 0.35s ease;
+        overflow-x: hidden;
+    }
+
+    /* TOMBOL GESER TEMA 🌗 - DI ATAS GAMBAR */
+    .theme-switch-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .theme-switch-wrap span { color: #9cc2a6; font-size: 22px; }
+
+    .switch-mode { position: relative; display: inline-block; width: 50px; height: 26px; }
+    .switch-mode input { opacity: 0; width: 0; height: 0; }
+    .slider-mode {
+        position: absolute; cursor: pointer;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #143028;
+        transition: .4s;
+        border: 1px solid #9cc2a6;
+        border-radius: 34px;
+    }
+    .slider-mode:before {
+        position: absolute; content: "";
+        height: 18px; width: 18px; left: 3px; bottom: 3px;
+        background-color: #9cc2a6;
+        transition: .4s; border-radius: 50%;
+    }
+    input:checked + .slider-mode { background-color: #9cc2a6; }
+    input:checked + .slider-mode:before { transform: translateX(24px); background-color: #061e12; }
+
+    /* LOGO */
+    .logo-link {
+        display: block;
+        text-decoration: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .logo-img {
+        width: min(80vw, 360px);
+        height: auto;
+        display: block;
+        transition: transform 0.2s ease;
+    }
+    .logo-img.logo-light { display: none; }
+    [data-theme="light"] .logo-img.logo-dark { display: none; }
+    [data-theme="light"] .logo-img.logo-light { display: block; }
+
+    .logo-link:active .logo-img {
+        transform: scale(0.96);
+    }
+</style>
+</head>
+<body>
+
+    <!-- TOMBOL GESER (SLIDER SWITCH) DENGAN ICON 🌗 (Kiri = Terang, Kanan = Gelap) -->
+    <div class="theme-switch-wrap">
+        <span>🌗</span>
+        <label class="switch-mode">
+            <input type="checkbox" id="themeSwitch" onclick="toggleTheme()">
+            <span class="slider-mode"></span>
+        </label>
+    </div>
+
+    <!-- LOGO KITABKU ONLINE, KETUK UNTUK MENUJU KITABKU.ONLINE -->
+    <a href="https://kitabku.online/" class="logo-link" aria-label="Kitabku Online">
+        <img src="logo-kitabku.png" alt="Kitabku Online" class="logo-img logo-dark">
+        <img src="logo-kitabku.light.png" alt="Kitabku Online" class="logo-img logo-light">
+    </a>
+
+    <script>
+        // TEMA GELAP TERANG DENGAN TOMBOL GESER (Kiri = Terang, Kanan = Gelap)
+        const htmlElement = document.documentElement;
+        const themeSwitch = document.getElementById('themeSwitch');
+        const savedTheme = localStorage.getItem('quranTheme');
+
+        if (savedTheme === 'light') {
+            htmlElement.setAttribute('data-theme', 'light');
+            if (themeSwitch) themeSwitch.checked = false;
+        } else {
+            htmlElement.removeAttribute('data-theme');
+            if (themeSwitch) themeSwitch.checked = true;
+        }
+
+        function toggleTheme() {
+            if (themeSwitch.checked) {
+                // Geser ke kanan -> Mode Gelap
+                htmlElement.removeAttribute('data-theme');
+                localStorage.setItem('quranTheme', 'dark');
+            } else {
+                // Geser ke kiri -> Mode Terang
+                htmlElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('quranTheme', 'light');
+            }
+        }
+    </script>
+
+</body>
+</html>
