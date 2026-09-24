@@ -6,6 +6,11 @@
 <title>Kitabku Online</title>
 <meta name="description" content="Logo Kitabku Online - menuju ke halaman utama kitabku.online">
 
+<!-- PAKSA REFRESH: CEGAH BROWSER MENYIMPAN CACHE HALAMAN -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
 <style>
     * {
         box-sizing: border-box;
@@ -104,9 +109,22 @@
 
     <!-- LOGO KITABKU ONLINE, KETUK UNTUK MENUJU KITABKU.ONLINE -->
     <a href="https://kitabku.online/" class="logo-link" aria-label="Kitabku Online">
-        <img src="logo-kitabku.png" alt="Kitabku Online" class="logo-img logo-dark">
-        <img src="logo-kitabku.light.png" alt="Kitabku Online" class="logo-img logo-light">
+        <img src="logo-kitabku.png" alt="Kitabku Online" class="logo-img logo-dark" id="imgLogoDark">
+        <img src="logo-kitabku.light.png" alt="Kitabku Online" class="logo-img logo-light" id="imgLogoLight">
     </a>
+
+    <script>
+        // PAKSA REFRESH GAMBAR: tambahkan kode acak (timestamp) di belakang
+        // nama file gambar, supaya browser SELALU ambil gambar terbaru
+        // dari server dan tidak memakai gambar lama dari cache.
+        (function paksaMuatUlangGambar() {
+            const versi = Date.now();
+            const imgDark = document.getElementById('imgLogoDark');
+            const imgLight = document.getElementById('imgLogoLight');
+            if (imgDark) imgDark.src = 'logo-kitabku.png?v=' + versi;
+            if (imgLight) imgLight.src = 'logo-kitabku.light.png?v=' + versi;
+        })();
+    </script>
 
     <script>
         // TEMA GELAP TERANG DENGAN TOMBOL GESER (Kiri = Terang, Kanan = Gelap)
