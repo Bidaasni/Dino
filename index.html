@@ -1,157 +1,417 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kitabku Online</title>
-<meta name="description" content="Logo Kitabku Online - menuju ke halaman utama kitabku.online">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Kitabku.Online</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-<!-- PAKSA REFRESH: CEGAH BROWSER MENYIMPAN CACHE HALAMAN -->
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-
-<style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    /* ================================
-       TEMA DARK & LIGHT SAGE ELEGAN
-    ================================ */
     :root {
-        --hijau-gelap: #081a16;
-        --gold: #e3c85a;
-        --border-color: rgba(227, 200, 90, 0.28);
-        --bg-gradient: radial-gradient(circle at top, #1a3a30 0%, var(--hijau-gelap) 60%, #04120e 100%);
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
-    [data-theme="light"] {
-        --hijau-gelap: #f4f8f5;
-        --gold: #09241e;
-        --border-color: rgba(13, 48, 40, 0.2);
-        --bg-gradient: #9cc2a6;
-    }
+    html, body { height: 100%; }
 
     body {
-        background: var(--bg-gradient);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 22px;
-        transition: background 0.35s ease;
-        overflow-x: hidden;
+      background: #030303;
+      font-family: 'Arial Black', Impact, sans-serif;
+      overflow: hidden;
+      position: relative;
+      transition: background 1.4s ease;
     }
 
-    /* TOMBOL GESER TEMA 🌗 - DI ATAS GAMBAR */
-    .theme-switch-wrap {
-        display: flex;
-        align-items: center;
-        gap: 8px;
+    /* Ambient room light: beberapa lapisan agar cahaya terasa menyebar & memudar natural,
+       bukan satu lingkaran datar. Warna dibuat sedikit hangat (~2700K) seperti bohlam pijar. */
+    body::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 700px 500px at 50% 0%, rgba(255, 186, 90, 0.16) 0%, rgba(255, 160, 60, 0.07) 35%, transparent 65%),
+        radial-gradient(ellipse 1200px 900px at 50% 10%, rgba(120, 90, 30, 0.10) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 1.4s ease;
+      pointer-events: none;
+      z-index: 1;
     }
-    .theme-switch-wrap span { color: #9cc2a6; font-size: 22px; }
+    body.lamp-on::before { opacity: 1; }
 
-    .switch-mode { position: relative; display: inline-block; width: 50px; height: 26px; }
-    .switch-mode input { opacity: 0; width: 0; height: 0; }
-    .slider-mode {
-        position: absolute; cursor: pointer;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background-color: #143028;
-        transition: .4s;
-        border: 1px solid #9cc2a6;
-        border-radius: 34px;
-    }
-    .slider-mode:before {
-        position: absolute; content: "";
-        height: 18px; width: 18px; left: 3px; bottom: 3px;
-        background-color: #9cc2a6;
-        transition: .4s; border-radius: 50%;
-    }
-    input:checked + .slider-mode { background-color: #9cc2a6; }
-    input:checked + .slider-mode:before { transform: translateX(24px); background-color: #061e12; }
-
-    /* LOGO */
-    .logo-link {
-        display: block;
-        text-decoration: none;
-        -webkit-tap-highlight-color: transparent;
+    /* Vignette gelap di sudut supaya cahaya tengah terasa kontras (seperti ruangan sungguhan) */
+    body::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 900px 700px at 50% 30%, transparent 40%, rgba(0,0,0,0.55) 100%);
+      pointer-events: none;
+      z-index: 2;
     }
 
-    .logo-img {
-        width: min(80vw, 360px);
-        height: auto;
-        display: block;
-        transition: transform 0.2s ease;
+    /* --- SAKLAR DINDING --- */
+    .switch-wrapper {
+      position: absolute;
+      top: max(25px, env(safe-area-inset-top, 0px));
+      left: 20px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      z-index: 20;
+      transform: scale(0.9);
     }
-    .logo-img.logo-light { display: none; }
-    [data-theme="light"] .logo-img.logo-dark { display: none; }
-    [data-theme="light"] .logo-img.logo-light { display: block; }
 
-    .logo-link:active .logo-img {
-        transform: scale(0.96);
+    .switch-plate {
+      width: 55px; height: 85px;
+      background: linear-gradient(135deg, #1c1c1c, #0d0d0d);
+      border-radius: 8px;
+      border: 1px solid #2a2a2a;
+      box-shadow: 5px 5px 18px rgba(0,0,0,0.95),
+                  inset 0 1px 1px rgba(255,255,255,0.08);
+      display: flex; justify-content: center; align-items: center;
+      transition: all 1s ease;
+      position: relative;
     }
-</style>
+
+    /* Cahaya ambient yang memantul lembut ke saklar saat lampu menyala */
+    body.lamp-on .switch-plate {
+      background: radial-gradient(circle at 85% 105%, rgba(255, 195, 110, 0.32) 0%, rgba(255, 170, 80, 0.12) 30%, #17140f 60%, #0d0d0d 100%),
+                  radial-gradient(circle at 90% 5%, rgba(255, 195, 110, 0.10) 0%, transparent 45%);
+      border: 1px solid #332c14;
+      box-shadow: 3px 3px 12px rgba(0,0,0,0.7),
+                  6px 8px 16px rgba(255, 175, 80, 0.16),
+                  0 0 10px rgba(212, 175, 55, 0.10),
+                  inset 0 -10px 14px rgba(0, 0, 0, 0.35);
+    }
+
+    .switch-toggle {
+      width: 24px; height: 42px;
+      background: linear-gradient(135deg, #222222, #111111);
+      border-radius: 4px;
+      border: 1px solid #333;
+      box-shadow: 0 5px 0 #050505, 0 6px 10px rgba(0,0,0,0.95);
+      transform: translateY(6px);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.lamp-on .switch-toggle {
+      transform: translateY(-6px);
+      background: linear-gradient(100deg, #241f0c 0%, #4a3d10 40%, #7d651f 75%, #a3843a 100%);
+      box-shadow: 0 -5px 0 #4a3d0c,
+                  0 -6px 8px rgba(255, 190, 90, 0.15),
+                  2px 3px 6px rgba(255, 200, 110, 0.18),
+                  inset 1px 1px 2px rgba(255, 245, 200, 0.25),
+                  inset 0 -5px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    /* --- LAMPU MENGGANTUNG --- */
+    /* Biasan cahaya di sekitar lampu, agar tidak terkesan menyorot tajam langsung */
+    .lamp-halo {
+      position: absolute;
+      top: calc(max(25px, env(safe-area-inset-top, 0px)) + 76px);
+      left: 50%;
+      transform: translate(-50%, -35%);
+      width: 240px; height: 150px;
+      background: radial-gradient(ellipse at center, rgba(255, 212, 135, 0.40) 0%, rgba(255, 190, 100, 0.18) 45%, transparent 75%);
+      filter: blur(20px);
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      pointer-events: none;
+      z-index: 9;
+    }
+    body.lamp-on .lamp-halo { opacity: 1; }
+
+    .lamp-wrapper {
+      position: absolute;
+      top: calc(max(25px, env(safe-area-inset-top, 0px)) + 76px);
+      left: 50%;
+      transform: translateX(-50%) scale(0.85);
+      transform-origin: top center;
+      z-index: 10;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+
+    body.lamp-on .lamp-wrapper { opacity: 1; visibility: visible; }
+
+    .lamp-icon { width: 90px; height: 40px; overflow: visible; }
+
+    /* Kotak sorot: bodi metal dengan gradasi agar terlihat bervolume */
+    .spot-body { fill: url(#spotOff); stroke: #000; stroke-width: 1; transition: fill 0.2s; }
+    body.lamp-on .spot-body { fill: url(#spotOn); }
+
+    .spot-face { fill: #0a0a0a; transition: fill 0.2s; }
+    body.lamp-on .spot-face { fill: #4a3410; }
+
+    .spot-glow { fill: transparent; transition: fill 0.3s; }
+    body.lamp-on .spot-glow {
+      fill: rgba(255, 200, 110, 0.9);
+      filter: blur(3px);
+    }
+
+    /* Berkas cahaya turun dari bohlam, seperti cahaya menembus udara berdebu */
+    .light-beam {
+      position: absolute;
+      top: calc(max(25px, env(safe-area-inset-top, 0px)) + 110px); left: 50%;
+      transform: translateX(-50%);
+      width: 70vw; max-width: 480px;
+      height: 78vh;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      z-index: 4;
+      clip-path: polygon(44% 0%, 56% 0%, 96% 100%, 4% 100%);
+      background: linear-gradient(to bottom, rgba(255,205,120,0.30) 0%, rgba(255,185,95,0.14) 35%, rgba(255,170,80,0.05) 65%, transparent 90%);
+      filter: blur(14px);
+    }
+    body.lamp-on .light-beam { opacity: 1; }
+
+    /* Flicker singkat saat lampu baru dinyalakan, seperti bohlam pijar yang menyesuaikan arus */
+    @keyframes bulbFlicker {
+      0%   { opacity: 0.2; }
+      8%   { opacity: 0.9; }
+      16%  { opacity: 0.3; }
+      24%  { opacity: 1; }
+      32%  { opacity: 0.5; }
+      45%  { opacity: 1; }
+      100% { opacity: 1; }
+    }
+    body.flicker .lamp-wrapper,
+    body.flicker .light-beam,
+    body.flicker::before {
+      animation: bulbFlicker 0.7s steps(1, end) 1;
+    }
+
+    /* --- KUNANG-KUNANG (muncul saat lampu MATI, terbang menuju saklar) --- */
+    .fireflies {
+      position: absolute; inset: 0;
+      z-index: 8;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+    }
+    body.lamp-on .fireflies { opacity: 0; }
+
+    .firefly {
+      position: absolute;
+      width: 20px; height: 20px;
+      overflow: visible;
+      animation-name: flyToSwitch;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+    }
+    .firefly-wing {
+      fill: rgba(255, 255, 255, 0.20);
+      stroke: rgba(255, 255, 255, 0.15);
+      stroke-width: 0.5;
+      transform-origin: 12px 10px;
+      animation: wingFlap 0.25s ease-in-out infinite alternate;
+    }
+    .firefly-wing.right { animation-delay: 0.05s; }
+    .firefly-body { fill: #2e2a1a; }
+    .firefly-glow {
+      fill: #eaff8c;
+      filter: drop-shadow(0 0 3px #d4ff5c) drop-shadow(0 0 6px #c8ff3c);
+      animation: glowPulse 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes wingFlap {
+      0%   { transform: scaleX(1); }
+      100% { transform: scaleX(0.55); }
+    }
+    @keyframes glowPulse {
+      0%   { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    /* Satu keyframe dipakai bersama; --dx/--dy (jarak tepat ke saklar) beda tiap instance,
+       supaya semua benar-benar berkumpul di satu titik lalu lenyap, bukan menyebar */
+    @keyframes flyToSwitch {
+      0%   { transform: translate(0, 0) rotate(0deg) scale(0.7); opacity: 0; }
+      8%   { opacity: 1; }
+      40%  { transform: translate(calc(var(--dx) * 0.32), calc(var(--dy) * 0.32 + 14px)) rotate(-8deg) scale(1); opacity: 1; }
+      65%  { transform: translate(calc(var(--dx) * 0.6), calc(var(--dy) * 0.6 - 10px)) rotate(6deg) scale(1); opacity: 1; }
+      82%  { transform: translate(calc(var(--dx) * 0.85), calc(var(--dy) * 0.85)) rotate(-4deg) scale(0.7); opacity: 0.6; }
+      100% { transform: translate(var(--dx), var(--dy)) rotate(0deg) scale(0.2); opacity: 0; }
+    }
+
+    /* Titik target: sekitar posisi tengah saklar (~47px, 66px dari pojok kiri-atas) */
+    .f1 { top: 72%; left: 85%; --dx: calc(47px - 85vw); --dy: calc(66px - 72vh); animation-duration: 5.2s; animation-delay: 0s; }
+    .f2 { top: 30%; left: 78%; --dx: calc(47px - 78vw); --dy: calc(66px - 30vh); animation-duration: 6.1s; animation-delay: 1s; }
+    .f3 { top: 82%; left: 24%; --dx: calc(47px - 24vw); --dy: calc(66px - 82vh); animation-duration: 4.8s; animation-delay: 2s; }
+    .f4 { top: 15%; left: 58%; --dx: calc(47px - 58vw); --dy: calc(66px - 15vh); animation-duration: 6.5s; animation-delay: 0.5s; }
+    .f5 { top: 55%; left: 10%; --dx: calc(47px - 10vw); --dy: calc(66px - 55vh); animation-duration: 5.6s; animation-delay: 2.6s; }
+    .f6 { top: 90%; left: 62%; --dx: calc(47px - 62vw); --dy: calc(66px - 90vh); animation-duration: 6.0s; animation-delay: 1.6s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fireflies { display: none; }
+    }
+
+
+    .content-box {
+      position: absolute;
+      bottom: 12%;
+      left: 50%;
+      transform: translate(-50%, 12px);
+
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      padding: 40px 20px;
+      border-radius: 15px;
+      width: min(85%, 320px);
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      z-index: 15;
+      overflow: hidden;
+    }
+
+    /* Highlight halus di sisi atas kotak, seolah tersentuh cahaya dari bohlam di atasnya */
+    .content-box::before {
+      content: "";
+      position: absolute; top: 0; left: 0; right: 0; height: 60%;
+      background: linear-gradient(to bottom, rgba(255, 225, 170, 0.10), transparent);
+      opacity: 0;
+      transition: opacity 1.2s ease;
+      pointer-events: none;
+    }
+    body.lamp-on .content-box::before { opacity: 1; }
+
+    body.lamp-on .content-box {
+      opacity: 1;
+      transform: translate(-50%, 0);
+      pointer-events: auto;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.55), 0 0 40px rgba(212, 175, 55, 0.10);
+      border: 1px solid rgba(255, 215, 140, 0.15);
+    }
+
+    .title {
+      position: relative;
+      font-size: 26px;
+      color: #d4af37;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.9), 0 0 10px rgba(212, 175, 55, 0.3);
+    }
+
+    .title .dim {
+      color: #a8860f;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.9), 0 0 6px rgba(212, 175, 55, 0.15);
+    }
+
+    .subtitle {
+      position: relative;
+      font-size: 16px;
+      color: #b8960f;
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+      font-family: sans-serif;
+      font-weight: normal;
+    }
+
+    .btn-go {
+      position: relative;
+      display: inline-block;
+      background: linear-gradient(180deg, #b8960f, #937509);
+      color: #1a1a1a;
+      text-decoration: none;
+      font-family: sans-serif;
+      font-weight: bold;
+      font-size: 18px;
+      padding: 12px 45px;
+      border-radius: 8px;
+      box-shadow: 0 6px 0 #6b5507, 0 10px 15px rgba(0,0,0,0.5);
+      transition: all 0.1s ease;
+    }
+
+    .btn-go:active {
+      transform: translateY(6px);
+      box-shadow: 0 0 0 #6b5507, 0 4px 6px rgba(0,0,0,0.5);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- TOMBOL GESER (SLIDER SWITCH) DENGAN ICON 🌗 (Kiri = Terang, Kanan = Gelap) -->
-    <div class="theme-switch-wrap">
-        <span>🌗</span>
-        <label class="switch-mode">
-            <input type="checkbox" id="themeSwitch" onclick="toggleTheme()">
-            <span class="slider-mode"></span>
-        </label>
+  <!-- Kunang-kunang menuju saklar (saat lampu mati) -->
+  <div class="fireflies" id="fireflies">
+    <svg class="firefly f1" viewBox="0 0 24 24"><ellipse class="firefly-wing left" cx="8" cy="8" rx="5" ry="3" transform="rotate(-25 8 8)"/><ellipse class="firefly-wing right" cx="16" cy="8" rx="5" ry="3" transform="rotate(25 16 8)"/><ellipse class="firefly-body" cx="12" cy="12" rx="3" ry="5"/><circle class="firefly-glow" cx="12" cy="17" r="2.6"/></svg>
+    <svg class="firefly f2" viewBox="0 0 24 24"><ellipse class="firefly-wing left" cx="8" cy="8" rx="5" ry="3" transform="rotate(-25 8 8)"/><ellipse class="firefly-wing right" cx="16" cy="8" rx="5" ry="3" transform="rotate(25 16 8)"/><ellipse class="firefly-body" cx="12" cy="12" rx="3" ry="5"/><circle class="firefly-glow" cx="12" cy="17" r="2.6"/></svg>
+    <svg class="firefly f3" viewBox="0 0 24 24"><ellipse class="firefly-wing left" cx="8" cy="8" rx="5" ry="3" transform="rotate(-25 8 8)"/><ellipse class="firefly-wing right" cx="16" cy="8" rx="5" ry="3" transform="rotate(25 16 8)"/><ellipse class="firefly-body" cx="12" cy="12" rx="3" ry="5"/><circle class="firefly-glow" cx="12" cy="17" r="2.6"/></svg>
+    <svg class="firefly f4" viewBox="0 0 24 24"><ellipse class="firefly-wing left" cx="8" cy="8" rx="5" ry="3" transform="rotate(-25 8 8)"/><ellipse class="firefly-wing right" cx="16" cy="8" rx="5" ry="3" transform="rotate(25 16 8)"/><ellipse class="firefly-body" cx="12" cy="12" rx="3" ry="5"/><circle class="firefly-glow" cx="12" cy="17" r="2.6"/></svg>
+    <svg class="firefly f5" viewBox="0 0 24 24"><ellipse class="firefly-wing left" cx="8" cy="8" rx="5" ry="3" transform="rotate(-25 8 8)"/><ellipse class="firefly-wing right" cx="16" cy="8" rx="5" ry="3" transform="rotate(25 16 8)"/><ellipse class="firefly-body" cx="12" cy="12" rx="3" ry="5"/><circle class="firefly-glow" cx="12" cy="17" r="2.6"/></svg>
+    <svg class="firefly f6" viewBox="0 0 24 24"><ellipse class="firefly-wing left" cx="8" cy="8" rx="5" ry="3" transform="rotate(-25 8 8)"/><ellipse class="firefly-wing right" cx="16" cy="8" rx="5" ry="3" transform="rotate(25 16 8)"/><ellipse class="firefly-body" cx="12" cy="12" rx="3" ry="5"/><circle class="firefly-glow" cx="12" cy="17" r="2.6"/></svg>
+  </div>
+
+  <!-- Saklar Dinding -->
+  <div class="switch-wrapper" id="wallSwitch" role="button" aria-label="Nyalakan lampu" tabindex="0">
+    <div class="switch-plate">
+      <div class="switch-toggle"></div>
     </div>
+  </div>
 
-    <!-- LOGO KITABKU ONLINE, KETUK UNTUK MENUJU KITABKU.ONLINE -->
-    <a href="https://kitabku.online/" class="logo-link" aria-label="Kitabku Online">
-        <img src="logo-kitabku.png" alt="Kitabku Online" class="logo-img logo-dark" id="imgLogoDark">
-        <img src="logo-kitabku-light.png" alt="Kitabku Online" class="logo-img logo-light" id="imgLogoLight">
-    </a>
+  <!-- Berkas cahaya jatuh dari bohlam -->
+  <div class="light-beam"></div>
 
-    <script>
-        // PAKSA REFRESH GAMBAR: tambahkan kode acak (timestamp) di belakang
-        // nama file gambar, supaya browser SELALU ambil gambar terbaru
-        // dari server dan tidak memakai gambar lama dari cache.
-        (function paksaMuatUlangGambar() {
-            const versi = Date.now();
-            const imgDark = document.getElementById('imgLogoDark');
-            const imgLight = document.getElementById('imgLogoLight');
-            if (imgDark) imgDark.src = 'logo-kitabku.png?v=' + versi;
-            if (imgLight) imgLight.src = 'logo-kitabku-light.png?v=' + versi;
-        })();
-    </script>
+  <!-- Biasan cahaya lampu -->
+  <div class="lamp-halo"></div>
 
-    <script>
-        // TEMA GELAP TERANG DENGAN TOMBOL GESER (Kiri = Terang, Kanan = Gelap)
-        const htmlElement = document.documentElement;
-        const themeSwitch = document.getElementById('themeSwitch');
-        const savedTheme = localStorage.getItem('quranTheme');
+  <!-- Kotak Lampu Sorot -->
+  <div class="lamp-wrapper">
+    <svg class="lamp-icon" viewBox="0 0 90 40">
+      <defs>
+        <linearGradient id="spotOff" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2c2c2c"/>
+          <stop offset="100%" stop-color="#161616"/>
+        </linearGradient>
+        <linearGradient id="spotOn" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3a3a3a"/>
+          <stop offset="60%" stop-color="#1c1c1c"/>
+          <stop offset="100%" stop-color="#111"/>
+        </linearGradient>
+      </defs>
 
-        if (savedTheme === 'light') {
-            htmlElement.setAttribute('data-theme', 'light');
-            if (themeSwitch) themeSwitch.checked = false;
-        } else {
-            htmlElement.removeAttribute('data-theme');
-            if (themeSwitch) themeSwitch.checked = true;
-        }
+      <rect class="spot-body" x="10" y="0" width="70" height="20" rx="4" />
+      <rect class="spot-face" x="15" y="18" width="60" height="8" rx="2" />
+      <ellipse class="spot-glow" cx="45" cy="24" rx="24" ry="4" />
+    </svg>
+  </div>
 
-        function toggleTheme() {
-            if (themeSwitch.checked) {
-                // Geser ke kanan -> Mode Gelap
-                htmlElement.removeAttribute('data-theme');
-                localStorage.setItem('quranTheme', 'dark');
-            } else {
-                // Geser ke kiri -> Mode Terang
-                htmlElement.setAttribute('data-theme', 'light');
-                localStorage.setItem('quranTheme', 'light');
-            }
-        }
-    </script>
+
+  <!-- Kotak Kaca -->
+  <div class="content-box">
+    <h1 class="title"><span class="dim">K</span>itabk<span class="dim">u</span>.Online</h1>
+    <h2 class="subtitle">Al-Qur`an Digital</h2>
+    <a href="https://kitabku.online" class="btn-go" target="_blank" rel="noopener noreferrer">GO</a>
+  </div>
+
+  <script>
+    const wallSwitch = document.getElementById('wallSwitch');
+    const body = document.body;
+
+    function toggleLamp(event) {
+      event.preventDefault();
+      const turningOn = !body.classList.contains('lamp-on');
+      body.classList.toggle('lamp-on');
+      if (turningOn) {
+        body.classList.add('flicker');
+        setTimeout(() => body.classList.remove('flicker'), 700);
+      }
+    }
+
+    wallSwitch.addEventListener('click', toggleLamp);
+    wallSwitch.addEventListener('touchstart', toggleLamp, { passive: false });
+    wallSwitch.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') toggleLamp(e);
+    });
+  </script>
 
 </body>
 </html>
