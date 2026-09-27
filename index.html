@@ -291,10 +291,11 @@ let busy = false;
     body.classList.remove('blown', 'sparking');
     body.classList.add('lit', 'revealed');
 
-    // putar audio tepat saat lampu pertama kali nyala (awal klik)
+    // Putar tus.mp3 tepat saat lampu pertama kali dinyalakan.
     try {
-      konsletSound.currentTime = 0;
-      konsletSound.play().catch(() => {});
+      tusAudio.currentTime = 0;
+      const playPromise = tusAudio.play();
+      if (playPromise) playPromise.catch(() => {});
     } catch (e) {}
 
     setTimeout(() => {
