@@ -38,11 +38,13 @@
     pointer-events: none;
     transition: opacity 0.35s ease;
     background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.12);
     padding: 34px 30px;
     border-radius: 16px;
     text-align: center;
-    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
   }
   body.revealed .content-box { opacity: 1; pointer-events: auto; }
   .kb-title {
@@ -90,9 +92,9 @@
   body.revealed .glass { opacity: 1; }
   body.lit .glass, body.surge .glass {
     fill: rgba(255, 225, 150, 0.30);
-    filter: drop-shadow(0 0 28px rgba(255, 200, 90, 0.55));
+    filter: drop-shadow(0 0 30px rgba(255, 200, 90, 0.65)) drop-shadow(0 0 70px rgba(255, 180, 60, 0.4));
   }
-  body.surge .glass { filter: drop-shadow(0 0 24px rgba(255,255,255,0.8)); }
+  body.surge .glass { filter: drop-shadow(0 0 45px rgba(255,255,255,0.9)); }
   body.blown .glass { fill: rgba(120,110,90,0.10); transition: fill 0.12s ease, filter 0.12s ease; }
 
   .highlight { fill: rgba(255,255,255,0.5); opacity: 0; transition: opacity 0.35s ease; }
@@ -100,7 +102,7 @@
 
   .coil { fill: none; stroke: #55565c; stroke-width: 2.5; stroke-linecap: round; opacity: 0; transition: stroke 0.3s ease, opacity 0.35s ease; }
   body.revealed .coil.whole { opacity: 1; }
-  body.lit .coil, body.surge .coil { stroke: #ffdf91; filter: drop-shadow(0 0 6px #ffb84d); }
+  body.lit .coil, body.surge .coil { stroke: #ffdf91; filter: drop-shadow(0 0 4px #ffb84d) drop-shadow(0 0 10px #ff9d2e); }
   body.surge .coil { stroke: #ffffff; }
   .coil.broken { opacity: 0; transition: none; }
   body.blown .coil.whole { opacity: 0; transition: none; }
@@ -152,7 +154,7 @@
     stroke-linecap: round;
     stroke-linejoin: round;
     opacity: 0;
-    filter: drop-shadow(0 0 6px #8bdcff);
+    filter: drop-shadow(0 0 4px #bfe9ff) drop-shadow(0 0 10px #6cc9ff);
   }
   body.sparking .arc-flash { animation: arcFlicker 0.55s steps(2, jump-none) infinite; }
   .arc-flash.a2 { animation-delay: 0.18s !important; }
@@ -201,11 +203,31 @@
     * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
   }
 
-  @media (max-width: 480px) {
-    body { gap: 22px; padding: 24px 16px; }
-    .bulb-wrap { width: min(180px, 72vw); height: min(306px, 122vw); }
-    .content-box { padding: 26px 22px; }
-    .btn-go { font-size: 17px; padding: 11px 38px; }
+  html {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    overscroll-behavior: none;
+  }
+
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    overscroll-behavior: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  /* Ketukan tidak boleh membuat halaman ikut terseret */
+  button, .btn-go, #pullRing, .bulb-wrap, .rope, .pull-ring {
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
 </style>
@@ -256,16 +278,8 @@
 <script>
   const pullRing = document.getElementById('pullRing');
   const body = document.body;
-  let busy = false;
-
   const tusAudio = document.getElementById('tusAudio');
-
-  function playSparkSound() {
-    try {
-      tusAudio.currentTime = 0;
-      tusAudio.play().catch(() => {});
-    } catch (e) {}
-  }
+let busy = false;
 
   function pull() {
     if (busy) return;
@@ -277,8 +291,11 @@
     body.classList.remove('blown', 'sparking');
     body.classList.add('lit', 'revealed');
 
-    // Suara singkat dibuat langsung oleh browser, tanpa file audio besar.
-    playSparkSound();
+    // putar audio tepat saat lampu pertama kali nyala (awal klik)
+    try {
+      konsletSound.currentTime = 0;
+      konsletSound.play().catch(() => {});
+    } catch (e) {}
 
     setTimeout(() => {
       // 5 detik lampu menyala selesai -> mulai konslet 4 detik
