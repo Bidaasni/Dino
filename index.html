@@ -1,31 +1,312 @@
-    <!-- Tag Audio Baru (Pastikan file tus.mp3 ada di folder yang sama dengan index.html) -->
-    <audio id="konsletSound" src="tus.mp3"></audio>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aldino</title>
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    --bg: #0c0f16;
+    --bg-glow: #0c0f16;
+  }
+  * { box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 34px;
+    padding: 40px 24px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(ellipse 900px 700px at 50% 38%, var(--bg-glow) 0%, var(--bg) 60%);
+    background-color: var(--bg);
+    transition: background-color 0.6s ease;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  body.lit, body.surge  { --bg-glow: #4a3a14; background-color: #2a2210; }
+  body.blown { --bg-glow: #0c0f16; background-color: #0c0f16; transition: background-color 0.12s ease; }
 
-    <!-- Script Logika Saklar, Lampu, dan Suara -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        const pullRing = document.getElementById('pullRing');
-        const konsletSound = document.getElementById('konsletSound');
-        const body = document.body;
+  .content-box {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 34px 30px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+  }
+  body.revealed .content-box { opacity: 1; pointer-events: auto; }
+  .kb-title {
+    margin: 0 0 20px;
+    font-size: clamp(22px, 6vw, 28px);
+    font-weight: 800;
+    color: #d4af37;
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  }
+  .btn-go {
+    display: inline-block;
+    background: linear-gradient(180deg, #d9b32a, #c5a017);
+    color: #111;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 12px 45px;
+    border-radius: 8px;
+    box-shadow: 0 6px 0 #8c730b, 0 10px 15px rgba(0,0,0,0.4);
+    transition: all 0.1s ease;
+  }
+  .btn-go:active {
+    transform: translateY(6px);
+    box-shadow: 0 0 0 #8c730b, 0 4px 6px rgba(0,0,0,0.4);
+  }
 
-        if (pullRing) {
-          pullRing.addEventListener('click', function() {
-            // Memunculkan elemen halaman dari mode gelap
-            body.classList.add('revealed');
-            
-            // Mengganti status nyala/mati lampu
-            body.classList.toggle('lit');
+  .bulb-wrap {
+    position: relative;
+    width: 200px;
+    height: 340px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .bulb-svg { width: 100%; height: 100%; overflow: visible; }
 
-            // Memutar file tus.mp3 saat diketuk
-            if (konsletSound) {
-              konsletSound.currentTime = 0; 
-              konsletSound.play().catch(function(error) {
-                console.log("Pemutaran audio diblokir:", error);
-              });
-            }
-          });
-        }
-      });
-    </script>
-  </body>
+  .glass {
+    fill: rgba(255,255,255,0.05);
+    stroke: rgba(255,255,255,0.35);
+    stroke-width: 2;
+    opacity: 0;
+    transition: fill 0.5s ease, filter 0.4s ease, opacity 0.35s ease;
+  }
+  body.revealed .glass { opacity: 1; }
+  body.lit .glass, body.surge .glass {
+    fill: rgba(255, 225, 150, 0.30);
+    filter: drop-shadow(0 0 28px rgba(255, 200, 90, 0.55));
+  }
+  body.surge .glass { filter: drop-shadow(0 0 24px rgba(255,255,255,0.8)); }
+  body.blown .glass { fill: rgba(120,110,90,0.10); transition: fill 0.12s ease, filter 0.12s ease; }
+
+  .highlight { fill: rgba(255,255,255,0.5); opacity: 0; transition: opacity 0.35s ease; }
+  body.revealed .highlight { opacity: 0.5; }
+
+  .coil { fill: none; stroke: #55565c; stroke-width: 2.5; stroke-linecap: round; opacity: 0; transition: stroke 0.3s ease, opacity 0.35s ease; }
+  body.revealed .coil.whole { opacity: 1; }
+  body.lit .coil, body.surge .coil { stroke: #ffdf91; filter: drop-shadow(0 0 6px #ffb84d); }
+  body.surge .coil { stroke: #ffffff; }
+  .coil.broken { opacity: 0; transition: none; }
+  body.blown .coil.whole { opacity: 0; transition: none; }
+  body.blown .coil.broken { opacity: 1; stroke: #2a2a2a; filter: none; transition: none; }
+
+  .ember { fill: #ff9d2e; opacity: 0; }
+  body.blown .ember { animation: emberFall 1.1s ease-out forwards; }
+  .ember.e2 { animation-delay: 0.08s !important; }
+  .ember.e3 { animation-delay: 0.16s !important; }
+  @keyframes emberFall {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(22px) scale(0.3); }
+  }
+
+  .soot { fill: rgba(20,18,16,0); transition: fill 0.6s ease 0.2s; }
+  body.blown .soot { fill: rgba(20,18,16,0.55); }
+
+  .cap { fill: #cfd2d8; opacity: 0; transition: opacity 0.35s ease; }
+  .cap-dark { fill: #babdc4; opacity: 0; transition: opacity 0.35s ease; }
+  .cap-ring { stroke: #9a9da3; stroke-width: 1.5; opacity: 0; transition: opacity 0.35s ease; }
+  body.revealed .cap, body.revealed .cap-dark, body.revealed .cap-ring { opacity: 1; }
+
+  .cord { stroke: #6b6f78; stroke-width: 2.5; }
+  .pull-ring {
+    fill: #23262e;
+    stroke: #6a6e78;
+    stroke-width: 2;
+    transition: transform 0.18s ease;
+    transform-origin: 100px 300px;
+    animation: ringGlint 2.6s ease-in-out infinite;
+  }
+  .pull-hitarea {
+    fill: rgba(255,255,255,0.001);
+    cursor: pointer;
+    outline: none;
+  }
+  .pull-hitarea:focus { outline: none; }
+  @keyframes ringGlint {
+    0%, 100% { filter: drop-shadow(0 0 0 rgba(255,255,255,0)); }
+    50% { filter: drop-shadow(0 0 4px rgba(200,210,225,0.55)); }
+  }
+  body.revealed .pull-ring { animation: none; filter: none; }
+  body.tug .pull-ring { transform: translateY(16px); }
+
+  .arc-flash {
+    fill: none;
+    stroke: #eaf6ff;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+    filter: drop-shadow(0 0 6px #8bdcff);
+  }
+  body.sparking .arc-flash { animation: arcFlicker 0.55s steps(2, jump-none) infinite; }
+  .arc-flash.a2 { animation-delay: 0.18s !important; }
+  @keyframes arcFlicker {
+    0%   { opacity: 0; }
+    20%  { opacity: 1; }
+    35%  { opacity: 0.1; }
+    55%  { opacity: 1; }
+    70%  { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  .flash-overlay {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    opacity: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    z-index: 5;
+  }
+  body.sparking .flash-overlay { animation: whiteFlash 1.8s steps(2, jump-none) infinite; }
+  @keyframes whiteFlash {
+    0%   { opacity: 0; }
+    6%   { opacity: 0.5; }
+    12%  { opacity: 0; }
+    16%  { opacity: 0.3; }
+    22%  { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  /* Kedap-kedip tidak stabil selama fase konslet (4 detik) */
+  @keyframes surgeFlicker {
+    0%, 100% { opacity: 1; }
+    8%   { opacity: 0.35; }
+    18%  { opacity: 1; }
+    30%  { opacity: 0.55; }
+    45%  { opacity: 1; }
+    58%  { opacity: 0.25; }
+    72%  { opacity: 1; }
+    85%  { opacity: 0.5; }
+  }
+  body.surge .glass, body.surge .coil { animation: surgeFlicker 0.85s ease-in-out infinite; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+
+  @media (max-width: 480px) {
+    body { gap: 22px; padding: 24px 16px; }
+    .bulb-wrap { width: min(180px, 72vw); height: min(306px, 122vw); }
+    .content-box { padding: 26px 22px; }
+    .btn-go { font-size: 17px; padding: 11px 38px; }
+  }
+
+</style>
+</head>
+<body>
+
+  <div class="flash-overlay"></div>
+
+  <div class="content-box">
+    <h1 class="kb-title">Kitabku.Online</h1>
+    <a href="https://kitabku.online" class="btn-go" target="_blank" rel="noopener noreferrer">GO</a>
+  </div>
+
+  <div class="bulb-wrap" id="bulbWrap">
+    <svg class="bulb-svg" viewBox="0 0 200 320">
+      <path class="glass" d="M100 20 C50 20 25 60 25 105 C25 140 45 160 60 180 C70 193 72 205 72 215 L128 215 C128 205 130 193 140 180 C155 160 175 140 175 105 C175 60 150 20 100 20 Z"/>
+      <path class="highlight" d="M55 70 C55 95 60 115 70 130" stroke="rgba(255,255,255,0.5)" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.5"/>
+
+      <!-- filament utuh -->
+      <path class="coil whole" d="M82 190 L82 150 L118 150 L118 190" />
+      <path class="coil whole" d="M100 190 L100 160" />
+
+      <!-- percikan listrik konslet -->
+      <polyline class="arc-flash" points="88,148 96,158 86,160 100,172 92,163 104,163" />
+      <polyline class="arc-flash a2" points="118,150 128,140 120,138 132,128" />
+
+      <!-- filament putus (muncul saat blown) -->
+      <path class="coil broken" d="M82 190 L82 160 L92 158" />
+      <path class="coil broken" d="M108 158 L118 150 L118 190" />
+      <circle class="ember e1" cx="92" cy="158" r="2.4"/>
+      <circle class="ember e2" cx="100" cy="165" r="2"/>
+      <circle class="ember e3" cx="108" cy="158" r="2.4"/>
+
+      <ellipse class="soot" cx="100" cy="185" rx="22" ry="10"/>
+
+      <rect class="cap" x="78" y="215" width="44" height="14" rx="2"/>
+      <rect class="cap-dark" x="78" y="229" width="44" height="10"/>
+      <line class="cap-ring" x1="78" y1="220" x2="122" y2="220"/>
+      <line class="cap-ring" x1="78" y1="225" x2="122" y2="225"/>
+      <path class="cap-dark" d="M86 239 L114 239 L108 255 L92 255 Z"/>
+
+      <line class="cord" x1="100" y1="255" x2="100" y2="292"/>
+      <circle class="pull-ring" cx="100" cy="300" r="14"/>
+      <circle class="pull-hitarea" id="pullRing" cx="100" cy="300" r="34" role="button" tabindex="0" aria-label="Tarik saklar"/>
+    </svg>
+  </div>
+  <audio id="tusAudio" src="tus.mp3" preload="auto"></audio>
+<script>
+  const pullRing = document.getElementById('pullRing');
+  const body = document.body;
+  let busy = false;
+
+  const tusAudio = document.getElementById('tusAudio');
+
+  function playSparkSound() {
+    try {
+      tusAudio.currentTime = 0;
+      tusAudio.play().catch(() => {});
+    } catch (e) {}
+  }
+
+  function pull() {
+    if (busy) return;
+    busy = true;
+
+    body.classList.add('tug');
+    setTimeout(() => body.classList.remove('tug'), 180);
+
+    body.classList.remove('blown', 'sparking');
+    body.classList.add('lit', 'revealed');
+
+    // Suara singkat dibuat langsung oleh browser, tanpa file audio besar.
+    playSparkSound();
+
+    setTimeout(() => {
+      // 5 detik lampu menyala selesai -> mulai konslet 4 detik
+      body.classList.remove('lit');
+      body.classList.add('surge', 'sparking');
+
+      setTimeout(() => {
+        // 4 detik konslet selesai -> lampu padam, filamen putus
+        body.classList.remove('surge');
+        body.classList.add('blown');
+
+        setTimeout(() => {
+          // percikan masih lanjut 2 detik setelah padam, lalu berhenti
+          body.classList.remove('sparking');
+
+          // langsung gelap total begitu percikan terakhir selesai, tanpa jeda
+          body.classList.remove('blown');
+          body.classList.remove('revealed');
+          busy = false;
+        }, 2000);
+      }, 4230);
+    }, 4770);
+  }
+
+  pullRing.addEventListener('click', pull);
+  pullRing.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pull(); }
+  });
+</script>
+</body>
 </html>
